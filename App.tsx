@@ -5,6 +5,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Hero from './components/Hero';
 import Philosophy from './components/Philosophy';
+import PromoVideo from './components/PromoVideo';
 import ProductSection from './components/ProductSection';
 import ContactBanner from './components/ContactBanner';
 import ContactForm from './components/ContactForm';
@@ -44,6 +45,7 @@ const HomePage = () => (
   <PublicLayout>
     <Hero />
     <Philosophy />
+    <PromoVideo />
     <ProductSection />
     <ContactBanner />
   </PublicLayout>
@@ -418,7 +420,7 @@ const AboutLocationPage = () => {
       address: t.footer.address_changnyeong,
       tel: '055-533-0013',
       fax: '055-533-0225',
-      mapQuery: '경남 창녕군 대합면 대합산업단지로 22-44'
+      mapQuery: '경남 창녕군 대합면 대합産業단지로 22-44'
     }
   };
 

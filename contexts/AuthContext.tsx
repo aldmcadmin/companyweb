@@ -10,15 +10,20 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-
-  useEffect(() => {
-    // Check local storage for persisted session
-    const storedAuth = localStorage.getItem('isAdminAuthenticated');
-    if (storedAuth === 'true') {
-      setIsAuthenticated(true);
+  // Initialize state lazily to avoid flicker/redirect issues on refresh
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    try {
+      // Check if window is defined (safe for SSR environments, though mostly for client-side)
+      if (typeof window !== 'undefined') {
+        const storedAuth = localStorage.getItem('isAdminAuthenticated');
+        return storedAuth === 'true';
+      }
+      return false;
+    } catch (e) {
+      console.error("Auth initialization error:", e);
+      return false;
     }
-  }, []);
+  });
 
   const login = (id: string, pw: string) => {
     // Hardcoded credentials for demonstration
