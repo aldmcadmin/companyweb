@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import { useSite } from '../contexts/SiteContext';
-import { Users, Eye, FileText, MousePointer, Plus, Trash2, Search, Palette, Globe, Save, Upload, Image as ImageIcon, X, LayoutTemplate, Layers, Award } from 'lucide-react';
+import { Users, Eye, FileText, MousePointer, Plus, Trash2, Search, Palette, Globe, Save, Upload, Image as ImageIcon, X, LayoutTemplate, Layers, Award, Package, Edit3 } from 'lucide-react';
 import { BorderRadiusSize } from '../types';
 
 // --- Dashboard Component ---
@@ -52,10 +52,10 @@ export const AdminDashboard: React.FC = () => {
   );
 };
 
-// --- Content Manager Component (New) ---
+// --- Content Manager Component (Updated) ---
 export const AdminContent: React.FC = () => {
-  const { certifications, addCertification, deleteCertification, content, updateContent } = useSite();
-  const [activeTab, setActiveTab] = useState<'cert' | 'text' | 'images'>('cert');
+  const { certifications, addCertification, deleteCertification, content, updateContent, products, updateProduct } = useSite();
+  const [activeTab, setActiveTab] = useState<'cert' | 'text' | 'images' | 'products'>('products');
   const [newCert, setNewCert] = useState({ title: '', imageUrl: '' });
 
   const handleCertUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,7 +87,17 @@ export const AdminContent: React.FC = () => {
     }
   };
 
-  // Helper component for image upload block
+  const handleProductImageUpload = (id: string, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        updateProduct(id, { imageUrl: reader.result as string });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const ImageUploadBlock = ({ label, contentKey, description }: { label: string, contentKey: string, description?: string }) => (
     <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
       <div className="flex justify-between items-start mb-4">
@@ -124,26 +134,78 @@ export const AdminContent: React.FC = () => {
   return (
     <AdminLayout>
        <div className="space-y-6">
-          <div className="flex space-x-4 border-b border-gray-200 pb-1">
+          <div className="flex space-x-4 border-b border-gray-200 pb-1 overflow-x-auto">
+            <button 
+               onClick={() => setActiveTab('products')}
+               className={`pb-3 px-4 font-bold text-sm transition-colors whitespace-nowrap ${activeTab === 'products' ? 'text-brand-blue border-b-2 border-brand-blue' : 'text-gray-500 hover:text-gray-700'}`}
+             >
+               제품 관리
+             </button>
              <button 
                onClick={() => setActiveTab('cert')}
-               className={`pb-3 px-4 font-bold text-sm transition-colors ${activeTab === 'cert' ? 'text-brand-blue border-b-2 border-brand-blue' : 'text-gray-500 hover:text-gray-700'}`}
+               className={`pb-3 px-4 font-bold text-sm transition-colors whitespace-nowrap ${activeTab === 'cert' ? 'text-brand-blue border-b-2 border-brand-blue' : 'text-gray-500 hover:text-gray-700'}`}
              >
                인증서 관리
              </button>
              <button 
                onClick={() => setActiveTab('text')}
-               className={`pb-3 px-4 font-bold text-sm transition-colors ${activeTab === 'text' ? 'text-brand-blue border-b-2 border-brand-blue' : 'text-gray-500 hover:text-gray-700'}`}
+               className={`pb-3 px-4 font-bold text-sm transition-colors whitespace-nowrap ${activeTab === 'text' ? 'text-brand-blue border-b-2 border-brand-blue' : 'text-gray-500 hover:text-gray-700'}`}
              >
                텍스트 편집
              </button>
              <button 
                onClick={() => setActiveTab('images')}
-               className={`pb-3 px-4 font-bold text-sm transition-colors ${activeTab === 'images' ? 'text-brand-blue border-b-2 border-brand-blue' : 'text-gray-500 hover:text-gray-700'}`}
+               className={`pb-3 px-4 font-bold text-sm transition-colors whitespace-nowrap ${activeTab === 'images' ? 'text-brand-blue border-b-2 border-brand-blue' : 'text-gray-500 hover:text-gray-700'}`}
              >
                이미지 관리
              </button>
           </div>
+
+          {activeTab === 'products' && (
+            <div className="animate-fade-in space-y-8">
+               <div className="bg-blue-50 p-6 rounded-2xl flex items-center gap-4 border border-blue-100">
+                  <div className="p-3 bg-white rounded-full text-brand-blue shadow-sm">
+                     <Package className="w-6 h-6" />
+                  </div>
+                  <div>
+                     <h3 className="font-bold text-brand-blue text-lg">제품 소재 관리</h3>
+                     <p className="text-gray-600 text-sm">제품 소개 페이지에 표시되는 8가지 소재의 이미지와 설명을 관리합니다.</p>
+                  </div>
+               </div>
+
+               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {products.map((product) => (
+                     <div key={product.id} className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col h-full">
+                        <div className="relative aspect-[4/3] bg-gray-100 rounded-xl overflow-hidden mb-4 border border-gray-200">
+                           <img src={product.imageUrl} alt={product.title} className="w-full h-full object-cover" />
+                           <label className="absolute inset-0 bg-black/0 hover:bg-black/40 transition-colors flex items-center justify-center cursor-pointer group">
+                              <span className="bg-white/90 text-gray-900 px-3 py-1.5 rounded-lg font-bold text-xs opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2">
+                                 <Edit3 className="w-3 h-3" /> 사진 변경
+                              </span>
+                              <input type="file" accept="image/*" className="hidden" onChange={(e) => handleProductImageUpload(product.id, e)} />
+                           </label>
+                        </div>
+                        
+                        <div className="space-y-3 flex-1">
+                           <div>
+                              <label className="text-xs font-bold text-gray-400 block mb-1">제품명</label>
+                              <div className="font-bold text-gray-900 text-lg">{product.title}</div>
+                           </div>
+                           <div>
+                              <label className="text-xs font-bold text-gray-400 block mb-1">설명</label>
+                              <textarea 
+                                 rows={3}
+                                 className="w-full text-sm border border-gray-200 rounded-lg p-2 resize-none focus:ring-1 focus:ring-brand-blue outline-none"
+                                 value={product.description}
+                                 onChange={(e) => updateProduct(product.id, { description: e.target.value })}
+                              />
+                           </div>
+                        </div>
+                     </div>
+                  ))}
+               </div>
+            </div>
+          )}
 
           {activeTab === 'cert' && (
              <div className="space-y-8 animate-fade-in">

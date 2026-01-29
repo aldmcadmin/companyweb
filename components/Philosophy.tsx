@@ -1,31 +1,35 @@
+
 import React from 'react';
 import { Target, ShieldCheck, Zap } from 'lucide-react';
 import ScrollReveal from './ScrollReveal';
+import { useSite } from '../contexts/SiteContext';
 
 const Philosophy: React.FC = () => {
+  const { content, t } = useSite();
+
   const values = [
     {
       icon: <Target className="w-8 h-8 text-white" />,
-      title: "고객 맞춤형 설계",
-      desc: "단순한 제조를 넘어, 고객의 요구사항을 정확히 파악하여 최적의 설계를 제안합니다.",
+      title: t.philosophy.val1_title,
+      desc: t.philosophy.val1_desc,
       color: "bg-blue-600"
     },
     {
       icon: <ShieldCheck className="w-8 h-8 text-white" />,
-      title: "완벽한 품질 관리",
-      desc: "피막, 기계가공 등 전 공정에 걸친 엄격한 품질 관리 시스템을 운영합니다.",
+      title: t.philosophy.val2_title,
+      desc: t.philosophy.val2_desc,
       color: "bg-indigo-600"
     },
     {
       icon: <Zap className="w-8 h-8 text-white" />,
-      title: "적기 적소 납기",
-      desc: "효율적인 생산 공정과 물류 시스템으로 약속된 납기를 준수합니다.",
+      title: t.philosophy.val3_title,
+      desc: t.philosophy.val3_desc,
       color: "bg-violet-600"
     }
   ];
 
   return (
-    <section className="py-32 bg-white overflow-hidden">
+    <section id="philosophy" className="py-32 bg-white overflow-hidden relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header Section */}
@@ -33,19 +37,17 @@ const Philosophy: React.FC = () => {
           <ScrollReveal>
              <h2 className="text-lg font-bold text-brand-blue mb-4 flex items-center gap-2">
                <span className="w-8 h-[2px] bg-brand-blue inline-block"></span>
-               Management Philosophy
+               {t.philosophy.label}
              </h2>
           </ScrollReveal>
           <ScrollReveal delay={0.1}>
-            <p className="text-5xl md:text-7xl font-bold text-gray-900 tracking-tight leading-tight mb-8">
-              고객과 함께 성장하는 <br/>
-              <span className="text-gray-300">신뢰받는 파트너</span>
+            <p className="text-5xl md:text-7xl font-bold text-gray-900 tracking-tight leading-tight mb-8 whitespace-pre-line">
+              {t.philosophy.title}
             </p>
           </ScrollReveal>
           <ScrollReveal delay={0.2}>
-            <p className="max-w-2xl text-2xl text-gray-500 font-medium leading-relaxed">
-              대우경금속은 단순한 알루미늄 제조사가 아닙니다.<br/> 
-              고객의 성공 비즈니스를 위한 Total Service Provider입니다.
+            <p className="max-w-2xl text-2xl text-gray-500 font-medium leading-relaxed whitespace-pre-line">
+              {t.philosophy.desc}
             </p>
           </ScrollReveal>
         </div>
@@ -58,7 +60,7 @@ const Philosophy: React.FC = () => {
              <ScrollReveal mode="scale" className="sticky top-32">
                 <div className="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl relative group transform transition-transform duration-700 hover:scale-[1.02]">
                   <img 
-                    src="https://picsum.photos/id/48/800/1000" 
+                    src={content['philosophy_img_main']} 
                     alt="Factory Interior" 
                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                   />
@@ -67,9 +69,8 @@ const Philosophy: React.FC = () => {
                   <div className="absolute bottom-8 left-8 right-8">
                      <div className="bg-white/90 backdrop-blur-lg p-8 rounded-3xl shadow-lg border border-white/20 transform transition-transform duration-500 group-hover:-translate-y-2">
                         <span className="text-brand-blue font-bold tracking-wide text-sm uppercase mb-2 block">Since 1990</span>
-                        <p className="text-gray-900 font-bold text-2xl">
-                           30년 이상의 노하우로<br/>
-                           최고의 품질을 보장합니다.
+                        <p className="text-gray-900 font-bold text-2xl whitespace-pre-line">
+                           {t.philosophy.card_title}
                         </p>
                      </div>
                   </div>
@@ -100,7 +101,7 @@ const Philosophy: React.FC = () => {
             <ScrollReveal delay={0.5}>
                <div className="mt-8 p-8 bg-brand-gray rounded-3xl border border-gray-200 text-center transform transition-all duration-500 hover:scale-[1.03] hover:shadow-md">
                   <p className="text-brand-blue font-bold text-4xl mb-2 font-mono">50,000+</p>
-                  <p className="text-gray-500 font-medium">연간 생산 능력 (Ton)</p>
+                  <p className="text-gray-500 font-medium">{t.philosophy.stat_label}</p>
                </div>
             </ScrollReveal>
           </div>

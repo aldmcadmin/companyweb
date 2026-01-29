@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from 'react';
 
 interface ScrollRevealProps {
@@ -6,6 +7,7 @@ interface ScrollRevealProps {
   delay?: number; // Delay in seconds
   mode?: 'fade-up' | 'scale'; // Animation type
   className?: string;
+  viewportThreshold?: number; // Percentage of element visible to trigger
 }
 
 const ScrollReveal: React.FC<ScrollRevealProps> = ({ 
@@ -13,7 +15,8 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   width = 'full', 
   delay = 0,
   mode = 'fade-up',
-  className = ''
+  className = '',
+  viewportThreshold = 0.15
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -21,15 +24,14 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          // Once visible, we can stop observing to prevent re-triggering (optional)
-          // observer.unobserve(entry.target); 
-        }
+        // Toggle visibility based on intersection state
+        // This enables the "fade out naturally when scrolling back up" effect
+        setIsVisible(entry.isIntersecting);
       },
       {
-        threshold: 0.1, // Trigger when 10% of the element is visible
-        rootMargin: '0px 0px -50px 0px' // Offset to trigger slightly before/after
+        threshold: viewportThreshold, 
+        // Trigger a bit before it leaves/enters completely for smoothness
+        rootMargin: '0px 0px -50px 0px' 
       }
     );
 
@@ -42,7 +44,7 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
         observer.unobserve(ref.current);
       }
     };
-  }, []);
+  }, [viewportThreshold]);
 
   const baseClass = mode === 'fade-up' ? 'reveal-hidden' : 'scale-hidden';
   const visibleClass = mode === 'fade-up' ? 'reveal-visible' : 'scale-visible';

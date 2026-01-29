@@ -1,11 +1,12 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Post, SiteConfig, Language, Certification, ContentMap } from '../types';
+import { Post, SiteConfig, Language, Certification, ContentMap, Product } from '../types';
 import { TRANSLATIONS } from '../translations';
 
 interface SiteContextType {
   config: SiteConfig;
   posts: Post[];
+  products: Product[]; // Added products state
   certifications: Certification[];
   content: ContentMap;
   language: Language;
@@ -17,6 +18,7 @@ interface SiteContextType {
   addCertification: (cert: Omit<Certification, 'id'>) => void;
   deleteCertification: (id: string) => void;
   updateContent: (key: string, value: string) => void;
+  updateProduct: (id: string, updates: Partial<Product>) => void; // Added updateProduct
 }
 
 const DEFAULT_CONFIG: SiteConfig = {
@@ -34,6 +36,17 @@ const DEFAULT_POSTS: Post[] = [
   { id: '2', title: '창녕공장 신규 설비 도입 안내', author: '운영팀', category: '뉴스', date: '2024-02-15', status: 'Published', views: 890 },
   { id: '3', title: 'IATF 16949 인증 갱신 완료', author: '품질팀', category: '인증', date: '2024-03-10', status: 'Published', views: 540 },
   { id: '4', title: '하계 휴가 기간 공지', author: '인사팀', category: '공지사항', date: '2024-06-20', status: 'Draft', views: 0 },
+];
+
+const DEFAULT_PRODUCTS: Product[] = [
+  { id: 'p1', title: '경량소재', category: 'Lightweight', description: '자동차 경량화를 위한 고강도 알루미늄 소재', imageUrl: 'https://picsum.photos/id/20/600/400' },
+  { id: 'p2', title: '산업용소재', category: 'Industrial', description: '다양한 산업 설비 및 기계 구조용 소재', imageUrl: 'https://picsum.photos/id/1/600/400' },
+  { id: 'p3', title: '가공소재', category: 'Processing', description: '정밀 가공성이 우수한 고품질 소재', imageUrl: 'https://picsum.photos/id/192/600/400' },
+  { id: 'p4', title: '전기전자부품소재', category: 'Electronics', description: '전기 전도성과 방열성이 뛰어난 부품 소재', imageUrl: 'https://picsum.photos/id/3/600/400' },
+  { id: 'p5', title: '건축소재', category: 'Construction', description: '내구성과 심미성을 갖춘 건축 내외장재', imageUrl: 'https://picsum.photos/id/10/600/400' },
+  { id: 'p6', title: '환경소재', category: 'Environmental', description: '친환경 재활용이 가능한 지속 가능한 소재', imageUrl: 'https://picsum.photos/id/11/600/400' },
+  { id: 'p7', title: '외장소재', category: 'Exterior', description: '건물 및 제품의 외관을 돋보이게 하는 외장재', imageUrl: 'https://picsum.photos/id/12/600/400' },
+  { id: 'p8', title: '대체소재', category: 'Substitute', description: '기존 금속을 대체하는 고성능 합금 소재', imageUrl: 'https://picsum.photos/id/13/600/400' },
 ];
 
 const DEFAULT_CERTIFICATIONS: Certification[] = [
@@ -60,7 +73,7 @@ const DEFAULT_CONTENT: ContentMap = {
   'intro_main_title_2': 'Aluminum Extrusion',
   'intro_desc': '대우경금속은 고객 맞춤형 설계, 생산, 피막, 기계가공 및 적기적소의 납기까지 Total 서비스를 제공합니다. 최첨단 설비와 축적된 기술력을 바탕으로 다양한 산업 분야의 핵심 소재를 공급하고 있습니다.',
   
-  // Factory Images (New)
+  // Factory Images
   'intro_img_1': 'http://www.aldmc.co.kr/kor/images/about/introduction01.jpg',
   'intro_img_2': 'http://www.aldmc.co.kr/kor/images/about/introduction02.jpg',
   
@@ -88,6 +101,11 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return saved ? JSON.parse(saved) : DEFAULT_POSTS;
   });
 
+  const [products, setProducts] = useState<Product[]>(() => {
+    const saved = localStorage.getItem('siteProducts');
+    return saved ? JSON.parse(saved) : DEFAULT_PRODUCTS;
+  });
+
   const [certifications, setCertifications] = useState<Certification[]>(() => {
     const saved = localStorage.getItem('siteCertifications');
     return saved ? JSON.parse(saved) : DEFAULT_CERTIFICATIONS;
@@ -110,6 +128,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => { localStorage.setItem('siteConfig', JSON.stringify(config)); }, [config]);
   useEffect(() => { localStorage.setItem('sitePosts', JSON.stringify(posts)); }, [posts]);
+  useEffect(() => { localStorage.setItem('siteProducts', JSON.stringify(products)); }, [products]);
   useEffect(() => { localStorage.setItem('siteCertifications', JSON.stringify(certifications)); }, [certifications]);
   useEffect(() => { localStorage.setItem('siteContent', JSON.stringify(content)); }, [content]);
 
@@ -144,10 +163,15 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setContent(prev => ({ ...prev, [key]: value }));
   };
 
+  const updateProduct = (id: string, updates: Partial<Product>) => {
+    setProducts(prev => prev.map(p => p.id === id ? { ...p, ...updates } : p));
+  };
+
   return (
     <SiteContext.Provider value={{ 
       config, 
       posts, 
+      products,
       certifications,
       content,
       language,
@@ -158,7 +182,8 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       deletePost,
       addCertification,
       deleteCertification,
-      updateContent
+      updateContent,
+      updateProduct
     }}>
       {children}
     </SiteContext.Provider>

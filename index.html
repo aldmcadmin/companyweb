@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
   <head>
@@ -17,6 +18,10 @@
     <style>
       :root {
         --brand-blue: 7 29 73;
+      }
+      
+      html {
+        scroll-behavior: smooth;
       }
       
       body {
@@ -85,6 +90,9 @@
               'slide-up': 'slideUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards',
               'float': 'float 6s ease-in-out infinite',
               'breathe': 'breathe 20s ease-in-out infinite alternate',
+              'scale-up': 'scaleUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              'slow-reveal': 'slowReveal 1.8s cubic-bezier(0.19, 1, 0.22, 1) forwards',
+              'soft-blink': 'softBlink 3s ease-in-out infinite',
             },
             keyframes: {
               fadeIn: {
@@ -102,6 +110,18 @@
               breathe: {
                 '0%': { transform: 'scale(1)' },
                 '100%': { transform: 'scale(1.1)' },
+              },
+              scaleUp: {
+                '0%': { transform: 'scale(0.95)', opacity: '0' },
+                '100%': { transform: 'scale(1)', opacity: '1' },
+              },
+              slowReveal: {
+                '0%': { transform: 'translateY(50px)', opacity: '0' },
+                '100%': { transform: 'translateY(0)', opacity: '1' },
+              },
+              softBlink: {
+                '0%, 100%': { opacity: '1', transform: 'translateY(0)' },
+                '50%': { opacity: '0.1', transform: 'translateY(15px)' }, 
               }
             },
             transitionTimingFunction: {

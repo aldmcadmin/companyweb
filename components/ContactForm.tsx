@@ -15,7 +15,7 @@ interface FormData {
 }
 
 const ContactForm: React.FC = () => {
-  const { config } = useSite();
+  const { t } = useSite();
   const [formData, setFormData] = useState<FormData>({
     company: '',
     name: '',
@@ -98,12 +98,12 @@ const ContactForm: React.FC = () => {
         <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6">
           <CheckCircle className="w-10 h-10 text-green-500" />
         </div>
-        <h3 className="text-2xl font-bold text-gray-900 mb-2">문의가 접수되었습니다.</h3>
-        <p className="text-gray-500 mb-8 leading-relaxed">
-          담당자가 내용 확인 후 기재해주신 연락처로<br />빠른 시일 내에 답변 드리겠습니다.
+        <h3 className="text-2xl font-bold text-gray-900 mb-2">{t.contact.form.success_title}</h3>
+        <p className="text-gray-500 mb-8 leading-relaxed whitespace-pre-line">
+          {t.contact.form.success_desc}
         </p>
         <Button onClick={() => setStatus('idle')} variant="outline" className="rounded-full">
-          추가 문의하기
+          {t.contact.form.retry}
         </Button>
       </div>
     );
@@ -114,59 +114,59 @@ const ContactForm: React.FC = () => {
       <div className="space-y-6">
         {/* Header */}
         <div className="mb-8">
-          <h3 className="text-2xl font-bold text-gray-900">견적 및 상담 문의</h3>
-          <p className="text-sm text-gray-500 mt-1">상세한 내용을 남겨주시면 정확한 상담이 가능합니다.</p>
+          <h3 className="text-2xl font-bold text-gray-900">{t.contact.form.title}</h3>
+          <p className="text-sm text-gray-500 mt-1">{t.contact.form.subtitle}</p>
         </div>
 
         {/* Form Fields */}
         <div className="grid md:grid-cols-2 gap-6">
           <div className="space-y-1">
-            <label className="text-sm font-bold text-gray-700 ml-1">회사명 <span className="text-red-500">*</span></label>
+            <label className="text-sm font-bold text-gray-700 ml-1">{t.contact.form.labels.company} <span className="text-red-500">*</span></label>
             <input
               type="text"
               name="company"
               value={formData.company}
               onChange={handleChange}
-              placeholder="(주)대우경금속"
+              placeholder={t.contact.form.placeholders.company}
               className={`w-full p-4 bg-gray-50 border rounded-xl outline-none transition-all focus:bg-white focus:ring-2 ${errors.company ? 'border-red-300 focus:ring-red-200' : 'border-gray-200 focus:ring-brand-blue/20 focus:border-brand-blue'}`}
             />
             {errors.company && <p className="text-xs text-red-500 ml-1 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.company}</p>}
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-bold text-gray-700 ml-1">담당자 성함 <span className="text-red-500">*</span></label>
+            <label className="text-sm font-bold text-gray-700 ml-1">{t.contact.form.labels.name} <span className="text-red-500">*</span></label>
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
-              placeholder="홍길동"
+              placeholder={t.contact.form.placeholders.name}
               className={`w-full p-4 bg-gray-50 border rounded-xl outline-none transition-all focus:bg-white focus:ring-2 ${errors.name ? 'border-red-300 focus:ring-red-200' : 'border-gray-200 focus:ring-brand-blue/20 focus:border-brand-blue'}`}
             />
             {errors.name && <p className="text-xs text-red-500 ml-1 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.name}</p>}
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-bold text-gray-700 ml-1">연락처 <span className="text-red-500">*</span></label>
+            <label className="text-sm font-bold text-gray-700 ml-1">{t.contact.form.labels.phone} <span className="text-red-500">*</span></label>
             <input
               type="tel"
               name="phone"
               value={formData.phone}
               onChange={handleChange}
-              placeholder="010-1234-5678"
+              placeholder={t.contact.form.placeholders.phone}
               className={`w-full p-4 bg-gray-50 border rounded-xl outline-none transition-all focus:bg-white focus:ring-2 ${errors.phone ? 'border-red-300 focus:ring-red-200' : 'border-gray-200 focus:ring-brand-blue/20 focus:border-brand-blue'}`}
             />
             {errors.phone && <p className="text-xs text-red-500 ml-1 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.phone}</p>}
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-bold text-gray-700 ml-1">이메일 <span className="text-red-500">*</span></label>
+            <label className="text-sm font-bold text-gray-700 ml-1">{t.contact.form.labels.email} <span className="text-red-500">*</span></label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="example@company.com"
+              placeholder={t.contact.form.placeholders.email}
               className={`w-full p-4 bg-gray-50 border rounded-xl outline-none transition-all focus:bg-white focus:ring-2 ${errors.email ? 'border-red-300 focus:ring-red-200' : 'border-gray-200 focus:ring-brand-blue/20 focus:border-brand-blue'}`}
             />
             {errors.email && <p className="text-xs text-red-500 ml-1 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.email}</p>}
@@ -174,28 +174,28 @@ const ContactForm: React.FC = () => {
         </div>
 
         <div className="space-y-1">
-          <label className="text-sm font-bold text-gray-700 ml-1">문의 유형</label>
+          <label className="text-sm font-bold text-gray-700 ml-1">{t.contact.form.labels.type}</label>
           <select
             name="type"
             value={formData.type}
             onChange={handleChange}
             className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none transition-all focus:bg-white focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue appearance-none"
           >
-            <option value="견적문의">견적 문의</option>
-            <option value="기술상담">기술 상담</option>
-            <option value="채용문의">채용 문의</option>
-            <option value="기타">기타</option>
+            <option value="견적문의">{t.contact.form.options.inquiry}</option>
+            <option value="기술상담">{t.contact.form.options.tech}</option>
+            <option value="채용문의">{t.contact.form.options.recruit}</option>
+            <option value="기타">{t.contact.form.options.etc}</option>
           </select>
         </div>
 
         <div className="space-y-1">
-          <label className="text-sm font-bold text-gray-700 ml-1">문의 내용 <span className="text-red-500">*</span></label>
+          <label className="text-sm font-bold text-gray-700 ml-1">{t.contact.form.labels.message} <span className="text-red-500">*</span></label>
           <textarea
             name="message"
             value={formData.message}
             onChange={handleChange}
             rows={5}
-            placeholder="제품 규격, 수량, 납기일 등 상세 내용을 입력해주시면 정확한 견적이 가능합니다."
+            placeholder={t.contact.form.placeholders.message}
             className={`w-full p-4 bg-gray-50 border rounded-xl outline-none transition-all focus:bg-white focus:ring-2 resize-none ${errors.message ? 'border-red-300 focus:ring-red-200' : 'border-gray-200 focus:ring-brand-blue/20 focus:border-brand-blue'}`}
           />
           {errors.message && <p className="text-xs text-red-500 ml-1 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.message}</p>}
@@ -217,7 +217,7 @@ const ContactForm: React.FC = () => {
                 </div>
               </div>
               <span className={`text-sm ${errors.agreement ? 'text-red-500' : 'text-gray-500 group-hover:text-gray-700'}`}>
-                [필수] 개인정보 수집 및 이용에 동의합니다.
+                {t.contact.form.labels.agreement}
               </span>
            </label>
         </div>
@@ -231,18 +231,18 @@ const ContactForm: React.FC = () => {
           >
             {status === 'submitting' ? (
               <span className="flex items-center gap-2">
-                <Loader2 className="w-5 h-5 animate-spin" /> 전송 중...
+                <Loader2 className="w-5 h-5 animate-spin" /> {t.contact.form.submitting}
               </span>
             ) : (
               <span className="flex items-center gap-2">
-                문의하기 <Send className="w-5 h-5" />
+                {t.contact.form.submit} <Send className="w-5 h-5" />
               </span>
             )}
           </Button>
           {status === 'error' && (
             <div className="mt-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm text-center flex items-center justify-center gap-2 animate-fade-in">
               <AlertCircle className="w-4 h-4" />
-              전송에 실패했습니다. 잠시 후 다시 시도해주세요.
+              {t.contact.form.error}
             </div>
           )}
         </div>

@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { NAV_ITEMS } from '../constants'; // Kept for structure, labels overridden by translation
-import { Menu, X, ChevronDown, Globe, Settings } from 'lucide-react';
+import { NAV_ITEMS } from '../constants'; 
+import { Menu, X, ChevronDown, Globe, Settings, ArrowRight } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import Logo from './Logo';
 import { useSite } from '../contexts/SiteContext';
@@ -23,7 +23,6 @@ const Header: React.FC = () => {
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
-  // Helper to determine if a main nav item is active
   const isPathActive = (path: string) => {
     if (path === '/' && location.pathname === '/') return true;
     if (path !== '/' && location.pathname.startsWith(path)) return true;
@@ -34,15 +33,33 @@ const Header: React.FC = () => {
   const isTransparent = isHome && !isScrolled && !isMobileMenuOpen;
   const logoColor = isTransparent ? 'white' : config.primaryColor;
 
+  // Helper to translate Nav Labels and Sub-labels
   const getNavLabel = (key: string) => {
-    switch(key) {
-      case '회사소개': return t.nav.about;
-      case '제품소개': return t.nav.products;
-      case '생산공정': return t.nav.process;
-      case '연구소': return t.nav.rnd;
-      case '고객지원': return t.nav.support;
-      default: return key;
-    }
+    // Top level
+    if (key === '회사소개') return t.nav.about;
+    if (key === '제품소개') return t.nav.products;
+    if (key === '생산공정') return t.nav.process;
+    if (key === '연구소') return t.nav.rnd;
+    if (key === '고객지원') return t.nav.support;
+    
+    // Sub items (About)
+    if (key === '회사개요') return t.nav.intro;
+    if (key === '회사연혁') return t.nav.history;
+    if (key === '경영이념') return t.nav.philosophy;
+    if (key === '인증현황') return t.nav.cert;
+    if (key === '오시는 길') return t.nav.location;
+
+    // Sub items (Products)
+    if (key === '경량소재') return t.nav.light;
+    if (key === '산업용소재') return t.nav.industry;
+    if (key === '가공소재') return t.nav.processing;
+    if (key === '전기전자부품소재') return t.nav.electronic;
+    if (key === '건축소재') return t.nav.construction;
+    if (key === '환경소재') return t.nav.environmental;
+    if (key === '외장소재') return t.nav.exterior;
+    if (key === '대체소재') return t.nav.substitute;
+
+    return key;
   };
 
   return (
@@ -93,7 +110,7 @@ const Header: React.FC = () => {
                               to={sub.path}
                               className="px-4 py-3 text-sm text-gray-300 hover:bg-white/10 hover:text-white rounded-xl transition-colors font-medium text-left"
                             >
-                              {sub.label}
+                              {getNavLabel(sub.label)}
                             </Link>
                           ))}
                         </div>
@@ -131,7 +148,7 @@ const Header: React.FC = () => {
                  </div>
               </div>
 
-              {/* Admin Button - Now more visible with text and background */}
+              {/* Admin Button */}
               <Link to="/admin" title="Admin Dashboard">
                  <button className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all border ${
                    !isTransparent 
@@ -143,20 +160,28 @@ const Header: React.FC = () => {
                  </button>
               </Link>
 
+              {/* Enhanced CTA Button */}
               <Link to="/contact">
-                <button className={`text-sm font-medium px-5 py-2 transition-all duration-300 shadow-sm hover:shadow-md active:scale-95 ${config.borderRadius} ${
-                  !isTransparent 
-                    ? 'bg-brand-blue text-white hover:bg-black' 
-                    : 'bg-white text-brand-blue hover:bg-gray-100'
-                }`}>
-                  {t.nav.contact}
+                <button className={`
+                  group relative overflow-hidden flex items-center gap-2 text-sm font-bold px-6 py-2.5 transition-all duration-300 ease-spring shadow-sm hover:shadow-lg active:scale-95 ${config.borderRadius}
+                  ${!isTransparent 
+                    ? 'bg-brand-blue text-white hover:bg-[#334155]' // Toned down slate-700
+                    : 'bg-white text-brand-blue hover:bg-gray-50'}
+                `}>
+                  <span className="relative z-10 flex items-center gap-1">
+                    {t.nav.contact}
+                    {/* Arrow Animation */}
+                    <ArrowRight className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={3} />
+                  </span>
+                  
+                  {/* Soft Glow Effect (Replacing Shimmer) */}
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.15)_0%,_transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out pointer-events-none" />
                 </button>
               </Link>
             </div>
 
             {/* Mobile Menu Button */}
             <div className="md:hidden flex items-center gap-3">
-               {/* Mobile Admin Icon - High contrast */}
                <Link to="/admin" className="z-50 p-2 rounded-full bg-gray-100/50 backdrop-blur-sm">
                  <Settings className={`w-5 h-5 ${!isTransparent ? 'text-gray-900' : 'text-gray-900'}`} />
                </Link>
@@ -223,7 +248,7 @@ const Header: React.FC = () => {
                         className="text-gray-500 hover:text-brand-blue text-lg font-medium"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
-                        {sub.label}
+                        {getNavLabel(sub.label)}
                       </Link>
                     ))}
                   </div>

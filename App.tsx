@@ -16,6 +16,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { AdminDashboard, AdminPosts, AdminSettings, AdminContent } from './pages/Admin';
 import Login from './pages/Login';
 import { Phone, Mail, MapPin, Clock, TrendingUp, ThumbsUp, Lightbulb, UserCheck, Sparkles, Award, Printer, Navigation } from 'lucide-react';
+import { TRANSLATIONS } from './translations';
 
 // Scroll to top on route change
 const ScrollToTop = () => {
@@ -50,21 +51,23 @@ const HomePage = () => (
 
 // About Section
 const AboutIntroPage = () => {
-  const { content } = useSite();
+  const { content, t, language } = useSite();
+  const isDefaultLang = language === 'KOR';
+
   return (
     <PublicLayout>
-      <PageLayout title="회사개요" subtitle="대우경금속은 끊임없는 혁신으로 알루미늄 산업의 미래를 창조합니다.">
+      <PageLayout title={t.pages.intro.title} subtitle={t.pages.intro.subtitle}>
         <div className="space-y-16">
           
           {/* Intro Text & Vision */}
           <ScrollReveal>
             <div className="text-center max-w-3xl mx-auto space-y-6 mb-12">
               <h3 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight">
-                {content['intro_main_title_1']} <br/>
-                <span className="text-brand-blue">{content['intro_main_title_2']}</span>
+                {isDefaultLang ? content['intro_main_title_1'] : (language === 'ENG' ? 'Global Leader in' : 'Global Leader in')} <br/>
+                <span className="text-brand-blue">{isDefaultLang ? content['intro_main_title_2'] : (language === 'ENG' ? 'Aluminum Extrusion' : 'Aluminum Extrusion')}</span>
               </h3>
               <p className="text-gray-600 leading-relaxed text-lg break-keep">
-                {content['intro_desc']}
+                {isDefaultLang ? content['intro_desc'] : t.pages.intro.subtitle}
               </p>
             </div>
           </ScrollReveal>
@@ -80,8 +83,8 @@ const AboutIntroPage = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-8">
                       <div className="text-white transform transition-transform duration-300 group-hover:-translate-y-2">
-                        <h4 className="text-2xl font-bold mb-2">대구공장 (본사)</h4>
-                        <p className="text-white/80 text-sm font-medium">최첨단 압출 설비 및 본사 운영<br/>IATF 16949 인증 사업장</p>
+                        <h4 className="text-2xl font-bold mb-2">{t.footer.daegu}</h4>
+                        <p className="text-white/80 text-sm font-medium">{language === 'KOR' ? '최첨단 압출 설비 및 본사 운영\nIATF 16949 인증 사업장' : (language === 'ENG' ? 'HQ & State-of-the-art Facility' : '最先端押出設備および本社運営')}</p>
                       </div>
                   </div>
                 </div>
@@ -95,8 +98,8 @@ const AboutIntroPage = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-8">
                       <div className="text-white transform transition-transform duration-300 group-hover:-translate-y-2">
-                        <h4 className="text-2xl font-bold mb-2">창녕공장</h4>
-                        <p className="text-white/80 text-sm font-medium">대규모 물류 센터 및 제2 생산 거점<br/>스마트 팩토리 시스템 구축</p>
+                        <h4 className="text-2xl font-bold mb-2">{t.footer.changnyeong}</h4>
+                         <p className="text-white/80 text-sm font-medium">{language === 'KOR' ? '대규모 물류 센터 및 제2 생산 거점\n스마트 팩토리 시스템 구축' : (language === 'ENG' ? 'Large-scale Logistics & 2nd Factory' : '大規模物流センターおよび第2生産拠点')}</p>
                       </div>
                   </div>
                 </div>
@@ -108,32 +111,32 @@ const AboutIntroPage = () => {
             <div className="bg-gray-50 rounded-[2.5rem] p-8 md:p-12 border border-gray-100/50 shadow-inner">
                 <h3 className="text-xl font-bold text-gray-900 mb-8 flex items-center gap-3">
                   <span className="w-1.5 h-6 bg-brand-blue rounded-full"></span>
-                  기업 상세 정보
+                   {language === 'KOR' ? '기업 상세 정보' : (language === 'ENG' ? 'Company Details' : '企業詳細情報')}
                 </h3>
                 
                 <div className="space-y-6">
                   {/* Row Item */}
                   <div className="flex flex-col md:flex-row md:items-baseline border-b border-gray-200 pb-6">
-                      <div className="w-40 font-bold text-gray-500 shrink-0 mb-2 md:mb-0">회사명</div>
-                      <div className="font-bold text-lg text-gray-900">(주)대우경금속</div>
+                      <div className="w-40 font-bold text-gray-500 shrink-0 mb-2 md:mb-0">{language === 'KOR' ? '회사명' : (language === 'ENG' ? 'Company Name' : '会社名')}</div>
+                      <div className="font-bold text-lg text-gray-900">{language === 'KOR' ? '(주)대우경금속' : 'Daewoo Light Metal Co., Ltd.'}</div>
                   </div>
 
                   <div className="flex flex-col md:flex-row md:items-baseline border-b border-gray-200 pb-6">
-                      <div className="w-40 font-bold text-gray-500 shrink-0 mb-2 md:mb-0">대표이사</div>
-                      <div className="font-bold text-lg text-gray-900">김도연</div>
+                      <div className="w-40 font-bold text-gray-500 shrink-0 mb-2 md:mb-0">{language === 'KOR' ? '대표이사' : (language === 'ENG' ? 'CEO' : '代表取締役')}</div>
+                      <div className="font-bold text-lg text-gray-900">{language === 'KOR' ? '김도연' : 'Kim Do-yeon'}</div>
                   </div>
 
                   <div className="flex flex-col md:flex-row md:items-baseline border-b border-gray-200 pb-6">
-                      <div className="w-40 font-bold text-gray-500 shrink-0 mb-2 md:mb-0">주요사업</div>
-                      <div className="text-gray-800 leading-relaxed">알루미늄 압출 제조 및 판매 (자동차, 전자, 건축, 산업용 소재)</div>
+                      <div className="w-40 font-bold text-gray-500 shrink-0 mb-2 md:mb-0">{language === 'KOR' ? '주요사업' : (language === 'ENG' ? 'Main Business' : '主要事業')}</div>
+                      <div className="text-gray-800 leading-relaxed">{language === 'KOR' ? '알루미늄 압출 제조 및 판매 (자동차, 전자, 건축, 산업용 소재)' : (language === 'ENG' ? 'Aluminum Extrusion Manufacturing & Sales' : 'アルミニウム押出製造および販売')}</div>
                   </div>
 
                   <div className="flex flex-col md:flex-row md:items-start border-b border-gray-200 pb-6">
-                      <div className="w-40 font-bold text-gray-500 shrink-0 mb-4 md:mb-0 pt-1">사업장 안내</div>
+                      <div className="w-40 font-bold text-gray-500 shrink-0 mb-4 md:mb-0 pt-1">{language === 'KOR' ? '사업장 안내' : (language === 'ENG' ? 'Locations' : '事業所案内')}</div>
                       <div className="flex-1 space-y-6">
                         <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                            <span className="font-bold block text-brand-blue mb-2 text-lg">본사 / 1공장 (대구)</span>
-                            <p className="text-gray-700 mb-3">대구광역시 달성군 구지면 달성2차동3로 46 (달성2차 산업단지내)</p>
+                            <span className="font-bold block text-brand-blue mb-2 text-lg">{t.footer.daegu}</span>
+                            <p className="text-gray-700 mb-3">{t.footer.address_daegu}</p>
                             <div className="flex flex-wrap gap-4 text-sm text-gray-500 bg-gray-50 p-3 rounded-xl">
                               <span className="flex items-center gap-1"><Phone className="w-3 h-3" /> T. 053-611-6061</span>
                               <span className="hidden sm:inline text-gray-300">|</span>
@@ -142,8 +145,8 @@ const AboutIntroPage = () => {
                         </div>
                         
                         <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                            <span className="font-bold block text-brand-blue mb-2 text-lg">2공장 (창녕)</span>
-                            <p className="text-gray-700 mb-3">경남 창녕군 대합면 대합산업단지로 22-44</p>
+                            <span className="font-bold block text-brand-blue mb-2 text-lg">{t.footer.changnyeong}</span>
+                            <p className="text-gray-700 mb-3">{t.footer.address_changnyeong}</p>
                             <div className="flex flex-wrap gap-4 text-sm text-gray-500 bg-gray-50 p-3 rounded-xl">
                               <span className="flex items-center gap-1"><Phone className="w-3 h-3" /> T. 055-533-0013</span>
                               <span className="hidden sm:inline text-gray-300">|</span>
@@ -152,7 +155,7 @@ const AboutIntroPage = () => {
                         </div>
 
                         <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                            <span className="font-bold block text-brand-blue mb-2 text-lg">일본 판매 법인</span>
+                            <span className="font-bold block text-brand-blue mb-2 text-lg">{t.contact.info.japan_branch}</span>
                             <p className="text-gray-700 mb-3">Daewoo Metal Japan Co., Ltd. 591-1, Miyata, Miyawaka-city, Fukuoka-ken Japan</p>
                             <div className="flex flex-wrap gap-4 text-sm text-gray-500 bg-gray-50 p-3 rounded-xl">
                               <span className="flex items-center gap-1"><Phone className="w-3 h-3" /> T. +81-949-28-8028</span>
@@ -172,42 +175,13 @@ const AboutIntroPage = () => {
 };
 
 const AboutHistoryPage = () => {
-  const historyData = [
-    {
-      year: '2016',
-      events: [
-        { date: '2016.09', desc: 'DNV·GL 인증' },
-        { date: '2016.08', desc: '2,000톤 압출라인 2호기 도입' },
-        { date: '2016.07', desc: '창녕공장 준공' },
-        { date: '2016.06', desc: '특허 2건 등록' },
-        { date: '2016.04', desc: '이노비즈 인증(중소기업청)' },
-        { date: '2016.03', desc: '"알루미" 상표등록' },
-      ]
-    },
-    {
-      year: '2014',
-      events: [
-        { date: '2014.05', desc: '기술연구소 분원 개설' },
-        { date: '2014.03', desc: 'KS D 6759 인증' },
-        { date: '2014.01', desc: '한국생산기술연구원 파트너기업 지정' },
-      ]
-    },
-    {
-      year: '2013',
-      events: [
-        { date: '2013.12', desc: '기업부설연구소 설립' },
-        { date: '2013.07', desc: '벤처기업 인증(중소기업진흥공단)' },
-        { date: '2013.06', desc: '으뜸기업 선정(중소기업진흥공단)' },
-        { date: '2013.05', desc: '양산개시 ISO 9001 / 14001 인증' },
-        { date: '2013.04', desc: '2,000톤 압출설비 도입 설치' },
-        { date: '2013.01', desc: '(주)대우경금속 설립' },
-      ]
-    }
-  ];
+  const { t } = useSite();
+  // Using dynamic data from translations
+  const historyData = t.history.groups;
 
   return (
     <PublicLayout>
-      <PageLayout title="회사연혁" subtitle="대우경금속이 걸어온 도전과 성장의 역사입니다.">
+      <PageLayout title={t.pages.history.title} subtitle={t.pages.history.subtitle}>
         <div className="max-w-4xl mx-auto py-8">
              {/* Section Circle Header */}
              <div className="flex justify-center mb-20">
@@ -251,7 +225,7 @@ const AboutHistoryPage = () => {
                                   {group.events.map((event, idx) => (
                                       <ScrollReveal key={idx} delay={idx * 0.05}>
                                           <div className={`group flex flex-col md:block hover:bg-white hover:shadow-sm hover:rounded-xl p-2 -m-2 transition-all duration-300`}>
-                                              <span className={`inline-block text-gray-400 font-bold text-sm mb-1 ${isLeft ? 'md:ml-2' : 'md:mr-2'}`}>
+                                              <span className="inline-block text-gray-400 font-bold text-sm mb-1 md:mr-2">
                                                 {event.date}
                                               </span>
                                               <span className="text-gray-800 font-medium text-lg leading-snug group-hover:text-brand-blue transition-colors">
@@ -279,34 +253,34 @@ const AboutHistoryPage = () => {
 
 // Updated Philosophy Page with "Nonstop Jump" Concept
 const AboutPhilosophyPage = () => {
-  const { content } = useSite();
+  const { content, t } = useSite();
   const coreValues = [
     {
       icon: <ThumbsUp className="w-8 h-8" />,
-      title: "고객감동",
-      subtitle: "Customer Satisfaction",
-      desc: "단순한 만족을 넘어 감동을 선사합니다.\n고객의 성공이 곧 우리의 성공입니다.",
+      title: t.philosophy.cv_1_title,
+      subtitle: t.philosophy.cv_1_sub,
+      desc: t.philosophy.cv_1_desc,
       bg: "bg-blue-50"
     },
     {
       icon: <Lightbulb className="w-8 h-8" />,
-      title: "혁신",
-      subtitle: "Innovation",
-      desc: "현실에 안주하지 않는 도전정신으로\n새로운 가치를 창출하는 혁신경영을 실천합니다.",
+      title: t.philosophy.cv_2_title,
+      subtitle: t.philosophy.cv_2_sub,
+      desc: t.philosophy.cv_2_desc,
       bg: "bg-blue-50"
     },
     {
       icon: <UserCheck className="w-8 h-8" />,
-      title: "인재제일주의",
-      subtitle: "Talent First",
-      desc: "사람이 미래입니다. 인재양성으로\n기업과 개인이 함께 성장합니다.",
+      title: t.philosophy.cv_3_title,
+      subtitle: t.philosophy.cv_3_sub,
+      desc: t.philosophy.cv_3_desc,
       bg: "bg-blue-50"
     }
   ];
 
   return (
     <PublicLayout>
-      <PageLayout title="경영이념" subtitle="대우경금속이 추구하는 핵심 가치와 비전입니다.">
+      <PageLayout title={t.pages.philosophy.title} subtitle={t.pages.philosophy.subtitle}>
         <div className="py-8 space-y-24">
           
           {/* Section 1: Nonstop Jump (Reinterpreted) */}
@@ -330,8 +304,7 @@ const AboutPhilosophyPage = () => {
                    </h2>
                    
                    <p className="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto leading-relaxed">
-                     "무한점프"라는 뜻으로 <br className="hidden md:block"/>
-                     <span className="font-bold text-white">미래에 대한 도전과 도약</span>, 당사가 추구하는 핵심 가치입니다.
+                     {t.philosophy.nonstop_desc}
                    </p>
                 </div>
              </div>
@@ -343,7 +316,7 @@ const AboutPhilosophyPage = () => {
                <div className="text-center mb-12">
                   <h3 className="text-2xl font-bold text-gray-900 flex items-center justify-center gap-2">
                      <Sparkles className="w-5 h-5 text-brand-blue" />
-                     Core Values
+                     {t.philosophy.core_values_title}
                   </h3>
                   <div className="w-12 h-1 bg-gray-200 mx-auto mt-4 rounded-full"></div>
                </div>
@@ -365,11 +338,6 @@ const AboutPhilosophyPage = () => {
                   </ScrollReveal>
                ))}
             </div>
-            
-            {/* Visual Connector - Plus Signs */}
-            <div className="hidden md:flex justify-center -mt-[140px] mb-[140px] pointer-events-none relative z-0 opacity-0">
-               {/* Just for layout spacing if needed, but flex grid handles gap better */}
-            </div>
           </div>
 
         </div>
@@ -380,11 +348,11 @@ const AboutPhilosophyPage = () => {
 
 // New Certification Page - Consumes Dynamic Content
 const AboutCertificationPage = () => {
-  const { certifications } = useSite();
+  const { certifications, t } = useSite();
 
   return (
     <PublicLayout>
-      <PageLayout title="인증현황" subtitle="대우경금속의 품질과 기술력을 입증하는 각종 인증 현황입니다.">
+      <PageLayout title={t.pages.cert.title} subtitle={t.pages.cert.subtitle}>
          <ScrollReveal>
              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
                  {certifications.map((cer, idx) => (
@@ -418,19 +386,20 @@ const AboutCertificationPage = () => {
 };
 
 const AboutLocationPage = () => {
+  const { t } = useSite();
   const [activeTab, setActiveTab] = useState<'daegu' | 'changnyeong'>('daegu');
 
   const locations = {
     daegu: {
-      name: '대구 본사/1공장',
-      address: '대구광역시 달성군 구지면 달성2차동3로 46',
+      name: t.footer.daegu,
+      address: t.footer.address_daegu,
       tel: '053-611-6061',
       fax: '053-611-6066',
       mapQuery: '대구광역시 달성군 구지면 달성2차동3로 46'
     },
     changnyeong: {
-      name: '창녕 2공장',
-      address: '경남 창녕군 대합면 대합산업단지로 22-44',
+      name: t.footer.changnyeong,
+      address: t.footer.address_changnyeong,
       tel: '055-533-0013',
       fax: '055-533-0225',
       mapQuery: '경남 창녕군 대합면 대합산업단지로 22-44'
@@ -441,7 +410,7 @@ const AboutLocationPage = () => {
 
   return (
     <PublicLayout>
-      <PageLayout title="오시는 길" subtitle="대우경금속의 사업장 위치를 안내해 드립니다.">
+      <PageLayout title={t.pages.location.title} subtitle={t.pages.location.subtitle}>
           <div className="space-y-8">
               {/* Map Container */}
               <ScrollReveal>
@@ -513,123 +482,131 @@ const AboutLocationPage = () => {
 };
 
 // Products Section
-const ProductsListPage = () => (
-    <PublicLayout>
-      <div className="pt-32 pb-24 min-h-screen bg-brand-gray">
-         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Products</h1>
-             <p className="text-xl text-gray-500 mb-12">최고의 기술력으로 완성된 제품 라인업을 소개합니다.</p>
-             <ProductSection />
-         </div>
-      </div>
-    </PublicLayout>
-);
-
-const ProductDetailPage = ({ category }: { category: string }) => (
-    <PublicLayout>
-      <PageLayout title={`${category}`} subtitle={`대우경금속의 고품질 ${category} 제품군입니다.`}>
-          <div className="grid md:grid-cols-3 gap-6">
-              {[1, 2, 3, 4, 5, 6].map((i) => (
-                  <div key={i} className="group cursor-pointer">
-                      <div className="aspect-square bg-gray-100 rounded-2xl mb-4 overflow-hidden relative">
-                           <img src={`https://picsum.photos/seed/${category}${i}/400/400`} alt="Product" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
-                           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors"></div>
-                      </div>
-                      <h4 className="font-bold text-lg group-hover:text-brand-blue transition-colors">제품 모델명 {String(i).padStart(2, '0')}</h4>
-                      <p className="text-sm text-gray-500">규격 및 상세 스펙 설명</p>
-                  </div>
-              ))}
+const ProductsListPage = () => {
+    const { t } = useSite();
+    return (
+        <PublicLayout>
+          <div className="pt-32 pb-24 min-h-screen bg-brand-gray">
+             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                 <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">{t.products.title}</h1>
+                 <p className="text-xl text-gray-500 mb-12">{t.products.desc}</p>
+                 <ProductSection />
+             </div>
           </div>
-      </PageLayout>
-    </PublicLayout>
-);
+        </PublicLayout>
+    );
+};
+
+const ProductDetailPage = ({ category }: { category: string }) => {
+    const { t } = useSite();
+    return (
+        <PublicLayout>
+          <PageLayout title={`${category}`} subtitle={t.products.desc}>
+              <div className="grid md:grid-cols-3 gap-6">
+                  {[1, 2, 3, 4, 5, 6].map((i) => (
+                      <div key={i} className="group cursor-pointer">
+                          <div className="aspect-square bg-gray-100 rounded-2xl mb-4 overflow-hidden relative">
+                               <img src={`https://picsum.photos/seed/${category}${i}/400/400`} alt="Product" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+                               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors"></div>
+                          </div>
+                          <h4 className="font-bold text-lg group-hover:text-brand-blue transition-colors">{t.products.detail_page.model_name} {String(i).padStart(2, '0')}</h4>
+                          <p className="text-sm text-gray-500">{t.products.detail_page.spec_desc}</p>
+                      </div>
+                  ))}
+              </div>
+          </PageLayout>
+        </PublicLayout>
+    );
+};
 
 // Other Sections
-const ProcessPage = () => (
-    <PublicLayout>
-      <PageLayout title="생산공정" subtitle="원자재 입고부터 출하까지, 완벽을 기하는 공정 시스템">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {['용해/주조', '압출', '열처리', '교정', '절단', '피막', '가공', '검사/포장'].map((step, idx) => (
-                  <div key={step} className="p-6 bg-gray-50 rounded-xl text-center hover:bg-white hover:shadow-lg transition-all duration-300 border border-transparent hover:border-gray-100">
-                      <div className="text-3xl font-bold text-brand-blue/20 mb-2">0{idx + 1}</div>
-                      <h3 className="font-bold text-gray-900">{step}</h3>
-                  </div>
-              ))}
-          </div>
-      </PageLayout>
-    </PublicLayout>
-);
-
-const RndPage = () => (
-    <PublicLayout>
-      <PageLayout title="연구소" subtitle="미래 소재 기술을 선도하는 R&D 센터">
-          <div className="space-y-6 text-center">
-              <h3 className="text-2xl font-bold">Innovation for Future</h3>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                  기업부설연구소에서는 고강도/경량화 신소재 개발 및 차세대 친환경 공정 기술 연구에 매진하고 있습니다.
-              </p>
-              <div className="grid md:grid-cols-3 gap-6 mt-12">
-                   <div className="p-8 bg-gray-50 rounded-2xl">
-                       <h4 className="font-bold text-lg mb-2">신소재 개발</h4>
-                   </div>
-                   <div className="p-8 bg-gray-50 rounded-2xl">
-                       <h4 className="font-bold text-lg mb-2">공정 최적화</h4>
-                   </div>
-                   <div className="p-8 bg-gray-50 rounded-2xl">
-                       <h4 className="font-bold text-lg mb-2">품질 보증</h4>
-                   </div>
+const ProcessPage = () => {
+    const { t } = useSite();
+    return (
+        <PublicLayout>
+          <PageLayout title={t.pages.process.title} subtitle={t.pages.process.subtitle}>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {t.process.steps.map((step, idx) => (
+                      <div key={step} className="p-6 bg-gray-50 rounded-xl text-center hover:bg-white hover:shadow-lg transition-all duration-300 border border-transparent hover:border-gray-100">
+                          <div className="text-3xl font-bold text-brand-blue/20 mb-2">0{idx + 1}</div>
+                          <h3 className="font-bold text-gray-900">{step}</h3>
+                      </div>
+                  ))}
               </div>
-          </div>
-      </PageLayout>
-    </PublicLayout>
-);
+          </PageLayout>
+        </PublicLayout>
+    );
+};
+
+const RndPage = () => {
+    const { t } = useSite();
+    return (
+        <PublicLayout>
+          <PageLayout title={t.pages.rnd.title} subtitle={t.pages.rnd.subtitle}>
+              <div className="space-y-6 text-center">
+                  <h3 className="text-2xl font-bold">{t.rnd.title}</h3>
+                  <p className="text-gray-600 max-w-2xl mx-auto">
+                      {t.rnd.desc}
+                  </p>
+                  <div className="grid md:grid-cols-3 gap-6 mt-12">
+                       {t.rnd.cards.map((card, idx) => (
+                         <div key={idx} className="p-8 bg-gray-50 rounded-2xl">
+                             <h4 className="font-bold text-lg mb-2">{card}</h4>
+                         </div>
+                       ))}
+                  </div>
+              </div>
+          </PageLayout>
+        </PublicLayout>
+    );
+};
 
 // Improved Contact/Support Page
 const ContactPage = () => {
-  const { config } = useSite();
+  const { config, t } = useSite();
   
   return (
     <PublicLayout>
-      <PageLayout title="고객지원" subtitle="궁금하신 점이나 견적 문의를 남겨주세요.">
+      <PageLayout title={t.pages.support.title} subtitle={t.pages.support.subtitle}>
           <div className="grid lg:grid-cols-5 gap-12 items-start">
              {/* Left Info Column */}
              <div className="lg:col-span-2 space-y-8">
                 <div className="bg-brand-blue text-white p-8 rounded-3xl shadow-xl">
-                   <h3 className="text-xl font-bold mb-6">Contact Info</h3>
+                   <h3 className="text-xl font-bold mb-6">{t.contact.info.title}</h3>
                    <div className="space-y-6">
                       <div className="flex items-start gap-4">
                          <div className="p-2 bg-white/10 rounded-lg"><Phone className="w-5 h-5" /></div>
                          <div>
-                            <p className="text-xs text-blue-200 mb-1">전화번호</p>
+                            <p className="text-xs text-blue-200 mb-1">{t.contact.info.phone}</p>
                             <p className="font-bold text-lg">053-611-6061</p>
                          </div>
                       </div>
                       <div className="flex items-start gap-4">
                          <div className="p-2 bg-white/10 rounded-lg"><Mail className="w-5 h-5" /></div>
                          <div>
-                            <p className="text-xs text-blue-200 mb-1">이메일</p>
+                            <p className="text-xs text-blue-200 mb-1">{t.contact.info.email}</p>
                             <p className="font-bold">{config.contactEmail}</p>
                          </div>
                       </div>
                       <div className="flex items-start gap-4">
                          <div className="p-2 bg-white/10 rounded-lg"><Clock className="w-5 h-5" /></div>
                          <div>
-                            <p className="text-xs text-blue-200 mb-1">운영시간</p>
-                            <p className="font-bold">평일 09:00 - 18:00</p>
-                            <p className="text-sm text-blue-200">주말 및 공휴일 휴무</p>
+                            <p className="text-xs text-blue-200 mb-1">{t.contact.info.hours}</p>
+                            <p className="font-bold">{t.contact.info.hours_desc}</p>
+                            <p className="text-sm text-blue-200">{t.contact.info.closed}</p>
                          </div>
                       </div>
                    </div>
                 </div>
 
                 <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
-                   <h3 className="text-lg font-bold text-gray-900 mb-4">본사 위치</h3>
+                   <h3 className="text-lg font-bold text-gray-900 mb-4">{t.footer.daegu}</h3>
                    <div className="flex items-start gap-3 text-gray-600 mb-4">
                       <MapPin className="w-5 h-5 shrink-0 mt-1 text-brand-blue" />
-                      <p>대구광역시 달성군 구지면 달성2차동3로 46</p>
+                      <p>{t.footer.address_daegu}</p>
                    </div>
                    <a href="/about/location" className="text-sm font-bold text-brand-blue hover:underline block text-center bg-blue-50 py-3 rounded-xl">
-                      지도 자세히 보기
+                      {t.contact.info.view_map}
                    </a>
                 </div>
              </div>
@@ -682,10 +659,15 @@ const App: React.FC = () => {
             
             {/* Product Routes */}
             <Route path="/products" element={<ProductsListPage />} />
-            <Route path="/products/light" element={<ProductDetailPage category="경량소재" />} />
-            <Route path="/products/industry" element={<ProductDetailPage category="산업용소재" />} />
-            <Route path="/products/processing" element={<ProductDetailPage category="가공소재" />} />
-            <Route path="/products/construction" element={<ProductDetailPage category="건축소재" />} />
+            {/* Map product detail pages to use translations */}
+            <Route path="/products/light" element={<ProductDetailPage category={TRANSLATIONS.KOR.nav.light} />} />
+            <Route path="/products/industry" element={<ProductDetailPage category={TRANSLATIONS.KOR.nav.industry} />} />
+            <Route path="/products/processing" element={<ProductDetailPage category={TRANSLATIONS.KOR.nav.processing} />} />
+            <Route path="/products/electronic" element={<ProductDetailPage category={TRANSLATIONS.KOR.nav.electronic} />} />
+            <Route path="/products/construction" element={<ProductDetailPage category={TRANSLATIONS.KOR.nav.construction} />} />
+            <Route path="/products/environmental" element={<ProductDetailPage category={TRANSLATIONS.KOR.nav.environmental} />} />
+            <Route path="/products/exterior" element={<ProductDetailPage category={TRANSLATIONS.KOR.nav.exterior} />} />
+            <Route path="/products/substitute" element={<ProductDetailPage category={TRANSLATIONS.KOR.nav.substitute} />} />
             
             {/* Other Routes */}
             <Route path="/process" element={<ProcessPage />} />
