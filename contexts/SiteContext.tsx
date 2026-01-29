@@ -59,6 +59,13 @@ const DEFAULT_CONTENT: ContentMap = {
   'intro_main_title_1': 'Global Leader in',
   'intro_main_title_2': 'Aluminum Extrusion',
   'intro_desc': '대우경금속은 고객 맞춤형 설계, 생산, 피막, 기계가공 및 적기적소의 납기까지 Total 서비스를 제공합니다. 최첨단 설비와 축적된 기술력을 바탕으로 다양한 산업 분야의 핵심 소재를 공급하고 있습니다.',
+  
+  // Factory Images (New)
+  'intro_img_1': 'http://www.aldmc.co.kr/kor/images/about/introduction01.jpg',
+  'intro_img_2': 'http://www.aldmc.co.kr/kor/images/about/introduction02.jpg',
+  
+  // Philosophy Image
+  'philosophy_img_main': 'https://picsum.photos/id/48/800/1000'
 };
 
 const SiteContext = createContext<SiteContextType | undefined>(undefined);

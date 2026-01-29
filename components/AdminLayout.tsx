@@ -1,8 +1,9 @@
 
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, FileText, Settings, LogOut, Home, User, Layers } from 'lucide-react';
 import { useSite } from '../contexts/SiteContext';
+import { useAuth } from '../contexts/AuthContext';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -11,6 +12,13 @@ interface AdminLayoutProps {
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   const location = useLocation();
   const { config } = useSite();
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   const menuItems = [
     { label: '대시보드', path: '/admin', icon: <LayoutDashboard className="w-5 h-5" /> },
@@ -53,7 +61,10 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
             <Home className="w-5 h-5" />
             <span>사이트 바로가기</span>
           </Link>
-          <button className="w-full flex items-center space-x-3 px-4 py-3 text-red-400 hover:text-red-300 transition-colors">
+          <button 
+            onClick={handleLogout}
+            className="w-full flex items-center space-x-3 px-4 py-3 text-red-400 hover:text-red-300 transition-colors"
+          >
             <LogOut className="w-5 h-5" />
             <span>로그아웃</span>
           </button>

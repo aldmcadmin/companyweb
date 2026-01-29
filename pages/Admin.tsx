@@ -55,7 +55,7 @@ export const AdminDashboard: React.FC = () => {
 // --- Content Manager Component (New) ---
 export const AdminContent: React.FC = () => {
   const { certifications, addCertification, deleteCertification, content, updateContent } = useSite();
-  const [activeTab, setActiveTab] = useState<'cert' | 'text'>('cert');
+  const [activeTab, setActiveTab] = useState<'cert' | 'text' | 'images'>('cert');
   const [newCert, setNewCert] = useState({ title: '', imageUrl: '' });
 
   const handleCertUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,6 +76,51 @@ export const AdminContent: React.FC = () => {
     setNewCert({ title: '', imageUrl: '' });
   };
 
+  const handleContentImageUpload = (key: string, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        updateContent(key, reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Helper component for image upload block
+  const ImageUploadBlock = ({ label, contentKey, description }: { label: string, contentKey: string, description?: string }) => (
+    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+      <div className="flex justify-between items-start mb-4">
+         <div>
+            <h4 className="font-bold text-gray-900">{label}</h4>
+            {description && <p className="text-xs text-gray-500 mt-1">{description}</p>}
+         </div>
+      </div>
+      
+      <div className="space-y-3">
+         <div className="relative aspect-video w-full bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+            {content[contentKey] ? (
+               <img src={content[contentKey]} alt={label} className="w-full h-full object-cover" />
+            ) : (
+               <div className="flex items-center justify-center w-full h-full text-gray-400">
+                  <ImageIcon className="w-8 h-8" />
+               </div>
+            )}
+            <label className="absolute inset-0 bg-black/0 hover:bg-black/50 transition-colors flex items-center justify-center cursor-pointer group">
+               <span className="bg-white/90 text-gray-900 px-4 py-2 rounded-lg font-bold text-sm opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2">
+                  <Upload className="w-4 h-4" /> 이미지 변경
+               </span>
+               <input type="file" accept="image/*" className="hidden" onChange={(e) => handleContentImageUpload(contentKey, e)} />
+            </label>
+         </div>
+         <div className="flex items-center gap-2 text-xs text-gray-400">
+            <span className="truncate flex-1 font-mono bg-gray-50 p-1 rounded">{content[contentKey]?.substring(0, 40)}...</span>
+            <button onClick={() => updateContent(contentKey, '')} className="text-red-400 hover:text-red-500">삭제</button>
+         </div>
+      </div>
+    </div>
+  );
+
   return (
     <AdminLayout>
        <div className="space-y-6">
@@ -90,7 +135,13 @@ export const AdminContent: React.FC = () => {
                onClick={() => setActiveTab('text')}
                className={`pb-3 px-4 font-bold text-sm transition-colors ${activeTab === 'text' ? 'text-brand-blue border-b-2 border-brand-blue' : 'text-gray-500 hover:text-gray-700'}`}
              >
-               페이지 텍스트/이미지 수정
+               텍스트 편집
+             </button>
+             <button 
+               onClick={() => setActiveTab('images')}
+               className={`pb-3 px-4 font-bold text-sm transition-colors ${activeTab === 'images' ? 'text-brand-blue border-b-2 border-brand-blue' : 'text-gray-500 hover:text-gray-700'}`}
+             >
+               이미지 관리
              </button>
           </div>
 
@@ -190,15 +241,6 @@ export const AdminContent: React.FC = () => {
                         className="w-full border border-gray-200 rounded-lg p-2 mt-1 resize-none"
                       />
                    </div>
-                   <div>
-                      <label className="text-xs font-bold text-gray-500 uppercase">배경 이미지 URL</label>
-                      <input 
-                        type="text" 
-                        value={content['home_hero_bg'] || ''}
-                        onChange={(e) => updateContent('home_hero_bg', e.target.value)}
-                        className="w-full border border-gray-200 rounded-lg p-2 mt-1 text-xs"
-                      />
-                   </div>
                 </div>
 
                 {/* Intro Page Edit */}
@@ -233,6 +275,51 @@ export const AdminContent: React.FC = () => {
                         value={content['intro_desc'] || ''}
                         onChange={(e) => updateContent('intro_desc', e.target.value)}
                         className="w-full border border-gray-200 rounded-lg p-2 mt-1 resize-none"
+                      />
+                   </div>
+                </div>
+             </div>
+          )}
+
+          {activeTab === 'images' && (
+             <div className="animate-fade-in space-y-8">
+                {/* Section: Main */}
+                <div>
+                   <h3 className="text-lg font-bold text-gray-800 mb-4 px-1 border-l-4 border-brand-blue pl-3">메인 화면 (Home)</h3>
+                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      <ImageUploadBlock 
+                         label="히어로 배경 이미지" 
+                         contentKey="home_hero_bg" 
+                         description="메인 화면 최상단에 노출되는 대형 배경입니다."
+                      />
+                   </div>
+                </div>
+                
+                {/* Section: Company Intro */}
+                <div>
+                   <h3 className="text-lg font-bold text-gray-800 mb-4 px-1 border-l-4 border-brand-blue pl-3">회사 개요 (Factory)</h3>
+                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      <ImageUploadBlock 
+                         label="공장 사진 1 (대구)" 
+                         contentKey="intro_img_1" 
+                         description="회사개요 페이지 좌측/상단에 위치하는 첫 번째 사진입니다."
+                      />
+                      <ImageUploadBlock 
+                         label="공장 사진 2 (창녕)" 
+                         contentKey="intro_img_2" 
+                         description="회사개요 페이지 우측/하단에 위치하는 두 번째 사진입니다."
+                      />
+                   </div>
+                </div>
+
+                {/* Section: Philosophy */}
+                <div>
+                   <h3 className="text-lg font-bold text-gray-800 mb-4 px-1 border-l-4 border-brand-blue pl-3">경영 이념</h3>
+                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      <ImageUploadBlock 
+                         label="경영이념 메인 이미지" 
+                         contentKey="philosophy_img_main" 
+                         description="경영이념 섹션 좌측에 위치한 세로형 이미지입니다."
                       />
                    </div>
                 </div>

@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -11,8 +11,11 @@ import ContactForm from './components/ContactForm';
 import PageLayout from './components/PageLayout';
 import ScrollReveal from './components/ScrollReveal'; 
 import { SiteProvider, useSite } from './contexts/SiteContext';
+import { AuthProvider } from './contexts/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 import { AdminDashboard, AdminPosts, AdminSettings, AdminContent } from './pages/Admin';
-import { Phone, Mail, MapPin, Clock, TrendingUp, ThumbsUp, Lightbulb, UserCheck, Sparkles, Award } from 'lucide-react';
+import Login from './pages/Login';
+import { Phone, Mail, MapPin, Clock, TrendingUp, ThumbsUp, Lightbulb, UserCheck, Sparkles, Award, Printer, Navigation } from 'lucide-react';
 
 // Scroll to top on route change
 const ScrollToTop = () => {
@@ -71,7 +74,7 @@ const AboutIntroPage = () => {
             <ScrollReveal delay={0.1}>
                 <div className="group relative rounded-3xl overflow-hidden shadow-xl h-[300px] md:h-[400px]">
                   <img 
-                    src="http://www.aldmc.co.kr/kor/images/about/introduction01.jpg" 
+                    src={content['intro_img_1']} 
                     alt="대구공장 전경" 
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
@@ -86,7 +89,7 @@ const AboutIntroPage = () => {
             <ScrollReveal delay={0.2}>
                 <div className="group relative rounded-3xl overflow-hidden shadow-xl h-[300px] md:h-[400px]">
                   <img 
-                    src="http://www.aldmc.co.kr/kor/images/about/introduction02.jpg" 
+                    src={content['intro_img_2']} 
                     alt="창녕공장 전경" 
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
@@ -276,6 +279,7 @@ const AboutHistoryPage = () => {
 
 // Updated Philosophy Page with "Nonstop Jump" Concept
 const AboutPhilosophyPage = () => {
+  const { content } = useSite();
   const coreValues = [
     {
       icon: <ThumbsUp className="w-8 h-8" />,
@@ -413,27 +417,100 @@ const AboutCertificationPage = () => {
   );
 };
 
-const AboutLocationPage = () => (
-  <PublicLayout>
-    <PageLayout title="오시는 길" subtitle="대우경금속의 위치를 안내해 드립니다.">
-        <div className="space-y-8">
-            <div className="bg-gray-100 rounded-xl h-96 flex items-center justify-center">
-                <span className="text-gray-400 font-medium">지도 API 영역 (Google Maps / Naver Maps)</span>
-            </div>
-            <div className="grid md:grid-cols-2 gap-6">
-                <div className="p-6 bg-gray-50 rounded-xl">
-                    <h4 className="font-bold text-lg mb-2">대구 본사/공장</h4>
-                    <p className="text-gray-600">대구광역시 달성군 구지면 달성2차동3로 46</p>
+const AboutLocationPage = () => {
+  const [activeTab, setActiveTab] = useState<'daegu' | 'changnyeong'>('daegu');
+
+  const locations = {
+    daegu: {
+      name: '대구 본사/1공장',
+      address: '대구광역시 달성군 구지면 달성2차동3로 46',
+      tel: '053-611-6061',
+      fax: '053-611-6066',
+      mapQuery: '대구광역시 달성군 구지면 달성2차동3로 46'
+    },
+    changnyeong: {
+      name: '창녕 2공장',
+      address: '경남 창녕군 대합면 대합산업단지로 22-44',
+      tel: '055-533-0013',
+      fax: '055-533-0225',
+      mapQuery: '경남 창녕군 대합면 대합산업단지로 22-44'
+    }
+  };
+
+  const activeLoc = locations[activeTab];
+
+  return (
+    <PublicLayout>
+      <PageLayout title="오시는 길" subtitle="대우경금속의 사업장 위치를 안내해 드립니다.">
+          <div className="space-y-8">
+              {/* Map Container */}
+              <ScrollReveal>
+                <div className="w-full h-[400px] md:h-[500px] bg-gray-100 rounded-3xl overflow-hidden shadow-lg border border-gray-100 relative">
+                   <iframe 
+                      title="Location Map"
+                      width="100%" 
+                      height="100%" 
+                      frameBorder="0" 
+                      scrolling="no" 
+                      marginHeight={0} 
+                      marginWidth={0} 
+                      src={`https://maps.google.com/maps?q=${encodeURIComponent(activeLoc.mapQuery)}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
+                      className="w-full h-full"
+                   ></iframe>
+                   
+                   {/* Overlay Label for Context */}
+                   <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow-md border border-gray-200">
+                      <span className="font-bold text-brand-blue flex items-center gap-2">
+                         <MapPin className="w-4 h-4" /> {activeLoc.name}
+                      </span>
+                   </div>
                 </div>
-                <div className="p-6 bg-gray-50 rounded-xl">
-                    <h4 className="font-bold text-lg mb-2">창녕 공장</h4>
-                    <p className="text-gray-600">경남 창녕군 대합면 대합산업단지로 22-44</p>
-                </div>
-            </div>
-        </div>
-    </PageLayout>
-  </PublicLayout>
-);
+              </ScrollReveal>
+
+              {/* Selection Cards */}
+              <div className="grid md:grid-cols-2 gap-6">
+                  {(['daegu', 'changnyeong'] as const).map((key) => {
+                     const loc = locations[key];
+                     const isActive = activeTab === key;
+                     return (
+                       <ScrollReveal key={key} delay={0.1}>
+                         <div 
+                            onClick={() => setActiveTab(key)}
+                            className={`p-6 md:p-8 rounded-2xl cursor-pointer transition-all duration-300 ease-spring ${
+                               isActive 
+                               ? 'bg-white shadow-xl scale-[1.02] border-2 border-brand-blue' 
+                               : 'bg-gray-50 hover:bg-white hover:shadow-md border border-transparent'
+                            }`}
+                         >
+                             <div className="flex justify-between items-start mb-4">
+                                <h4 className={`font-bold text-xl ${isActive ? 'text-brand-blue' : 'text-gray-900'}`}>{loc.name}</h4>
+                                {isActive && <div className="bg-brand-blue text-white p-1 rounded-full"><Navigation className="w-4 h-4" /></div>}
+                             </div>
+                             
+                             <div className="space-y-3 text-sm md:text-base">
+                                <p className="flex items-start gap-3 text-gray-600">
+                                   <MapPin className={`w-5 h-5 shrink-0 mt-0.5 ${isActive ? 'text-brand-blue' : 'text-gray-400'}`} />
+                                   <span>{loc.address}</span>
+                                </p>
+                                <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 pl-8">
+                                   <p className="flex items-center gap-2 text-gray-500">
+                                      <Phone className="w-4 h-4" /> {loc.tel}
+                                   </p>
+                                   <p className="flex items-center gap-2 text-gray-500">
+                                      <Printer className="w-4 h-4" /> {loc.fax}
+                                   </p>
+                                </div>
+                             </div>
+                         </div>
+                       </ScrollReveal>
+                     );
+                  })}
+              </div>
+          </div>
+      </PageLayout>
+    </PublicLayout>
+  );
+};
 
 // Products Section
 const ProductsListPage = () => (
@@ -579,45 +656,50 @@ const NotFound = () => (
 
 const App: React.FC = () => {
   return (
-    <SiteProvider>
-      <Router>
-        <ScrollToTop />
-        <Routes>
-          {/* Admin Routes (No Header/Footer) */}
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/admin/content" element={<AdminContent />} />
-          <Route path="/admin/posts" element={<AdminPosts />} />
-          <Route path="/admin/settings" element={<AdminSettings />} />
+    <AuthProvider>
+      <SiteProvider>
+        <Router>
+          <ScrollToTop />
+          <Routes>
+            {/* Login Route */}
+            <Route path="/login" element={<Login />} />
 
-          {/* Public Routes */}
-          <Route path="/" element={<HomePage />} />
-          
-          {/* About Routes */}
-          <Route path="/about" element={<AboutPhilosophyPage />} />
-          <Route path="/about/intro" element={<AboutIntroPage />} />
-          <Route path="/about/history" element={<AboutHistoryPage />} />
-          <Route path="/about/cer" element={<AboutCertificationPage />} /> 
-          <Route path="/about/location" element={<AboutLocationPage />} />
-          
-          {/* Product Routes */}
-          <Route path="/products" element={<ProductsListPage />} />
-          <Route path="/products/light" element={<ProductDetailPage category="경량소재" />} />
-          <Route path="/products/industry" element={<ProductDetailPage category="산업용소재" />} />
-          <Route path="/products/processing" element={<ProductDetailPage category="가공소재" />} />
-          <Route path="/products/construction" element={<ProductDetailPage category="건축소재" />} />
-          
-          {/* Other Routes */}
-          <Route path="/process" element={<ProcessPage />} />
-          <Route path="/rnd" element={<RndPage />} />
-          
-          {/* Replaced SupportPage with ContactPage */}
-          <Route path="/support" element={<ContactPage />} />
-          <Route path="/contact" element={<ContactPage />} />
+            {/* Admin Routes (Protected) */}
+            <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+            <Route path="/admin/content" element={<ProtectedRoute><AdminContent /></ProtectedRoute>} />
+            <Route path="/admin/posts" element={<ProtectedRoute><AdminPosts /></ProtectedRoute>} />
+            <Route path="/admin/settings" element={<ProtectedRoute><AdminSettings /></ProtectedRoute>} />
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Router>
-    </SiteProvider>
+            {/* Public Routes */}
+            <Route path="/" element={<HomePage />} />
+            
+            {/* About Routes */}
+            <Route path="/about" element={<AboutPhilosophyPage />} />
+            <Route path="/about/intro" element={<AboutIntroPage />} />
+            <Route path="/about/history" element={<AboutHistoryPage />} />
+            <Route path="/about/cer" element={<AboutCertificationPage />} /> 
+            <Route path="/about/location" element={<AboutLocationPage />} />
+            
+            {/* Product Routes */}
+            <Route path="/products" element={<ProductsListPage />} />
+            <Route path="/products/light" element={<ProductDetailPage category="경량소재" />} />
+            <Route path="/products/industry" element={<ProductDetailPage category="산업용소재" />} />
+            <Route path="/products/processing" element={<ProductDetailPage category="가공소재" />} />
+            <Route path="/products/construction" element={<ProductDetailPage category="건축소재" />} />
+            
+            {/* Other Routes */}
+            <Route path="/process" element={<ProcessPage />} />
+            <Route path="/rnd" element={<RndPage />} />
+            
+            {/* Replaced SupportPage with ContactPage */}
+            <Route path="/support" element={<ContactPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Router>
+      </SiteProvider>
+    </AuthProvider>
   );
 };
 

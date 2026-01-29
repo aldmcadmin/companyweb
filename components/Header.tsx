@@ -34,9 +34,6 @@ const Header: React.FC = () => {
   const isTransparent = isHome && !isScrolled && !isMobileMenuOpen;
   const logoColor = isTransparent ? 'white' : config.primaryColor;
 
-  // Map translations to nav structure
-  // This simplistic mapping assumes the structure in constants matches translation keys
-  // For a real app, structure might be dynamic.
   const getNavLabel = (key: string) => {
     switch(key) {
       case '회사소개': return t.nav.about;
@@ -112,7 +109,7 @@ const Header: React.FC = () => {
             </nav>
 
             {/* Right Actions: Lang Switcher & CTA */}
-            <div className="hidden md:flex items-center gap-4">
+            <div className="hidden md:flex items-center gap-3">
               {/* Language Switcher */}
               <div className="relative group">
                  <button className={`flex items-center gap-1 text-xs font-bold px-2 py-1 rounded transition-colors ${!isTransparent ? 'text-gray-600 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}>
@@ -134,10 +131,15 @@ const Header: React.FC = () => {
                  </div>
               </div>
 
-              {/* Admin Button */}
+              {/* Admin Button - Now more visible with text and background */}
               <Link to="/admin" title="Admin Dashboard">
-                 <button className={`p-2 rounded-full transition-colors ${!isTransparent ? 'text-gray-400 hover:text-brand-blue hover:bg-gray-100' : 'text-white/50 hover:text-white hover:bg-white/10'}`}>
-                    <Settings className="w-5 h-5" />
+                 <button className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all border ${
+                   !isTransparent 
+                     ? 'bg-gray-100 border-gray-200 text-gray-700 hover:bg-brand-blue hover:text-white hover:border-brand-blue' 
+                     : 'bg-white/10 border-white/20 text-white hover:bg-white/20'
+                 }`}>
+                    <Settings className="w-4 h-4" />
+                    <span className="text-xs font-bold">ADMIN</span>
                  </button>
               </Link>
 
@@ -154,9 +156,11 @@ const Header: React.FC = () => {
 
             {/* Mobile Menu Button */}
             <div className="md:hidden flex items-center gap-3">
-               <Link to="/admin" className="z-50">
-                 <Settings className={`w-5 h-5 ${isMobileMenuOpen ? 'text-gray-900' : (!isTransparent ? 'text-gray-900' : 'text-white')}`} />
+               {/* Mobile Admin Icon - High contrast */}
+               <Link to="/admin" className="z-50 p-2 rounded-full bg-gray-100/50 backdrop-blur-sm">
+                 <Settings className={`w-5 h-5 ${!isTransparent ? 'text-gray-900' : 'text-gray-900'}`} />
                </Link>
+               
                <button 
                  className="z-50 focus:outline-none p-2"
                  onClick={toggleMobileMenu}
@@ -179,7 +183,15 @@ const Header: React.FC = () => {
         }`}
       >
         <div className="pt-28 px-6 h-full overflow-y-auto pb-10">
-          <div className="flex justify-end mb-6">
+          <div className="flex justify-between items-center mb-6">
+             <Link 
+               to="/admin" 
+               className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-lg text-gray-700 font-bold text-sm"
+               onClick={() => setIsMobileMenuOpen(false)}
+             >
+               <Settings className="w-4 h-4" /> 관리자 모드
+             </Link>
+
              <div className="flex bg-gray-100 rounded-lg p-1">
                {['KOR', 'ENG', 'JPN'].map((lang) => (
                   <button 
