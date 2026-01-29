@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import { useSite } from '../contexts/SiteContext';
-import { Users, Eye, FileText, MousePointer, Plus, Trash2, Search, Palette, Globe, Save, Upload, Image as ImageIcon, X, LayoutTemplate, Layers, Award, Package, Edit3 } from 'lucide-react';
+import { Users, Eye, FileText, MousePointer, Plus, Trash2, Search, Palette, Globe, Save, Upload, Image as ImageIcon, X, LayoutTemplate, Layers, Award, Package, Pencil, Wand2, Loader2 } from 'lucide-react';
 import { BorderRadiusSize } from '../types';
 
 // --- Dashboard Component ---
@@ -180,7 +180,7 @@ export const AdminContent: React.FC = () => {
                            <img src={product.imageUrl} alt={product.title} className="w-full h-full object-cover" />
                            <label className="absolute inset-0 bg-black/0 hover:bg-black/40 transition-colors flex items-center justify-center cursor-pointer group">
                               <span className="bg-white/90 text-gray-900 px-3 py-1.5 rounded-lg font-bold text-xs opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2">
-                                 <Edit3 className="w-3 h-3" /> 사진 변경
+                                 <Pencil className="w-3 h-3" /> 사진 변경
                               </span>
                               <input type="file" accept="image/*" className="hidden" onChange={(e) => handleProductImageUpload(product.id, e)} />
                            </label>
@@ -257,7 +257,7 @@ export const AdminContent: React.FC = () => {
                                   <button onClick={() => deleteCertification(cert.id)} className="text-white bg-red-500 p-2 rounded-full hover:bg-red-600">
                                      <Trash2 className="w-4 h-4" />
                                   </button>
-                               </div>
+                                </div>
                             </div>
                             <p className="text-center text-sm font-medium truncate">{cert.title}</p>
                          </div>
@@ -498,18 +498,77 @@ export const AdminPosts: React.FC = () => {
 export const AdminSettings: React.FC = () => {
   const { config, updateConfig } = useSite();
   const [localConfig, setLocalConfig] = useState(config);
+  const [autoRemoveBg, setAutoRemoveBg] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleSave = () => {
     updateConfig(localConfig);
     alert('설정이 저장되었습니다.');
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Function to remove background based on top-left pixel color
+  const removeImageBackground = (imageSrc: string): Promise<string> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.crossOrigin = "Anonymous";
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) { resolve(imageSrc); return; }
+        
+        ctx.drawImage(img, 0, 0);
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+        
+        // Get background color from top-left pixel
+        const bgR = data[0];
+        const bgG = data[1];
+        const bgB = data[2];
+        const bgA = data[3];
+
+        // If top-left is already transparent, assume it's good
+        if (bgA === 0) { resolve(imageSrc); return; }
+
+        const tolerance = 50; // Tolerance for color matching
+
+        for (let i = 0; i < data.length; i += 4) {
+          const r = data[i];
+          const g = data[i + 1];
+          const b = data[i + 2];
+
+          // Calculate distance from background color
+          const diff = Math.abs(r - bgR) + Math.abs(g - bgG) + Math.abs(b - bgB);
+
+          if (diff < tolerance) {
+            data[i + 3] = 0; // Make transparent
+          }
+        }
+
+        ctx.putImageData(imageData, 0, 0);
+        resolve(canvas.toDataURL('image/png'));
+      };
+      img.onerror = () => resolve(imageSrc);
+      img.src = imageSrc;
+    });
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setIsProcessing(true);
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setLocalConfig({ ...localConfig, logoUrl: reader.result as string });
+      reader.onloadend = async () => {
+        let result = reader.result as string;
+        
+        // Process if auto remove is enabled
+        if (autoRemoveBg) {
+           result = await removeImageBackground(result);
+        }
+        
+        setLocalConfig({ ...localConfig, logoUrl: result });
+        setIsProcessing(false);
       };
       reader.readAsDataURL(file);
     }
@@ -594,7 +653,12 @@ export const AdminSettings: React.FC = () => {
                     <label className="block text-sm font-medium text-gray-700 mb-3">로고 이미지</label>
                     <div className="flex items-start gap-6">
                        <div className="w-32 h-16 border border-gray-200 rounded-lg bg-gray-50 flex items-center justify-center overflow-hidden relative group">
-                          {localConfig.logoUrl ? (
+                          {isProcessing ? (
+                             <div className="flex flex-col items-center">
+                                <Loader2 className="w-6 h-6 animate-spin text-brand-blue mb-1" />
+                                <span className="text-xs text-gray-500">처리중</span>
+                             </div>
+                          ) : localConfig.logoUrl ? (
                             <>
                               <img src={localConfig.logoUrl} alt="Preview" className="w-full h-full object-contain p-2" />
                               <button 
@@ -608,13 +672,32 @@ export const AdminSettings: React.FC = () => {
                             <ImageIcon className="w-6 h-6 text-gray-400" />
                           )}
                        </div>
-                       <div className="flex-1">
-                          <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                       <div className="flex-1 space-y-3">
+                          <label className={`cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors ${isProcessing ? 'opacity-50 pointer-events-none' : ''}`}>
                              <Upload className="w-4 h-4" />
                              이미지 업로드
-                             <input type="file" accept="image/png, image/jpeg, image/svg+xml" onChange={handleImageUpload} className="hidden" />
+                             <input type="file" accept="image/png, image/jpeg, image/svg+xml" onChange={handleImageUpload} className="hidden" disabled={isProcessing} />
                           </label>
-                          <p className="text-xs text-gray-400 mt-2">
+                          
+                          {/* Magic Background Remover Toggle */}
+                          <div className="flex items-center gap-2">
+                             <button 
+                               onClick={() => setAutoRemoveBg(!autoRemoveBg)}
+                               className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
+                                  autoRemoveBg 
+                                  ? 'bg-indigo-100 text-indigo-700 border border-indigo-200 shadow-sm' 
+                                  : 'bg-gray-100 text-gray-500 border border-gray-200'
+                               }`}
+                             >
+                                <Wand2 className="w-3.5 h-3.5" />
+                                {autoRemoveBg ? '배경 자동 제거 ON' : '배경 자동 제거 OFF'}
+                             </button>
+                             <p className="text-xs text-gray-400">
+                                {autoRemoveBg ? '업로드 시 배경색을 자동으로 투명하게 만듭니다.' : '배경 제거 기능을 사용하려면 클릭하세요.'}
+                             </p>
+                          </div>
+                          
+                          <p className="text-xs text-gray-400">
                              배경이 투명한 PNG 파일을 권장합니다.
                           </p>
                        </div>

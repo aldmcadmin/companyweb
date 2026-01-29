@@ -93,6 +93,7 @@
               'scale-up': 'scaleUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
               'slow-reveal': 'slowReveal 1.8s cubic-bezier(0.19, 1, 0.22, 1) forwards',
               'soft-blink': 'softBlink 3s ease-in-out infinite',
+              'draw-stroke': 'drawStroke 2s ease-out forwards',
             },
             keyframes: {
               fadeIn: {
@@ -122,6 +123,10 @@
               softBlink: {
                 '0%, 100%': { opacity: '1', transform: 'translateY(0)' },
                 '50%': { opacity: '0.1', transform: 'translateY(15px)' }, 
+              },
+              drawStroke: {
+                '0%': { strokeDasharray: '1000', strokeDashoffset: '1000' },
+                '100%': { strokeDasharray: '1000', strokeDashoffset: '0' },
               }
             },
             transitionTimingFunction: {

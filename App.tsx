@@ -283,30 +283,46 @@ const AboutPhilosophyPage = () => {
       <PageLayout title={t.pages.philosophy.title} subtitle={t.pages.philosophy.subtitle}>
         <div className="py-8 space-y-24">
           
-          {/* Section 1: Nonstop Jump (Reinterpreted) */}
+          {/* Section 1: Nonstop Jump (Refined - Sophisticated & Modern) */}
           <ScrollReveal>
-             <div className="relative bg-brand-blue rounded-[3rem] p-10 md:p-20 overflow-hidden text-center text-white shadow-2xl shadow-blue-900/20">
-                {/* Background Decor - Abstract Growth Lines */}
-                <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
-                   <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-                      <path d="M0,100 C30,80 50,50 100,0" stroke="white" strokeWidth="2" fill="none" />
-                      <path d="M0,100 C40,90 60,60 100,10" stroke="white" strokeWidth="1" fill="none" />
-                   </svg>
-                </div>
+             <div className="group relative w-full rounded-[2.5rem] overflow-hidden shadow-2xl transition-all duration-500 hover:shadow-[0_20px_60px_-15px_rgba(7,29,73,0.3)]">
                 
-                <div className="relative z-10 flex flex-col items-center">
-                   <div className="w-20 h-20 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center mb-8 animate-float">
-                      <TrendingUp className="w-10 h-10 text-blue-200" />
+                {/* 1. Deep Space/Ocean Gradient Background */}
+                <div className="absolute inset-0 bg-[conic-gradient(at_bottom_left,_var(--tw-gradient-stops))] from-slate-900 via-[#071D49] to-[#0A265E] animate-pulse"></div>
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,#1e3a8a,transparent)] opacity-60 mix-blend-screen"></div>
+
+                {/* 2. Animated Particles / Grid (Subtle) */}
+                <div className="absolute inset-0 opacity-20" style={{ 
+                    backgroundImage: 'radial-gradient(rgba(255,255,255,0.3) 1px, transparent 1px)', 
+                    backgroundSize: '40px 40px' 
+                }}></div>
+
+                {/* 3. Content Container */}
+                <div className="relative z-10 flex flex-col items-center justify-center py-24 px-6 md:px-12 text-center">
+                   
+                   {/* Icon with Ring Pulse Animation */}
+                   <div className="relative mb-10">
+                      <div className="absolute inset-0 rounded-full bg-blue-400/20 animate-ping blur-xl"></div>
+                      <div className="absolute inset-0 rounded-full border border-white/20 scale-150 animate-pulse"></div>
+                      <div className="w-24 h-24 bg-gradient-to-tr from-white/10 to-white/5 backdrop-blur-md rounded-full border border-white/20 flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.1)] group-hover:scale-110 transition-transform duration-500 ease-spring">
+                         <TrendingUp className="w-10 h-10 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]" strokeWidth={1.5} />
+                      </div>
                    </div>
                    
-                   <h2 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight">
-                     Nonstop <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-white">Jump</span>
+                   {/* Typography: Modern & Elegant */}
+                   <h2 className="text-5xl md:text-7xl font-bold mb-8 tracking-tight text-white drop-shadow-lg">
+                     Nonstop <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 via-white to-blue-200 animate-text-shimmer bg-[length:200%_auto]">Jump</span>
                    </h2>
                    
-                   <p className="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto leading-relaxed">
+                   <div className="w-16 h-1 bg-gradient-to-r from-transparent via-blue-400 to-transparent mb-8 opacity-50"></div>
+
+                   <p className="text-lg md:text-2xl text-blue-50/90 max-w-3xl mx-auto leading-relaxed font-light tracking-wide mix-blend-overlay">
                      {t.philosophy.nonstop_desc}
                    </p>
                 </div>
+
+                {/* 4. Glassmorphism Reflection Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
              </div>
           </ScrollReveal>
 

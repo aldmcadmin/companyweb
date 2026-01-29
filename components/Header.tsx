@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { NAV_ITEMS } from '../constants'; 
-import { Menu, X, ChevronDown, Globe, Settings, ArrowRight } from 'lucide-react';
+import { Menu, X, ChevronDown, Globe, ArrowRight } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import Logo from './Logo';
 import { useSite } from '../contexts/SiteContext';
@@ -67,7 +67,7 @@ const Header: React.FC = () => {
       <header 
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           !isTransparent 
-            ? 'bg-white/80 backdrop-blur-md border-b border-gray-200/50 py-3 shadow-sm' 
+            ? 'bg-white/70 backdrop-blur-xl border-b border-white/20 py-3 shadow-sm' 
             : 'bg-transparent py-5'
         }`}
       >
@@ -87,30 +87,53 @@ const Header: React.FC = () => {
                 <div key={item.path} className="relative group px-3 py-2">
                   <Link 
                     to={item.path}
-                    className={`text-sm font-medium transition-all duration-200 flex items-center gap-1
+                    className={`text-sm font-medium transition-all duration-200 flex items-center gap-1.5
                       ${!isTransparent 
-                        ? (isPathActive(item.path) ? `text-[${config.primaryColor}]` : 'text-gray-600 hover:text-brand-blue') 
-                        : (isPathActive(item.path) ? 'text-white' : 'text-gray-300 hover:text-white')
+                        ? (isPathActive(item.path) ? `text-[${config.primaryColor}] font-bold` : 'text-gray-600 hover:text-brand-blue') 
+                        : (isPathActive(item.path) ? 'text-white font-bold' : 'text-white/80 hover:text-white')
                       }`}
                   >
                     {getNavLabel(item.label)}
                     {item.subItems && (
-                      <ChevronDown className={`w-3 h-3 transition-transform duration-200 group-hover:rotate-180 opacity-50`} />
+                      <ChevronDown className={`w-3 h-3 transition-transform duration-300 group-hover:rotate-180 opacity-60`} />
                     )}
                   </Link>
                   
-                  {/* Dropdown Menu */}
+                  {/* Mega Dropdown Menu (Enhanced Glassmorphism) */}
                   {item.subItems && (
-                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 pt-6 w-52 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300 ease-out z-50">
-                      <div className="bg-black/60 backdrop-blur-2xl rounded-2xl shadow-2xl border border-white/5 overflow-hidden p-2 ring-1 ring-black/5">
-                        <div className="flex flex-col space-y-1">
+                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 pt-4 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] z-50">
+                      <div className={`
+                        backdrop-blur-xl rounded-2xl border overflow-hidden p-1.5
+                        transition-colors duration-300 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)]
+                        ${isTransparent 
+                          ? 'bg-black/30 border-white/10 shadow-black/20' // Dark Glass (High Transparency)
+                          : 'bg-white/60 border-white/40 shadow-gray-200/50' // Light Glass (Frosted)
+                        }
+                        ${item.subItems.length > 5 ? 'w-[540px]' : 'w-max'}
+                      `}>
+                        <div className={`
+                          ${item.subItems.length > 5 
+                            ? 'grid grid-cols-4 gap-1' 
+                            : 'flex flex-row gap-1'}
+                        `}>
                           {item.subItems.map((sub) => (
                             <Link 
                               key={sub.path} 
                               to={sub.path}
-                              className="px-4 py-3 text-sm text-gray-300 hover:bg-white/10 hover:text-white rounded-xl transition-colors font-medium text-left"
+                              className={`
+                                flex items-center justify-center rounded-xl transition-all duration-200
+                                ${item.subItems!.length > 5 
+                                  ? 'py-2.5 px-2 text-center' 
+                                  : 'py-2 px-5 min-w-[100px] text-center'}
+                                ${isTransparent
+                                  ? 'text-white/90 hover:bg-white/20 hover:text-white hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]' 
+                                  : 'text-gray-700 hover:bg-white/80 hover:text-brand-blue hover:shadow-sm' 
+                                }
+                              `}
                             >
-                              {getNavLabel(sub.label)}
+                              <span className="block text-[13px] font-medium leading-tight">
+                                {getNavLabel(sub.label)}
+                              </span>
                             </Link>
                           ))}
                         </div>
@@ -126,15 +149,19 @@ const Header: React.FC = () => {
             </nav>
 
             {/* Right Actions: Lang Switcher & CTA */}
-            <div className="hidden md:flex items-center gap-3">
+            <div className="hidden md:flex items-center gap-2">
               {/* Language Switcher */}
               <div className="relative group">
-                 <button className={`flex items-center gap-1 text-xs font-bold px-2 py-1 rounded transition-colors ${!isTransparent ? 'text-gray-600 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}>
-                    <Globe className="w-3 h-3" />
+                 <button className={`flex items-center gap-1 text-xs font-bold px-3 py-2 rounded-full transition-all ${
+                   !isTransparent 
+                    ? 'text-gray-500 hover:bg-gray-100 hover:text-gray-900' 
+                    : 'text-white/80 hover:bg-white/10 hover:text-white'
+                 }`}>
+                    <Globe className="w-3.5 h-3.5" />
                     <span>{language}</span>
                  </button>
                  <div className="absolute top-full right-0 pt-2 w-24 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity z-50">
-                    <div className="bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden py-1">
+                    <div className="bg-white/90 backdrop-blur-md rounded-lg shadow-xl border border-gray-100 overflow-hidden py-1">
                        {['KOR', 'ENG', 'JPN'].map((lang) => (
                           <button 
                             key={lang}
@@ -148,44 +175,25 @@ const Header: React.FC = () => {
                  </div>
               </div>
 
-              {/* Admin Button */}
-              <Link to="/admin" title="Admin Dashboard">
-                 <button className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all border ${
-                   !isTransparent 
-                     ? 'bg-gray-100 border-gray-200 text-gray-700 hover:bg-brand-blue hover:text-white hover:border-brand-blue' 
-                     : 'bg-white/10 border-white/20 text-white hover:bg-white/20'
-                 }`}>
-                    <Settings className="w-4 h-4" />
-                    <span className="text-xs font-bold">ADMIN</span>
-                 </button>
-              </Link>
-
-              {/* Enhanced CTA Button */}
+              {/* Enhanced CTA Button - Minimal Ghost Style to Hover Fill */}
               <Link to="/contact">
                 <button className={`
-                  group relative overflow-hidden flex items-center gap-2 text-sm font-bold px-6 py-2.5 transition-all duration-300 ease-spring shadow-sm hover:shadow-lg active:scale-95 ${config.borderRadius}
+                  group relative overflow-hidden flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-full transition-all duration-300 ease-spring
                   ${!isTransparent 
-                    ? 'bg-brand-blue text-white hover:bg-[#334155]' // Toned down slate-700
-                    : 'bg-white text-brand-blue hover:bg-gray-50'}
+                    ? 'text-gray-900 bg-transparent hover:bg-gray-100' 
+                    : 'text-white bg-transparent hover:bg-white/20 hover:backdrop-blur-md'}
                 `}>
                   <span className="relative z-10 flex items-center gap-1">
                     {t.nav.contact}
                     {/* Arrow Animation */}
-                    <ArrowRight className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={3} />
+                    <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.5} />
                   </span>
-                  
-                  {/* Soft Glow Effect (Replacing Shimmer) */}
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.15)_0%,_transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out pointer-events-none" />
                 </button>
               </Link>
             </div>
 
             {/* Mobile Menu Button */}
             <div className="md:hidden flex items-center gap-3">
-               <Link to="/admin" className="z-50 p-2 rounded-full bg-gray-100/50 backdrop-blur-sm">
-                 <Settings className={`w-5 h-5 ${!isTransparent ? 'text-gray-900' : 'text-gray-900'}`} />
-               </Link>
-               
                <button 
                  className="z-50 focus:outline-none p-2"
                  onClick={toggleMobileMenu}
@@ -208,15 +216,7 @@ const Header: React.FC = () => {
         }`}
       >
         <div className="pt-28 px-6 h-full overflow-y-auto pb-10">
-          <div className="flex justify-between items-center mb-6">
-             <Link 
-               to="/admin" 
-               className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-lg text-gray-700 font-bold text-sm"
-               onClick={() => setIsMobileMenuOpen(false)}
-             >
-               <Settings className="w-4 h-4" /> 관리자 모드
-             </Link>
-
+          <div className="flex justify-end items-center mb-6">
              <div className="flex bg-gray-100 rounded-lg p-1">
                {['KOR', 'ENG', 'JPN'].map((lang) => (
                   <button 

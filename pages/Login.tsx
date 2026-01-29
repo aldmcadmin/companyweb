@@ -66,7 +66,7 @@ const Login: React.FC = () => {
                 value={id}
                 onChange={(e) => setId(e.target.value)}
                 className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition-all"
-                placeholder="admin"
+                placeholder="dmcadmin"
               />
             </div>
             <div>
