@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { NAV_ITEMS } from '../constants'; // Kept for structure, labels overridden by translation
-import { Menu, X, ChevronDown, Globe } from 'lucide-react';
+import { Menu, X, ChevronDown, Globe, Settings } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import Logo from './Logo';
 import { useSite } from '../contexts/SiteContext';
@@ -134,6 +134,13 @@ const Header: React.FC = () => {
                  </div>
               </div>
 
+              {/* Admin Button */}
+              <Link to="/admin" title="Admin Dashboard">
+                 <button className={`p-2 rounded-full transition-colors ${!isTransparent ? 'text-gray-400 hover:text-brand-blue hover:bg-gray-100' : 'text-white/50 hover:text-white hover:bg-white/10'}`}>
+                    <Settings className="w-5 h-5" />
+                 </button>
+              </Link>
+
               <Link to="/contact">
                 <button className={`text-sm font-medium px-5 py-2 transition-all duration-300 shadow-sm hover:shadow-md active:scale-95 ${config.borderRadius} ${
                   !isTransparent 
@@ -146,16 +153,21 @@ const Header: React.FC = () => {
             </div>
 
             {/* Mobile Menu Button */}
-            <button 
-              className="md:hidden z-50 focus:outline-none p-2"
-              onClick={toggleMobileMenu}
-            >
-              {isMobileMenuOpen ? (
-                <X className="h-6 w-6 text-gray-900" />
-              ) : (
-                <Menu className={`h-6 w-6 ${!isTransparent ? 'text-gray-900' : 'text-white'}`} />
-              )}
-            </button>
+            <div className="md:hidden flex items-center gap-3">
+               <Link to="/admin" className="z-50">
+                 <Settings className={`w-5 h-5 ${isMobileMenuOpen ? 'text-gray-900' : (!isTransparent ? 'text-gray-900' : 'text-white')}`} />
+               </Link>
+               <button 
+                 className="z-50 focus:outline-none p-2"
+                 onClick={toggleMobileMenu}
+               >
+                 {isMobileMenuOpen ? (
+                   <X className="h-6 w-6 text-gray-900" />
+                 ) : (
+                   <Menu className={`h-6 w-6 ${!isTransparent ? 'text-gray-900' : 'text-white'}`} />
+                 )}
+               </button>
+            </div>
           </div>
         </div>
       </header>

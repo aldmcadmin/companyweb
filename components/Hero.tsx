@@ -9,7 +9,7 @@ const Hero: React.FC = () => {
   const [scrollY, setScrollY] = useState(0);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
-  const { t } = useSite();
+  const { t, content } = useSite();
 
   useEffect(() => {
     let ticking = false;
@@ -49,7 +49,7 @@ const Hero: React.FC = () => {
     <div ref={containerRef} className="relative h-screen w-full overflow-hidden bg-[#111111]">
       {/* 
         Background Image Layer 
-        - Replaced with new image from user request
+        - Reads URL from content context
         - Applied grayscale and brightness filters to create 'Charcoal' tone
         - Mouse parallax (translate X/Y) + Scroll parallax (translate Y)
       */}
@@ -65,16 +65,14 @@ const Hero: React.FC = () => {
       >
         <div className="w-full h-full">
             <img 
-            src="https://plus.unsplash.com/premium_photo-1672423154405-5fd922c11af2?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-            alt="Geometric Metal Texture" 
+            src={content['home_hero_bg']} 
+            alt="Hero Background" 
             className="w-full h-full object-cover filter grayscale brightness-[0.4] contrast-125" 
             />
         </div>
         
         {/* 
            Gradient Overlay
-           - Deep Charcoal at bottom/top fading to transparent
-           - Slight hint of Brand Blue (30% opacity) to maintain identity while keeping it mostly neutral
         */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#071D49]/30 to-[#050505]/60 mix-blend-multiply" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80" />
@@ -92,20 +90,20 @@ const Hero: React.FC = () => {
           {/* Badge */}
           <div className="animate-slide-up" style={{ animationDelay: '0.1s' }}>
             <span className="inline-block px-4 py-1.5 rounded-full border border-white/20 text-white/90 text-sm font-medium backdrop-blur-md bg-white/5 shadow-[0_0_15px_rgba(255,255,255,0.05)]">
-              {t.hero.badge}
+              {content['home_hero_badge'] || t.hero.badge}
             </span>
           </div>
           
           <h1 className="text-4xl md:text-7xl font-bold text-white tracking-tighter leading-[1.1] animate-slide-up" style={{ animationDelay: '0.2s' }}>
-            {t.hero.title_prefix} <br/>
+            {content['home_hero_title_prefix'] || t.hero.title_prefix} <br/>
             {/* Metallic Text Effect */}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-100 via-gray-300 to-gray-500 drop-shadow-lg">
-              {t.hero.title_highlight}
+              {content['home_hero_title_highlight'] || t.hero.title_highlight}
             </span>
           </h1>
           
           <p className="text-lg md:text-2xl text-gray-400 leading-relaxed max-w-2xl animate-slide-up" style={{ animationDelay: '0.4s' }}>
-            {t.hero.desc}
+            {content['home_hero_desc'] || t.hero.desc}
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 pt-6 animate-slide-up" style={{ animationDelay: '0.6s' }}>

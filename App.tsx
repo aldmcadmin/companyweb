@@ -9,9 +9,9 @@ import ProductSection from './components/ProductSection';
 import ContactBanner from './components/ContactBanner';
 import ContactForm from './components/ContactForm';
 import PageLayout from './components/PageLayout';
-import ScrollReveal from './components/ScrollReveal'; // Added import
+import ScrollReveal from './components/ScrollReveal'; 
 import { SiteProvider, useSite } from './contexts/SiteContext';
-import { AdminDashboard, AdminPosts, AdminSettings } from './pages/Admin';
+import { AdminDashboard, AdminPosts, AdminSettings, AdminContent } from './pages/Admin';
 import { Phone, Mail, MapPin, Clock, TrendingUp, ThumbsUp, Lightbulb, UserCheck, Sparkles, Award } from 'lucide-react';
 
 // Scroll to top on route change
@@ -46,125 +46,127 @@ const HomePage = () => (
 );
 
 // About Section
-const AboutIntroPage = () => (
-  <PublicLayout>
-    <PageLayout title="회사개요" subtitle="대우경금속은 끊임없는 혁신으로 알루미늄 산업의 미래를 창조합니다.">
-      <div className="space-y-16">
-        
-        {/* Intro Text & Vision */}
-        <ScrollReveal>
-          <div className="text-center max-w-3xl mx-auto space-y-6 mb-12">
-             <h3 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight">
-               Global Leader in <br/>
-               <span className="text-brand-blue">Aluminum Extrusion</span>
-             </h3>
-             <p className="text-gray-600 leading-relaxed text-lg break-keep">
-               대우경금속은 고객 맞춤형 설계, 생산, 피막, 기계가공 및 적기적소의 납기까지 Total 서비스를 제공합니다.
-               최첨단 설비와 축적된 기술력을 바탕으로 자동차, 전자, 건축 등 다양한 산업 분야의 핵심 소재를 공급하고 있습니다.
-             </p>
-          </div>
-        </ScrollReveal>
-
-        {/* Factory Images */}
-        <div className="grid md:grid-cols-2 gap-8">
-           <ScrollReveal delay={0.1}>
-              <div className="group relative rounded-3xl overflow-hidden shadow-xl h-[300px] md:h-[400px]">
-                 <img 
-                   src="http://www.aldmc.co.kr/kor/images/about/introduction01.jpg" 
-                   alt="대구공장 전경" 
-                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                 />
-                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-8">
-                    <div className="text-white transform transition-transform duration-300 group-hover:-translate-y-2">
-                       <h4 className="text-2xl font-bold mb-2">대구공장 (본사)</h4>
-                       <p className="text-white/80 text-sm font-medium">최첨단 압출 설비 및 본사 운영<br/>IATF 16949 인증 사업장</p>
-                    </div>
-                 </div>
-              </div>
-           </ScrollReveal>
-           <ScrollReveal delay={0.2}>
-              <div className="group relative rounded-3xl overflow-hidden shadow-xl h-[300px] md:h-[400px]">
-                 <img 
-                   src="http://www.aldmc.co.kr/kor/images/about/introduction02.jpg" 
-                   alt="창녕공장 전경" 
-                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                 />
-                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-8">
-                    <div className="text-white transform transition-transform duration-300 group-hover:-translate-y-2">
-                       <h4 className="text-2xl font-bold mb-2">창녕공장</h4>
-                       <p className="text-white/80 text-sm font-medium">대규모 물류 센터 및 제2 생산 거점<br/>스마트 팩토리 시스템 구축</p>
-                    </div>
-                 </div>
-              </div>
-           </ScrollReveal>
-        </div>
-
-        {/* Company Detail Table (Styled as Cards/List) */}
-        <ScrollReveal delay={0.3}>
-           <div className="bg-gray-50 rounded-[2.5rem] p-8 md:p-12 border border-gray-100/50 shadow-inner">
-              <h3 className="text-xl font-bold text-gray-900 mb-8 flex items-center gap-3">
-                 <span className="w-1.5 h-6 bg-brand-blue rounded-full"></span>
-                 기업 상세 정보
+const AboutIntroPage = () => {
+  const { content } = useSite();
+  return (
+    <PublicLayout>
+      <PageLayout title="회사개요" subtitle="대우경금속은 끊임없는 혁신으로 알루미늄 산업의 미래를 창조합니다.">
+        <div className="space-y-16">
+          
+          {/* Intro Text & Vision */}
+          <ScrollReveal>
+            <div className="text-center max-w-3xl mx-auto space-y-6 mb-12">
+              <h3 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight">
+                {content['intro_main_title_1']} <br/>
+                <span className="text-brand-blue">{content['intro_main_title_2']}</span>
               </h3>
-              
-              <div className="space-y-6">
-                 {/* Row Item */}
-                 <div className="flex flex-col md:flex-row md:items-baseline border-b border-gray-200 pb-6">
-                    <div className="w-40 font-bold text-gray-500 shrink-0 mb-2 md:mb-0">회사명</div>
-                    <div className="font-bold text-lg text-gray-900">(주)대우경금속</div>
-                 </div>
+              <p className="text-gray-600 leading-relaxed text-lg break-keep">
+                {content['intro_desc']}
+              </p>
+            </div>
+          </ScrollReveal>
 
-                 <div className="flex flex-col md:flex-row md:items-baseline border-b border-gray-200 pb-6">
-                    <div className="w-40 font-bold text-gray-500 shrink-0 mb-2 md:mb-0">대표이사</div>
-                    <div className="font-bold text-lg text-gray-900">김도연</div>
-                 </div>
+          {/* Factory Images */}
+          <div className="grid md:grid-cols-2 gap-8">
+            <ScrollReveal delay={0.1}>
+                <div className="group relative rounded-3xl overflow-hidden shadow-xl h-[300px] md:h-[400px]">
+                  <img 
+                    src="http://www.aldmc.co.kr/kor/images/about/introduction01.jpg" 
+                    alt="대구공장 전경" 
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-8">
+                      <div className="text-white transform transition-transform duration-300 group-hover:-translate-y-2">
+                        <h4 className="text-2xl font-bold mb-2">대구공장 (본사)</h4>
+                        <p className="text-white/80 text-sm font-medium">최첨단 압출 설비 및 본사 운영<br/>IATF 16949 인증 사업장</p>
+                      </div>
+                  </div>
+                </div>
+            </ScrollReveal>
+            <ScrollReveal delay={0.2}>
+                <div className="group relative rounded-3xl overflow-hidden shadow-xl h-[300px] md:h-[400px]">
+                  <img 
+                    src="http://www.aldmc.co.kr/kor/images/about/introduction02.jpg" 
+                    alt="창녕공장 전경" 
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-8">
+                      <div className="text-white transform transition-transform duration-300 group-hover:-translate-y-2">
+                        <h4 className="text-2xl font-bold mb-2">창녕공장</h4>
+                        <p className="text-white/80 text-sm font-medium">대규모 물류 센터 및 제2 생산 거점<br/>스마트 팩토리 시스템 구축</p>
+                      </div>
+                  </div>
+                </div>
+            </ScrollReveal>
+          </div>
 
-                 <div className="flex flex-col md:flex-row md:items-baseline border-b border-gray-200 pb-6">
-                    <div className="w-40 font-bold text-gray-500 shrink-0 mb-2 md:mb-0">주요사업</div>
-                    <div className="text-gray-800 leading-relaxed">알루미늄 압출 제조 및 판매 (자동차, 전자, 건축, 산업용 소재)</div>
-                 </div>
+          {/* Company Detail Table */}
+          <ScrollReveal delay={0.3}>
+            <div className="bg-gray-50 rounded-[2.5rem] p-8 md:p-12 border border-gray-100/50 shadow-inner">
+                <h3 className="text-xl font-bold text-gray-900 mb-8 flex items-center gap-3">
+                  <span className="w-1.5 h-6 bg-brand-blue rounded-full"></span>
+                  기업 상세 정보
+                </h3>
+                
+                <div className="space-y-6">
+                  {/* Row Item */}
+                  <div className="flex flex-col md:flex-row md:items-baseline border-b border-gray-200 pb-6">
+                      <div className="w-40 font-bold text-gray-500 shrink-0 mb-2 md:mb-0">회사명</div>
+                      <div className="font-bold text-lg text-gray-900">(주)대우경금속</div>
+                  </div>
 
-                 <div className="flex flex-col md:flex-row md:items-start border-b border-gray-200 pb-6">
-                    <div className="w-40 font-bold text-gray-500 shrink-0 mb-4 md:mb-0 pt-1">사업장 안내</div>
-                    <div className="flex-1 space-y-6">
-                       <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                          <span className="font-bold block text-brand-blue mb-2 text-lg">본사 / 1공장 (대구)</span>
-                          <p className="text-gray-700 mb-3">대구광역시 달성군 구지면 달성2차동3로 46 (달성2차 산업단지내)</p>
-                          <div className="flex flex-wrap gap-4 text-sm text-gray-500 bg-gray-50 p-3 rounded-xl">
-                             <span className="flex items-center gap-1"><Phone className="w-3 h-3" /> T. 053-611-6061</span>
-                             <span className="hidden sm:inline text-gray-300">|</span>
-                             <span>F. 053-611-6066</span>
-                          </div>
-                       </div>
-                       
-                       <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                          <span className="font-bold block text-brand-blue mb-2 text-lg">2공장 (창녕)</span>
-                          <p className="text-gray-700 mb-3">경남 창녕군 대합면 대합산업단지로 22-44</p>
-                          <div className="flex flex-wrap gap-4 text-sm text-gray-500 bg-gray-50 p-3 rounded-xl">
-                             <span className="flex items-center gap-1"><Phone className="w-3 h-3" /> T. 055-533-0013</span>
-                             <span className="hidden sm:inline text-gray-300">|</span>
-                             <span>F. 055-533-0225</span>
-                          </div>
-                       </div>
+                  <div className="flex flex-col md:flex-row md:items-baseline border-b border-gray-200 pb-6">
+                      <div className="w-40 font-bold text-gray-500 shrink-0 mb-2 md:mb-0">대표이사</div>
+                      <div className="font-bold text-lg text-gray-900">김도연</div>
+                  </div>
 
-                       <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                          <span className="font-bold block text-brand-blue mb-2 text-lg">일본 판매 법인</span>
-                          <p className="text-gray-700 mb-3">Daewoo Metal Japan Co., Ltd. 591-1, Miyata, Miyawaka-city, Fukuoka-ken Japan</p>
-                          <div className="flex flex-wrap gap-4 text-sm text-gray-500 bg-gray-50 p-3 rounded-xl">
-                             <span className="flex items-center gap-1"><Phone className="w-3 h-3" /> T. +81-949-28-8028</span>
-                             <span className="hidden sm:inline text-gray-300">|</span>
-                             <span>F. +81-949-28-8028</span>
-                          </div>
-                       </div>
-                    </div>
-                 </div>
-              </div>
-           </div>
-        </ScrollReveal>
-      </div>
-    </PageLayout>
-  </PublicLayout>
-);
+                  <div className="flex flex-col md:flex-row md:items-baseline border-b border-gray-200 pb-6">
+                      <div className="w-40 font-bold text-gray-500 shrink-0 mb-2 md:mb-0">주요사업</div>
+                      <div className="text-gray-800 leading-relaxed">알루미늄 압출 제조 및 판매 (자동차, 전자, 건축, 산업용 소재)</div>
+                  </div>
+
+                  <div className="flex flex-col md:flex-row md:items-start border-b border-gray-200 pb-6">
+                      <div className="w-40 font-bold text-gray-500 shrink-0 mb-4 md:mb-0 pt-1">사업장 안내</div>
+                      <div className="flex-1 space-y-6">
+                        <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                            <span className="font-bold block text-brand-blue mb-2 text-lg">본사 / 1공장 (대구)</span>
+                            <p className="text-gray-700 mb-3">대구광역시 달성군 구지면 달성2차동3로 46 (달성2차 산업단지내)</p>
+                            <div className="flex flex-wrap gap-4 text-sm text-gray-500 bg-gray-50 p-3 rounded-xl">
+                              <span className="flex items-center gap-1"><Phone className="w-3 h-3" /> T. 053-611-6061</span>
+                              <span className="hidden sm:inline text-gray-300">|</span>
+                              <span>F. 053-611-6066</span>
+                            </div>
+                        </div>
+                        
+                        <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                            <span className="font-bold block text-brand-blue mb-2 text-lg">2공장 (창녕)</span>
+                            <p className="text-gray-700 mb-3">경남 창녕군 대합면 대합산업단지로 22-44</p>
+                            <div className="flex flex-wrap gap-4 text-sm text-gray-500 bg-gray-50 p-3 rounded-xl">
+                              <span className="flex items-center gap-1"><Phone className="w-3 h-3" /> T. 055-533-0013</span>
+                              <span className="hidden sm:inline text-gray-300">|</span>
+                              <span>F. 055-533-0225</span>
+                            </div>
+                        </div>
+
+                        <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                            <span className="font-bold block text-brand-blue mb-2 text-lg">일본 판매 법인</span>
+                            <p className="text-gray-700 mb-3">Daewoo Metal Japan Co., Ltd. 591-1, Miyata, Miyawaka-city, Fukuoka-ken Japan</p>
+                            <div className="flex flex-wrap gap-4 text-sm text-gray-500 bg-gray-50 p-3 rounded-xl">
+                              <span className="flex items-center gap-1"><Phone className="w-3 h-3" /> T. +81-949-28-8028</span>
+                              <span className="hidden sm:inline text-gray-300">|</span>
+                              <span>F. +81-949-28-8028</span>
+                            </div>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+            </div>
+          </ScrollReveal>
+        </div>
+      </PageLayout>
+    </PublicLayout>
+  );
+};
 
 const AboutHistoryPage = () => {
   const historyData = [
@@ -372,24 +374,9 @@ const AboutPhilosophyPage = () => {
   );
 };
 
-// New Certification Page
+// New Certification Page - Consumes Dynamic Content
 const AboutCertificationPage = () => {
-  // Using direct URLs from the original site to ensure they display immediately without local file management
-  // Updated ISO 14001 with user provided URL
-  const certifications = [
-    { title: "ISO 14001", img: "https://file.notion.so/f/f/c7dae5a5-48c6-4450-a729-3ac476c1b5bf/66d8c4ba-557d-4474-99e1-1fdcb5e3b341/%EC%9D%B8%EC%A6%9D%EC%84%9C_ISO_14001_KOR.jpg?table=block&id=2f7c2f22-549c-8023-8c3e-d83be4f40481&spaceId=c7dae5a5-48c6-4450-a729-3ac476c1b5bf&expirationTimestamp=1769731200000&signature=_GF85xHtmem9PFnqeJ4ijquTGWVOlLlwLXik6dkXWso&downloadName=%5B%EC%9D%B8%EC%A6%9D%EC%84%9C%5D+ISO+14001_KOR.jpg" },
-    { title: "ISO 9001", img: "http://www.aldmc.co.kr/kor/images/about/cer/cer02_z.gif" },
-    { title: "벤처기업확인서", img: "http://www.aldmc.co.kr/kor/images/about/cer/cer03_z.gif" },
-    { title: "KS 제품인증서", img: "http://www.aldmc.co.kr/kor/images/about/cer/cer04_z.gif" },
-    { title: "기업부설연구소 인정서", img: "http://www.aldmc.co.kr/kor/images/about/cer/cer05_z.gif" },
-    { title: "기술혁신형 중소기업(INNO-BIZ) 확인서", img: "http://www.aldmc.co.kr/kor/images/about/cer/cer06_z.gif" },
-    { title: "IATF 16949", img: "http://www.aldmc.co.kr/kor/images/about/cer/cer07_z.gif" },
-    { title: "상표등록증", img: "http://www.aldmc.co.kr/kor/images/about/cer/cer08_z.gif" },
-    { title: "상표등록증", img: "http://www.aldmc.co.kr/kor/images/about/cer/cer09_z.gif" },
-    { title: "DNV-GL 인증서", img: "http://www.aldmc.co.kr/kor/images/about/cer/cer10_z.gif" },
-    { title: "특허증(10-0893074)", img: "http://www.aldmc.co.kr/kor/images/about/cer/cer11_z.gif" },
-    { title: "특허증(10-1629473)", img: "http://www.aldmc.co.kr/kor/images/about/cer/cer12_z.gif" },
-  ];
+  const { certifications } = useSite();
 
   return (
     <PublicLayout>
@@ -397,7 +384,7 @@ const AboutCertificationPage = () => {
          <ScrollReveal>
              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
                  {certifications.map((cer, idx) => (
-                     <div key={idx} className="group flex flex-col items-center">
+                     <div key={cer.id} className="group flex flex-col items-center">
                          <div className="w-full bg-white border border-gray-100 p-2 md:p-4 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.03)] group-hover:shadow-xl group-hover:-translate-y-2 transition-all duration-300 ease-spring cursor-pointer">
                              <div className="aspect-[3/4] overflow-hidden rounded-lg bg-white relative flex items-center justify-center">
                                  {/* Fallback styling in case image fails */}
@@ -405,7 +392,7 @@ const AboutCertificationPage = () => {
                                      <Award className="w-12 h-12 opacity-20" />
                                  </div>
                                  <img 
-                                   src={cer.img} 
+                                   src={cer.imageUrl} 
                                    alt={cer.title} 
                                    className="relative z-10 w-full h-full object-contain transform transition-transform duration-500 group-hover:scale-105"
                                    onError={(e) => {
@@ -598,6 +585,7 @@ const App: React.FC = () => {
         <Routes>
           {/* Admin Routes (No Header/Footer) */}
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/content" element={<AdminContent />} />
           <Route path="/admin/posts" element={<AdminPosts />} />
           <Route path="/admin/settings" element={<AdminSettings />} />
 
@@ -608,7 +596,7 @@ const App: React.FC = () => {
           <Route path="/about" element={<AboutPhilosophyPage />} />
           <Route path="/about/intro" element={<AboutIntroPage />} />
           <Route path="/about/history" element={<AboutHistoryPage />} />
-          <Route path="/about/cer" element={<AboutCertificationPage />} /> {/* Added Route */}
+          <Route path="/about/cer" element={<AboutCertificationPage />} /> 
           <Route path="/about/location" element={<AboutLocationPage />} />
           
           {/* Product Routes */}

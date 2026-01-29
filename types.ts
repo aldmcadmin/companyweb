@@ -46,4 +46,17 @@ export interface SiteConfig {
   logoUrl?: string | null; // URL or Base64 string of the uploaded logo
 }
 
+export interface Certification {
+  id: string;
+  title: string;
+  imageUrl: string;
+}
+
+// Flexible key-value store for page texts and images
+export interface ContentMap {
+  [key: string]: string; 
+  // Example: 'home_hero_title': 'The Future of...'
+  // 'home_hero_bg': 'https://...'
+}
+
 export type Language = 'KOR' | 'ENG' | 'JPN';

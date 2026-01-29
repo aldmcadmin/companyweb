@@ -1,6 +1,7 @@
+
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, FileText, Settings, LogOut, Home, User } from 'lucide-react';
+import { LayoutDashboard, FileText, Settings, LogOut, Home, User, Layers } from 'lucide-react';
 import { useSite } from '../contexts/SiteContext';
 
 interface AdminLayoutProps {
@@ -13,6 +14,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
 
   const menuItems = [
     { label: '대시보드', path: '/admin', icon: <LayoutDashboard className="w-5 h-5" /> },
+    { label: '페이지/콘텐츠 관리', path: '/admin/content', icon: <Layers className="w-5 h-5" /> },
     { label: '게시글 관리', path: '/admin/posts', icon: <FileText className="w-5 h-5" /> },
     { label: '사이트 설정', path: '/admin/settings', icon: <Settings className="w-5 h-5" /> },
   ];

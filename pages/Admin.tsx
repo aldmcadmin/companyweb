@@ -2,17 +2,17 @@
 import React, { useState } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import { useSite } from '../contexts/SiteContext';
-import { Users, Eye, FileText, MousePointer, Plus, Trash2, Search, Palette, Globe, Save, Upload, Image as ImageIcon, X, LayoutTemplate } from 'lucide-react';
+import { Users, Eye, FileText, MousePointer, Plus, Trash2, Search, Palette, Globe, Save, Upload, Image as ImageIcon, X, LayoutTemplate, Layers, Award } from 'lucide-react';
 import { BorderRadiusSize } from '../types';
 
 // --- Dashboard Component ---
 export const AdminDashboard: React.FC = () => {
-  const { posts } = useSite();
+  const { posts, certifications } = useSite();
   const totalViews = posts.reduce((acc, curr) => acc + curr.views, 0);
 
   const stats = [
     { label: '총 방문자 수', value: '12,450', change: '+12%', icon: <Users className="w-6 h-6 text-blue-600" /> },
-    { label: '페이지 뷰', value: totalViews.toLocaleString(), change: '+5%', icon: <Eye className="w-6 h-6 text-green-600" /> },
+    { label: '인증서 보유', value: certifications.length.toString(), change: '현황', icon: <Award className="w-6 h-6 text-green-600" /> },
     { label: '게시글 수', value: posts.length.toString(), change: '+2', icon: <FileText className="w-6 h-6 text-purple-600" /> },
     { label: '문의 접수', value: '8', change: '+8', icon: <MousePointer className="w-6 h-6 text-orange-600" /> },
   ];
@@ -33,10 +33,215 @@ export const AdminDashboard: React.FC = () => {
             </div>
           ))}
         </div>
+        
+        <div className="grid md:grid-cols-2 gap-6">
+           <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+              <h3 className="text-lg font-bold mb-4">빠른 바로가기</h3>
+              <div className="flex gap-4">
+                 <a href="#/admin/content" className="flex-1 bg-blue-50 p-4 rounded-xl text-brand-blue font-bold hover:bg-blue-100 transition-colors text-center">
+                    페이지 문구 수정
+                 </a>
+                 <a href="#/admin/posts" className="flex-1 bg-gray-50 p-4 rounded-xl text-gray-700 font-bold hover:bg-gray-100 transition-colors text-center">
+                    새 공지사항 작성
+                 </a>
+              </div>
+           </div>
+        </div>
       </div>
     </AdminLayout>
   );
 };
+
+// --- Content Manager Component (New) ---
+export const AdminContent: React.FC = () => {
+  const { certifications, addCertification, deleteCertification, content, updateContent } = useSite();
+  const [activeTab, setActiveTab] = useState<'cert' | 'text'>('cert');
+  const [newCert, setNewCert] = useState({ title: '', imageUrl: '' });
+
+  const handleCertUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setNewCert({ ...newCert, imageUrl: reader.result as string });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleAddCert = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newCert.title || !newCert.imageUrl) return;
+    addCertification(newCert);
+    setNewCert({ title: '', imageUrl: '' });
+  };
+
+  return (
+    <AdminLayout>
+       <div className="space-y-6">
+          <div className="flex space-x-4 border-b border-gray-200 pb-1">
+             <button 
+               onClick={() => setActiveTab('cert')}
+               className={`pb-3 px-4 font-bold text-sm transition-colors ${activeTab === 'cert' ? 'text-brand-blue border-b-2 border-brand-blue' : 'text-gray-500 hover:text-gray-700'}`}
+             >
+               인증서 관리
+             </button>
+             <button 
+               onClick={() => setActiveTab('text')}
+               className={`pb-3 px-4 font-bold text-sm transition-colors ${activeTab === 'text' ? 'text-brand-blue border-b-2 border-brand-blue' : 'text-gray-500 hover:text-gray-700'}`}
+             >
+               페이지 텍스트/이미지 수정
+             </button>
+          </div>
+
+          {activeTab === 'cert' && (
+             <div className="space-y-8 animate-fade-in">
+                {/* Add New Cert */}
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                   <h3 className="font-bold text-lg mb-4">새 인증서 등록</h3>
+                   <form onSubmit={handleAddCert} className="flex flex-col md:flex-row gap-4 items-end">
+                      <div className="flex-1 w-full">
+                         <label className="block text-sm font-medium text-gray-700 mb-1">인증서명</label>
+                         <input 
+                           type="text" 
+                           value={newCert.title} 
+                           onChange={(e) => setNewCert({...newCert, title: e.target.value})}
+                           placeholder="예: ISO 14001"
+                           className="w-full border border-gray-300 rounded-lg p-3"
+                         />
+                      </div>
+                      <div className="flex-1 w-full">
+                         <label className="block text-sm font-medium text-gray-700 mb-1">이미지</label>
+                         <div className="flex gap-2">
+                           <label className="flex-1 cursor-pointer border border-gray-300 bg-gray-50 text-gray-500 rounded-lg p-3 flex items-center justify-center hover:bg-gray-100">
+                              <Upload className="w-4 h-4 mr-2" />
+                              {newCert.imageUrl ? '이미지 변경' : '이미지 업로드'}
+                              <input type="file" accept="image/*" onChange={handleCertUpload} className="hidden" />
+                           </label>
+                         </div>
+                      </div>
+                      <button type="submit" className="bg-brand-blue text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-900 w-full md:w-auto">
+                         등록
+                      </button>
+                   </form>
+                   {newCert.imageUrl && (
+                      <div className="mt-4 w-32 h-40 bg-gray-100 rounded-lg border border-gray-200 overflow-hidden relative">
+                         <img src={newCert.imageUrl} alt="Preview" className="w-full h-full object-contain" />
+                         <button onClick={() => setNewCert({...newCert, imageUrl: ''})} className="absolute top-1 right-1 bg-black/50 text-white rounded-full p-1"><X className="w-3 h-3"/></button>
+                      </div>
+                   )}
+                </div>
+
+                {/* List */}
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                   <h3 className="font-bold text-lg mb-6">등록된 인증서 목록 ({certifications.length})</h3>
+                   <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                      {certifications.map((cert) => (
+                         <div key={cert.id} className="group relative bg-gray-50 rounded-xl p-3 border border-gray-200">
+                            <div className="aspect-[3/4] bg-white rounded-lg overflow-hidden mb-3 flex items-center justify-center relative">
+                               <img src={cert.imageUrl} alt={cert.title} className="w-full h-full object-contain" />
+                               <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                  <button onClick={() => deleteCertification(cert.id)} className="text-white bg-red-500 p-2 rounded-full hover:bg-red-600">
+                                     <Trash2 className="w-4 h-4" />
+                                  </button>
+                               </div>
+                            </div>
+                            <p className="text-center text-sm font-medium truncate">{cert.title}</p>
+                         </div>
+                      ))}
+                   </div>
+                </div>
+             </div>
+          )}
+
+          {activeTab === 'text' && (
+             <div className="grid md:grid-cols-2 gap-8 animate-fade-in">
+                {/* Hero Section Edit */}
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-4">
+                   <div className="flex items-center gap-2 mb-2 border-b border-gray-100 pb-3">
+                      <div className="p-2 bg-blue-50 rounded text-brand-blue"><LayoutTemplate className="w-4 h-4" /></div>
+                      <h3 className="font-bold">메인 페이지 - 히어로 섹션</h3>
+                   </div>
+                   
+                   <div>
+                      <label className="text-xs font-bold text-gray-500 uppercase">타이틀 접두어</label>
+                      <input 
+                        type="text" 
+                        value={content['home_hero_title_prefix'] || ''}
+                        onChange={(e) => updateContent('home_hero_title_prefix', e.target.value)}
+                        className="w-full border border-gray-200 rounded-lg p-2 mt-1"
+                      />
+                   </div>
+                   <div>
+                      <label className="text-xs font-bold text-gray-500 uppercase">강조 타이틀</label>
+                      <input 
+                        type="text" 
+                        value={content['home_hero_title_highlight'] || ''}
+                        onChange={(e) => updateContent('home_hero_title_highlight', e.target.value)}
+                        className="w-full border border-gray-200 rounded-lg p-2 mt-1"
+                      />
+                   </div>
+                   <div>
+                      <label className="text-xs font-bold text-gray-500 uppercase">설명 문구</label>
+                      <textarea 
+                        rows={3}
+                        value={content['home_hero_desc'] || ''}
+                        onChange={(e) => updateContent('home_hero_desc', e.target.value)}
+                        className="w-full border border-gray-200 rounded-lg p-2 mt-1 resize-none"
+                      />
+                   </div>
+                   <div>
+                      <label className="text-xs font-bold text-gray-500 uppercase">배경 이미지 URL</label>
+                      <input 
+                        type="text" 
+                        value={content['home_hero_bg'] || ''}
+                        onChange={(e) => updateContent('home_hero_bg', e.target.value)}
+                        className="w-full border border-gray-200 rounded-lg p-2 mt-1 text-xs"
+                      />
+                   </div>
+                </div>
+
+                {/* Intro Page Edit */}
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-4">
+                   <div className="flex items-center gap-2 mb-2 border-b border-gray-100 pb-3">
+                      <div className="p-2 bg-purple-50 rounded text-purple-600"><FileText className="w-4 h-4" /></div>
+                      <h3 className="font-bold">회사소개 - 개요 페이지</h3>
+                   </div>
+                   
+                   <div>
+                      <label className="text-xs font-bold text-gray-500 uppercase">메인 타이틀 1</label>
+                      <input 
+                        type="text" 
+                        value={content['intro_main_title_1'] || ''}
+                        onChange={(e) => updateContent('intro_main_title_1', e.target.value)}
+                        className="w-full border border-gray-200 rounded-lg p-2 mt-1"
+                      />
+                   </div>
+                   <div>
+                      <label className="text-xs font-bold text-gray-500 uppercase">메인 타이틀 2 (강조)</label>
+                      <input 
+                        type="text" 
+                        value={content['intro_main_title_2'] || ''}
+                        onChange={(e) => updateContent('intro_main_title_2', e.target.value)}
+                        className="w-full border border-gray-200 rounded-lg p-2 mt-1"
+                      />
+                   </div>
+                   <div>
+                      <label className="text-xs font-bold text-gray-500 uppercase">소개글</label>
+                      <textarea 
+                        rows={5}
+                        value={content['intro_desc'] || ''}
+                        onChange={(e) => updateContent('intro_desc', e.target.value)}
+                        className="w-full border border-gray-200 rounded-lg p-2 mt-1 resize-none"
+                      />
+                   </div>
+                </div>
+             </div>
+          )}
+       </div>
+    </AdminLayout>
+  );
+}
 
 // --- Post Manager Component ---
 export const AdminPosts: React.FC = () => {
