@@ -6,7 +6,7 @@ import { TRANSLATIONS } from '../translations';
 interface SiteContextType {
   config: SiteConfig;
   posts: Post[];
-  products: Product[]; // Added products state
+  products: Product[]; 
   certifications: Certification[];
   content: ContentMap;
   language: Language;
@@ -18,7 +18,9 @@ interface SiteContextType {
   addCertification: (cert: Omit<Certification, 'id'>) => void;
   deleteCertification: (id: string) => void;
   updateContent: (key: string, value: string) => void;
-  updateProduct: (id: string, updates: Partial<Product>) => void; // Added updateProduct
+  updateProduct: (id: string, updates: Partial<Product>) => void;
+  exportSiteData: () => void;
+  importSiteData: (jsonData: string) => boolean;
 }
 
 const DEFAULT_CONFIG: SiteConfig = {
@@ -28,7 +30,7 @@ const DEFAULT_CONFIG: SiteConfig = {
   borderRadius: 'rounded-full', 
   seoKeywords: '알루미늄, 압출, 경량소재, 자동차부품',
   contactEmail: 'info@aldmc.co.kr',
-  logoUrl: null
+  logoUrl: 'https://firebasestorage.googleapis.com/v0/b/company-homepage-28347.firebasestorage.app/o/DMC%20%EC%8B%9C%EA%B7%B8%EB%8B%88%EC%B2%98(%EC%83%81%ED%95%98)%20ENG%20white.png?alt=media&token=95cc47a9-e985-4013-9239-67bc60786d4e'
 };
 
 const DEFAULT_POSTS: Post[] = [
@@ -61,23 +63,16 @@ const DEFAULT_CERTIFICATIONS: Certification[] = [
 ];
 
 const DEFAULT_CONTENT: ContentMap = {
-  // Home Hero
   'home_hero_title_prefix': 'The Future of',
   'home_hero_title_highlight': 'Aluminum Technology',
   'home_hero_desc': '차별화된 기술력과 서비스로 알루미늄 산업을 선도합니다. 고객 맞춤형 설계부터 완벽한 납기까지, 우리는 기준을 만듭니다.',
   'home_hero_bg': 'https://plus.unsplash.com/premium_photo-1672423154405-5fd922c11af2?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   'home_hero_badge': 'Total Aluminum Solutions',
-  
-  // Intro Page
   'intro_main_title_1': 'Global Leader in',
   'intro_main_title_2': 'Aluminum Extrusion',
   'intro_desc': '대우경금속은 고객 맞춤형 설계, 생산, 피막, 기계가공 및 적기적소의 납기까지 Total 서비스를 제공합니다. 최첨단 설비와 축적된 기술력을 바탕으로 다양한 산업 분야의 핵심 소재를 공급하고 있습니다.',
-  
-  // Factory Images
   'intro_img_1': 'http://www.aldmc.co.kr/kor/images/about/introduction01.jpg',
   'intro_img_2': 'http://www.aldmc.co.kr/kor/images/about/introduction02.jpg',
-  
-  // Philosophy Image
   'philosophy_img_main': 'https://picsum.photos/id/48/800/1000'
 };
 
@@ -87,7 +82,7 @@ const hexToRgb = (hex: string) => {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
     ? `${parseInt(result[1], 16)} ${parseInt(result[2], 16)} ${parseInt(result[3], 16)}`
-    : '7 29 73'; // fallback
+    : '7 29 73';
 };
 
 export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -167,6 +162,59 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setProducts(prev => prev.map(p => p.id === id ? { ...p, ...updates } : p));
   };
 
+  // --- New Feature: Data Export/Import ---
+  
+  const exportSiteData = () => {
+    const data = {
+      config,
+      posts,
+      products,
+      certifications,
+      content,
+      timestamp: new Date().toISOString()
+    };
+    
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `daewoo-site-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const importSiteData = (jsonData: string): boolean => {
+    try {
+      const data = JSON.parse(jsonData);
+      
+      // Basic validation
+      if (!data.config || !data.content) {
+        throw new Error("Invalid data format");
+      }
+
+      // Update State
+      if (data.config) setConfig(data.config);
+      if (data.posts) setPosts(data.posts);
+      if (data.products) setProducts(data.products);
+      if (data.certifications) setCertifications(data.certifications);
+      if (data.content) setContent(data.content);
+
+      // Force Update LocalStorage immediately
+      localStorage.setItem('siteConfig', JSON.stringify(data.config));
+      localStorage.setItem('sitePosts', JSON.stringify(data.posts || []));
+      localStorage.setItem('siteProducts', JSON.stringify(data.products || []));
+      localStorage.setItem('siteCertifications', JSON.stringify(data.certifications || []));
+      localStorage.setItem('siteContent', JSON.stringify(data.content));
+
+      return true;
+    } catch (e) {
+      console.error("Import failed:", e);
+      return false;
+    }
+  };
+
   return (
     <SiteContext.Provider value={{ 
       config, 
@@ -183,7 +231,9 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       addCertification,
       deleteCertification,
       updateContent,
-      updateProduct
+      updateProduct,
+      exportSiteData,
+      importSiteData
     }}>
       {children}
     </SiteContext.Provider>

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useSite } from '../contexts/SiteContext';
 
@@ -11,12 +12,30 @@ const Logo: React.FC<LogoProps> = ({ color = '#071D49', className = '' }) => {
 
   // If a custom logo URL exists in config
   if (config.logoUrl) {
-    // Apply filter for white mode to simulate vector behavior for PNGs
-    // brightness(0) makes it black, invert(1) makes it white.
-    // grayscale(1) ensures no stray colors if the original was colored.
-    const style: React.CSSProperties = color === 'white' 
-      ? { filter: 'brightness(0) invert(1) grayscale(1)' } 
-      : {};
+    // Check if the logo source is likely a white version based on filename
+    // This is a heuristic to support the user's specific request without breaking other potential colored uploads
+    const isWhiteSource = config.logoUrl.toLowerCase().includes('white');
+
+    let style: React.CSSProperties = {};
+
+    if (isWhiteSource) {
+      // If source is white:
+      if (color === 'white') {
+        // We want white, it is white.
+        style = {};
+      } else {
+        // We want dark (e.g. #071D49) for white backgrounds (scrolled header, footer).
+        // Since we can't easily colorize white to specific hex with simple filters,
+        // we invert it to make it black for high visibility.
+        // brightness(0) on white makes it black.
+        style = { filter: 'brightness(0)' }; 
+      }
+    } else {
+      // Default behavior (assuming source is dark/colored)
+      style = color === 'white' 
+        ? { filter: 'brightness(0) invert(1) grayscale(1)' } 
+        : {};
+    }
 
     return (
       <img 
