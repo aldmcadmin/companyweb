@@ -29,6 +29,14 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    // Strict Email Validation to prevent legacy IDs (like "dmcadmin")
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError('올바른 이메일 형식을 입력해주세요. (예: admin@aldmc.co.kr)');
+      return;
+    }
+
     setIsLoading(true);
 
     const success = await login(email, pw);
