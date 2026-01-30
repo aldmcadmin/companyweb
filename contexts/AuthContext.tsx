@@ -18,7 +18,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Monitor Firebase Auth State
   useEffect(() => {
-    // onAuthStateChanged는 브라우저 저장소(IndexedDB/LocalStorage)에 저장된 세션을 복구합니다.
     const unsubscribe = onAuthStateChanged(auth, (user: any) => {
       if (user) {
         console.log("User session restored:", user.email);
@@ -34,8 +33,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const login = async (email: string, pw: string): Promise<boolean> => {
+    // 1. 이메일 형식 검사 (Double Check)
+    // 'dmcadmin' 같은 아이디 입력 시 아예 요청을 보내지 않음
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      console.error("Invalid email format detected. Login blocked.");
+      return false;
+    }
+
     try {
-      // 기본적으로 Firebase는 브라우저를 닫아도 로그인을 유지합니다 (LOCAL persistence)
+      // 2. Firebase 인증 시도
       await signInWithEmailAndPassword(auth, email, pw);
       return true;
     } catch (error) {
@@ -48,12 +55,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       await signOut(auth);
       setIsAuthenticated(false);
+      // 혹시 모를 로컬 스토리지 잔여 데이터 제거 (구 버전 호환)
+      localStorage.removeItem('auth'); 
     } catch (error) {
       console.error("Logout failed:", error);
     }
   };
 
-  // 인증 상태를 확인하는 동안 흰 화면 대신 로딩 화면 표시
+  // 인증 상태를 확인하는 동안 로딩 화면 표시
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 text-gray-500">

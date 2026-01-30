@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Lock, ArrowLeft, Loader2, Mail } from 'lucide-react';
+import { Lock, ArrowLeft, Loader2, Mail, ShieldCheck } from 'lucide-react';
 import Button from '../components/Button';
 import Logo from '../components/Logo';
 
@@ -12,14 +12,19 @@ const Login: React.FC = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   
-  const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   
-  // Default to admin dashboard or the page they tried to access
   const from = location.state?.from?.pathname || '/admin';
 
-  // If already authenticated, redirect to admin immediately
+  // [중요] 로그인 페이지 접속 시 기존 세션 강제 종료 (혹시 모를 캐시 문제 방지)
+  useEffect(() => {
+    if (!location.state?.from) {
+       logout(); 
+    }
+  }, [logout, location]);
+
   useEffect(() => {
     if (isAuthenticated) {
       navigate(from, { replace: true });
@@ -30,7 +35,7 @@ const Login: React.FC = () => {
     e.preventDefault();
     setError('');
 
-    // Strict Email Validation to prevent legacy IDs (like "dmcadmin")
+    // Strict Email Validation (legacy ID 차단)
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setError('올바른 이메일 형식을 입력해주세요. (예: admin@aldmc.co.kr)');
@@ -120,8 +125,13 @@ const Login: React.FC = () => {
             </Button>
           </form>
           
-          <div className="mt-8 text-center">
+          <div className="mt-8 text-center space-y-4">
              <Logo className="h-6 mx-auto opacity-50" />
+             
+             {/* 버전 확인용 라벨: 배포가 정상적으로 되면 이 문구가 보여야 합니다. */}
+             <div className="inline-flex items-center gap-1 text-[10px] text-gray-400 bg-gray-100 px-2 py-1 rounded-full">
+                <ShieldCheck className="w-3 h-3" /> System v2.1 (Firebase Auth)
+             </div>
           </div>
         </div>
       </div>
