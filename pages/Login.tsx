@@ -2,12 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Lock, ArrowLeft, Loader2 } from 'lucide-react';
+import { Lock, ArrowLeft, Loader2, Mail } from 'lucide-react';
 import Button from '../components/Button';
 import Logo from '../components/Logo';
 
 const Login: React.FC = () => {
-  const [id, setId] = useState('');
+  const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -31,16 +31,14 @@ const Login: React.FC = () => {
     setError('');
     setIsLoading(true);
 
-    // Simulate network delay for effect
-    setTimeout(() => {
-      const success = login(id, pw);
-      if (success) {
-        navigate(from, { replace: true });
-      } else {
-        setError('아이디 또는 비밀번호가 올바르지 않습니다.');
-        setIsLoading(false);
-      }
-    }, 800);
+    const success = await login(email, pw);
+    
+    if (success) {
+      navigate(from, { replace: true });
+    } else {
+      setError('이메일 또는 비밀번호가 올바르지 않습니다.');
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -60,21 +58,25 @@ const Login: React.FC = () => {
              </div>
           </div>
           <h2 className="text-2xl font-bold text-white">관리자 로그인</h2>
-          <p className="text-blue-200 text-sm mt-2">사이트 관리 모드에 접속합니다.</p>
+          <p className="text-blue-200 text-sm mt-2">Firebase 계정으로 접속합니다.</p>
         </div>
 
         {/* Form */}
         <div className="p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">아이디</label>
-              <input 
-                type="text" 
-                value={id}
-                onChange={(e) => setId(e.target.value)}
-                className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition-all"
-                placeholder="dmcadmin"
-              />
+              <label className="block text-sm font-bold text-gray-700 mb-2">이메일 계정</label>
+              <div className="relative">
+                <input 
+                  type="email" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full p-4 pl-12 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition-all"
+                  placeholder="admin@aldmc.co.kr"
+                  required
+                />
+                <Mail className="w-5 h-5 text-gray-400 absolute top-1/2 left-4 -translate-y-1/2" />
+              </div>
             </div>
             <div>
               <label className="block text-sm font-bold text-gray-700 mb-2">비밀번호</label>
@@ -83,7 +85,8 @@ const Login: React.FC = () => {
                 value={pw}
                 onChange={(e) => setPw(e.target.value)}
                 className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition-all"
-                placeholder="••••"
+                placeholder="••••••••"
+                required
               />
             </div>
 

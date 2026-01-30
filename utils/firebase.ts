@@ -3,6 +3,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
 // @ts-ignore
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
+// @ts-ignore
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBBr9JVXr-SZnY9051niEWk4THj0J4u79w",
@@ -16,6 +18,10 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 export const storage = getStorage(app);
+export const auth = getAuth(app);
+
+// Export auth functions for use in Context
+export { signInWithEmailAndPassword, signOut, onAuthStateChanged };
 
 /**
  * Uploads a file to Firebase Storage and returns the public download URL.
@@ -41,8 +47,9 @@ export const uploadImageToStorage = async (file: File, pathPrefix: string = 'ima
     console.error("Firebase Upload Error:", error);
     if (error instanceof Error) {
         // Handle common errors gracefully
-        if (error.message.includes('unauthorized')) {
-            alert("업로드 권한이 없습니다. 관리자 로그인 상태를 확인해주세요.");
+        // @ts-ignore
+        if (error.code === 'storage/unauthorized' || error.message.includes('unauthorized')) {
+            alert("업로드 권한이 없습니다. 관리자 계정으로 로그인되어 있는지 확인해주세요.");
         } else {
             alert(`이미지 업로드 실패: ${error.message}`);
         }

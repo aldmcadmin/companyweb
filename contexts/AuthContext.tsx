@@ -1,48 +1,56 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { auth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from '../utils/firebase';
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: (id: string, pw: string) => boolean;
-  logout: () => void;
+  login: (email: string, pw: string) => Promise<boolean>;
+  logout: () => Promise<void>;
+  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Initialize state lazily to avoid flicker/redirect issues on refresh
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    try {
-      // Check if window is defined (safe for SSR environments, though mostly for client-side)
-      if (typeof window !== 'undefined') {
-        const storedAuth = localStorage.getItem('isAdminAuthenticated');
-        return storedAuth === 'true';
-      }
-      return false;
-    } catch (e) {
-      console.error("Auth initialization error:", e);
-      return false;
-    }
-  });
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [loading, setLoading] = useState(true);
 
-  const login = (id: string, pw: string) => {
-    // Hardcoded credentials for demonstration
-    if (id === 'dmcadmin' && pw === 'dnrehrla*1') {
-      setIsAuthenticated(true);
-      localStorage.setItem('isAdminAuthenticated', 'true');
+  // Monitor Firebase Auth State
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user: any) => {
+      if (user) {
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const login = async (email: string, pw: string): Promise<boolean> => {
+    try {
+      await signInWithEmailAndPassword(auth, email, pw);
       return true;
+    } catch (error) {
+      console.error("Login failed:", error);
+      return false;
     }
-    return false;
   };
 
-  const logout = () => {
-    setIsAuthenticated(false);
-    localStorage.removeItem('isAdminAuthenticated');
+  const logout = async () => {
+    try {
+      await signOut(auth);
+      setIsAuthenticated(false);
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
-      {children}
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, loading }}>
+      {!loading && children}
     </AuthContext.Provider>
   );
 };
