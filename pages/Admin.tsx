@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import { useSite } from '../contexts/SiteContext';
-import { Users, Eye, FileText, MousePointer, Plus, Trash2, Search, Palette, Globe, Save, Upload, Image as ImageIcon, X, LayoutTemplate, Layers, Award, Package, Pencil, Wand2, Loader2, Download, RefreshCcw, AlertTriangle, Cloud } from 'lucide-react';
+import { Users, Eye, FileText, MousePointer, Plus, Trash2, Search, Palette, Globe, Save, Upload, Image as ImageIcon, X, LayoutTemplate, Layers, Award, Package, Pencil, Wand2, Loader2, Download, RefreshCcw, AlertTriangle } from 'lucide-react';
 import { BorderRadiusSize } from '../types';
 import { uploadImageToStorage } from '../utils/firebase';
 
@@ -21,17 +21,17 @@ export const AdminDashboard: React.FC = () => {
   return (
     <AdminLayout>
       <div className="space-y-8">
-        {/* Important Notice - Updated for Firebase */}
-        <div className="bg-blue-50 border border-blue-200 rounded-2xl p-6 flex items-start gap-4">
-            <div className="p-2 bg-blue-100 rounded-full text-blue-600">
-               <Cloud className="w-6 h-6" />
+        {/* Important Notice */}
+        <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-6 flex items-start gap-4">
+            <div className="p-2 bg-yellow-100 rounded-full text-yellow-600">
+               <AlertTriangle className="w-6 h-6" />
             </div>
             <div>
-               <h3 className="text-blue-800 font-bold text-lg mb-1">클라우드 이미지 서버 연동됨</h3>
-               <p className="text-blue-700 text-sm leading-relaxed">
-                  이제 이미지를 업로드하면 자동으로 <strong>클라우드 서버(Firebase Storage)</strong>에 저장됩니다.<br/>
-                  업로드된 이미지는 <strong>전 세계 어디서나 접속 가능한 주소(URL)</strong>를 갖게 되어, 다른 PC나 모바일에서도 정상적으로 보입니다.<br/>
-                  <span className="text-xs text-blue-500 mt-1 block">* 단, 텍스트 변경사항이나 설정값은 여전히 [데이터 백업/복원] 기능을 통해 옮겨주셔야 합니다.</span>
+               <h3 className="text-yellow-800 font-bold text-lg mb-1">관리자 주의사항 (데이터 동기화 안내)</h3>
+               <p className="text-yellow-700 text-sm leading-relaxed">
+                  이제 이미지를 업로드하면 <strong>Firebase 서버</strong>에 저장되어 어디서든 이미지가 보입니다.<br/>
+                  다만, 텍스트 변경사항이나 설정값은 여전히 <strong>현재 브라우저</strong>에만 저장되므로, 
+                  다른 PC로 설정을 옮기려면 <strong>[사이트 설정] &gt; [데이터 백업 및 복원]</strong> 기능을 이용하세요.
                </p>
             </div>
         </div>
@@ -73,20 +73,17 @@ export const AdminContent: React.FC = () => {
   const { certifications, addCertification, deleteCertification, content, updateContent, products, updateProduct } = useSite();
   const [activeTab, setActiveTab] = useState<'cert' | 'text' | 'images' | 'products'>('products');
   const [newCert, setNewCert] = useState({ title: '', imageUrl: '' });
-  const [isUploading, setIsUploading] = useState<string | null>(null); // Track which ID is uploading
+  const [uploading, setUploading] = useState<{[key: string]: boolean}>({});
 
-  // Updated: Use Firebase Upload
   const handleCertUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setIsUploading('new-cert');
+      setUploading(prev => ({ ...prev, 'newCert': true }));
       try {
         const url = await uploadImageToStorage(file, 'certificates/');
         setNewCert({ ...newCert, imageUrl: url });
-      } catch (error) {
-        alert("업로드 실패: Firebase 설정을 확인해주세요.");
       } finally {
-        setIsUploading(null);
+        setUploading(prev => ({ ...prev, 'newCert': false }));
       }
     }
   };
@@ -98,79 +95,72 @@ export const AdminContent: React.FC = () => {
     setNewCert({ title: '', imageUrl: '' });
   };
 
-  // Updated: Use Firebase Upload
   const handleContentImageUpload = async (key: string, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setIsUploading(key);
+      setUploading(prev => ({ ...prev, [key]: true }));
       try {
-        const url = await uploadImageToStorage(file, 'site-assets/');
+        const url = await uploadImageToStorage(file, 'content_images/');
         updateContent(key, url);
-      } catch (error) {
-         alert("업로드 실패: Firebase 설정을 확인해주세요.");
       } finally {
-        setIsUploading(null);
+        setUploading(prev => ({ ...prev, [key]: false }));
       }
     }
   };
 
-  // Updated: Use Firebase Upload
   const handleProductImageUpload = async (id: string, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setIsUploading(id);
+      setUploading(prev => ({ ...prev, [`prod_${id}`]: true }));
       try {
         const url = await uploadImageToStorage(file, 'products/');
         updateProduct(id, { imageUrl: url });
-      } catch (error) {
-         alert("업로드 실패: Firebase 설정을 확인해주세요.");
       } finally {
-        setIsUploading(null);
+        setUploading(prev => ({ ...prev, [`prod_${id}`]: false }));
       }
     }
   };
 
-  const ImageUploadBlock = ({ label, contentKey, description }: { label: string, contentKey: string, description?: string }) => (
-    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-      <div className="flex justify-between items-start mb-4">
-         <div>
-            <h4 className="font-bold text-gray-900">{label}</h4>
-            {description && <p className="text-xs text-gray-500 mt-1">{description}</p>}
-         </div>
+  const ImageUploadBlock = ({ label, contentKey, description }: { label: string, contentKey: string, description?: string }) => {
+    const isUploadingThis = uploading[contentKey];
+    return (
+      <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+        <div className="flex justify-between items-start mb-4">
+           <div>
+              <h4 className="font-bold text-gray-900">{label}</h4>
+              {description && <p className="text-xs text-gray-500 mt-1">{description}</p>}
+           </div>
+        </div>
+        
+        <div className="space-y-3">
+           <div className="relative aspect-video w-full bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+              {isUploadingThis ? (
+                 <div className="flex flex-col items-center justify-center w-full h-full text-brand-blue">
+                    <Loader2 className="w-8 h-8 animate-spin mb-2" />
+                    <span className="text-xs font-medium">업로드 중...</span>
+                 </div>
+              ) : content[contentKey] ? (
+                 <img src={content[contentKey]} alt={label} className="w-full h-full object-cover" />
+              ) : (
+                 <div className="flex items-center justify-center w-full h-full text-gray-400">
+                    <ImageIcon className="w-8 h-8" />
+                 </div>
+              )}
+              <label className={`absolute inset-0 bg-black/0 hover:bg-black/50 transition-colors flex items-center justify-center cursor-pointer group ${isUploadingThis ? 'pointer-events-none' : ''}`}>
+                 <span className="bg-white/90 text-gray-900 px-4 py-2 rounded-lg font-bold text-sm opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2">
+                    <Upload className="w-4 h-4" /> 이미지 변경
+                 </span>
+                 <input type="file" accept="image/*" className="hidden" onChange={(e) => handleContentImageUpload(contentKey, e)} disabled={isUploadingThis} />
+              </label>
+           </div>
+           <div className="flex items-center gap-2 text-xs text-gray-400">
+              <span className="truncate flex-1 font-mono bg-gray-50 p-1 rounded">{content[contentKey]?.substring(0, 40)}...</span>
+              <button onClick={() => updateContent(contentKey, '')} className="text-red-400 hover:text-red-500">삭제</button>
+           </div>
+        </div>
       </div>
-      
-      <div className="space-y-3">
-         <div className="relative aspect-video w-full bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
-            {isUploading === contentKey ? (
-               <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50 z-20">
-                  <Loader2 className="w-8 h-8 text-brand-blue animate-spin mb-2" />
-                  <span className="text-xs font-bold text-gray-500">서버에 저장 중...</span>
-               </div>
-            ) : null}
-            
-            {content[contentKey] ? (
-               <img src={content[contentKey]} alt={label} className="w-full h-full object-cover" />
-            ) : (
-               <div className="flex items-center justify-center w-full h-full text-gray-400">
-                  <ImageIcon className="w-8 h-8" />
-               </div>
-            )}
-            <label className="absolute inset-0 bg-black/0 hover:bg-black/50 transition-colors flex items-center justify-center cursor-pointer group">
-               <span className="bg-white/90 text-gray-900 px-4 py-2 rounded-lg font-bold text-sm opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2">
-                  <Upload className="w-4 h-4" /> 이미지 변경
-               </span>
-               <input type="file" accept="image/*" className="hidden" onChange={(e) => handleContentImageUpload(contentKey, e)} />
-            </label>
-         </div>
-         <div className="flex items-center gap-2 text-xs text-gray-400">
-            <span className="truncate flex-1 font-mono bg-gray-50 p-1 rounded">
-               {content[contentKey] ? (content[contentKey].includes('firebasestorage') ? 'Cloud Storage' : 'Local Data') : 'Empty'}
-            </span>
-            <button onClick={() => updateContent(contentKey, '')} className="text-red-400 hover:text-red-500">삭제</button>
-         </div>
-      </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <AdminLayout>
@@ -215,21 +205,24 @@ export const AdminContent: React.FC = () => {
                </div>
 
                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {products.map((product) => (
+                  {products.map((product) => {
+                     const isUploadingProd = uploading[`prod_${product.id}`];
+                     return (
                      <div key={product.id} className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col h-full">
                         <div className="relative aspect-[4/3] bg-gray-100 rounded-xl overflow-hidden mb-4 border border-gray-200">
-                           {isUploading === product.id ? (
-                              <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50 z-20">
-                                 <Loader2 className="w-8 h-8 text-brand-blue animate-spin mb-2" />
-                                 <span className="text-xs font-bold text-gray-500">업로드 중...</span>
-                              </div>
-                           ) : null}
-                           <img src={product.imageUrl} alt={product.title} className="w-full h-full object-cover" />
-                           <label className="absolute inset-0 bg-black/0 hover:bg-black/40 transition-colors flex items-center justify-center cursor-pointer group">
+                           {isUploadingProd ? (
+                             <div className="flex flex-col items-center justify-center h-full text-brand-blue">
+                               <Loader2 className="w-6 h-6 animate-spin mb-2" />
+                               <span className="text-xs">업로드 중</span>
+                             </div>
+                           ) : (
+                             <img src={product.imageUrl} alt={product.title} className="w-full h-full object-cover" />
+                           )}
+                           <label className={`absolute inset-0 bg-black/0 hover:bg-black/40 transition-colors flex items-center justify-center cursor-pointer group ${isUploadingProd ? 'pointer-events-none' : ''}`}>
                               <span className="bg-white/90 text-gray-900 px-3 py-1.5 rounded-lg font-bold text-xs opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2">
                                  <Pencil className="w-3 h-3" /> 사진 변경
                               </span>
-                              <input type="file" accept="image/*" className="hidden" onChange={(e) => handleProductImageUpload(product.id, e)} />
+                              <input type="file" accept="image/*" className="hidden" onChange={(e) => handleProductImageUpload(product.id, e)} disabled={isUploadingProd} />
                            </label>
                         </div>
                         
@@ -249,7 +242,7 @@ export const AdminContent: React.FC = () => {
                            </div>
                         </div>
                      </div>
-                  ))}
+                  )})}
                </div>
             </div>
           )}
@@ -273,18 +266,14 @@ export const AdminContent: React.FC = () => {
                       <div className="flex-1 w-full">
                          <label className="block text-sm font-medium text-gray-700 mb-1">이미지</label>
                          <div className="flex gap-2">
-                           <label className="flex-1 cursor-pointer border border-gray-300 bg-gray-50 text-gray-500 rounded-lg p-3 flex items-center justify-center hover:bg-gray-100 relative">
-                              {isUploading === 'new-cert' ? (
-                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                              ) : (
-                                <Upload className="w-4 h-4 mr-2" />
-                              )}
-                              {isUploading === 'new-cert' ? '업로드 중...' : (newCert.imageUrl ? '이미지 변경' : '이미지 업로드')}
-                              <input type="file" accept="image/*" onChange={handleCertUpload} className="hidden" disabled={isUploading === 'new-cert'} />
+                           <label className={`flex-1 cursor-pointer border border-gray-300 bg-gray-50 text-gray-500 rounded-lg p-3 flex items-center justify-center hover:bg-gray-100 ${uploading['newCert'] ? 'opacity-50 pointer-events-none' : ''}`}>
+                              {uploading['newCert'] ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Upload className="w-4 h-4 mr-2" />}
+                              {uploading['newCert'] ? '업로드 중...' : (newCert.imageUrl ? '이미지 변경' : '이미지 업로드')}
+                              <input type="file" accept="image/*" onChange={handleCertUpload} className="hidden" disabled={uploading['newCert']} />
                            </label>
                          </div>
                       </div>
-                      <button type="submit" className="bg-brand-blue text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-900 w-full md:w-auto">
+                      <button type="submit" disabled={uploading['newCert']} className="bg-brand-blue text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-900 w-full md:w-auto disabled:opacity-50">
                          등록
                       </button>
                    </form>
@@ -582,7 +571,6 @@ export const AdminSettings: React.FC = () => {
   };
 
   // Function to remove background based on top-left pixel color
-  // Note: Background removal still happens client-side with canvas for the logo feature
   const removeImageBackground = (imageSrc: string): Promise<string> => {
     return new Promise((resolve) => {
       const img = new Image();
@@ -604,17 +592,21 @@ export const AdminSettings: React.FC = () => {
         const bgB = data[2];
         const bgA = data[3];
 
+        // If top-left is already transparent, assume it's good
         if (bgA === 0) { resolve(imageSrc); return; }
 
-        const tolerance = 50; 
+        const tolerance = 50; // Tolerance for color matching
 
         for (let i = 0; i < data.length; i += 4) {
           const r = data[i];
           const g = data[i + 1];
           const b = data[i + 2];
+
+          // Calculate distance from background color
           const diff = Math.abs(r - bgR) + Math.abs(g - bgG) + Math.abs(b - bgB);
+
           if (diff < tolerance) {
-            data[i + 3] = 0; 
+            data[i + 3] = 0; // Make transparent
           }
         }
 
@@ -626,39 +618,30 @@ export const AdminSettings: React.FC = () => {
     });
   };
 
-  // Modified to use Firebase Upload for Logo
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setIsProcessing(true);
-      
       try {
-          // If auto remove bg is ON, we must process locally first then upload the blob
-          if (autoRemoveBg) {
-             const reader = new FileReader();
-             reader.onloadend = async () => {
-                 let result = reader.result as string;
-                 const processedDataUrl = await removeImageBackground(result);
-                 
-                 // Convert DataURL to Blob for upload
-                 const res = await fetch(processedDataUrl);
-                 const blob = await res.blob();
-                 const processedFile = new File([blob], "logo_processed.png", { type: "image/png" });
-                 
-                 const url = await uploadImageToStorage(processedFile, 'logos/');
-                 setLocalConfig({ ...localConfig, logoUrl: url });
-                 setIsProcessing(false);
-             };
-             reader.readAsDataURL(file);
-          } else {
-             // Direct Upload
-             const url = await uploadImageToStorage(file, 'logos/');
-             setLocalConfig({ ...localConfig, logoUrl: url });
-             setIsProcessing(false);
-          }
+        let url = await uploadImageToStorage(file, 'branding/');
+        
+        // Process if auto remove is enabled
+        // Note: Removing background requires Cross-Origin access which Firebase Storage provides if configured (CORS).
+        // If not configured, this might fail or return original URL.
+        // For simplicity, we only run removeImageBackground if we have a valid URL.
+        if (autoRemoveBg) {
+           try {
+             url = await removeImageBackground(url);
+           } catch (e) {
+             console.warn("Could not remove background", e);
+           }
+        }
+        
+        setLocalConfig({ ...localConfig, logoUrl: url });
       } catch (e) {
-         alert("로고 업로드 실패: Firebase 설정을 확인해주세요.");
-         setIsProcessing(false);
+        // Error already handled
+      } finally {
+        setIsProcessing(false);
       }
     }
   };
@@ -788,8 +771,8 @@ export const AdminSettings: React.FC = () => {
                        </div>
                        <div className="flex-1 space-y-3">
                           <label className={`cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors ${isProcessing ? 'opacity-50 pointer-events-none' : ''}`}>
-                             {isProcessing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-                             {isProcessing ? '업로드 중...' : '이미지 업로드'}
+                             <Upload className="w-4 h-4" />
+                             이미지 업로드
                              <input type="file" accept="image/png, image/jpeg, image/svg+xml" onChange={handleImageUpload} className="hidden" disabled={isProcessing} />
                           </label>
                           
