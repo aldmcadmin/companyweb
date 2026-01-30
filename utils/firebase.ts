@@ -5,6 +5,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebas
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
 // @ts-ignore
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+// @ts-ignore
+import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBBr9JVXr-SZnY9051niEWk4THj0J4u79w",
@@ -19,9 +21,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const storage = getStorage(app);
 export const auth = getAuth(app);
+export const db = getFirestore(app);
 
 // Export auth functions for use in Context
 export { signInWithEmailAndPassword, signOut, onAuthStateChanged };
+
+// Export firestore functions
+export { doc, onSnapshot, setDoc };
 
 /**
  * Uploads a file to Firebase Storage and returns the public download URL.

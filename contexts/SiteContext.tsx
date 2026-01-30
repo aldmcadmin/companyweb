@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Post, SiteConfig, Language, Certification, ContentMap, Product } from '../types';
 import { TRANSLATIONS } from '../translations';
+import { db, doc, onSnapshot, setDoc } from '../utils/firebase';
 
 interface SiteContextType {
   config: SiteConfig;
@@ -21,6 +22,7 @@ interface SiteContextType {
   updateProduct: (id: string, updates: Partial<Product>) => void;
   exportSiteData: () => void;
   importSiteData: (jsonData: string) => boolean;
+  isSyncing: boolean;
 }
 
 const DEFAULT_CONFIG: SiteConfig = {
@@ -71,9 +73,9 @@ const DEFAULT_CONTENT: ContentMap = {
   'intro_main_title_1': 'Global Leader in',
   'intro_main_title_2': 'Aluminum Extrusion',
   'intro_desc': '대우경금속은 고객 맞춤형 설계, 생산, 피막, 기계가공 및 적기적소의 납기까지 Total 서비스를 제공합니다. 최첨단 설비와 축적된 기술력을 바탕으로 다양한 산업 분야의 핵심 소재를 공급하고 있습니다.',
-  'intro_img_1': 'http://www.aldmc.co.kr/kor/images/about/introduction01.jpg',
-  'intro_img_2': 'http://www.aldmc.co.kr/kor/images/about/introduction02.jpg',
-  'philosophy_img_main': 'https://picsum.photos/id/48/800/1000'
+  'intro_img_1': 'https://firebasestorage.googleapis.com/v0/b/company-homepage-28347.firebasestorage.app/o/%EB%8C%80%EA%B5%AC%EA%B3%B5%EC%9E%A5.JPG?alt=media&token=530a1c33-4075-4f33-a6e2-cf01939f5b8b',
+  'intro_img_2': 'https://firebasestorage.googleapis.com/v0/b/company-homepage-28347.firebasestorage.app/o/%EC%B0%BD%EB%85%95%EA%B3%B5%EC%9E%A5.png?alt=media&token=124af372-5d38-4717-a191-546d04907f48',
+  'philosophy_img_main': 'https://firebasestorage.googleapis.com/v0/b/company-homepage-28347.firebasestorage.app/o/site-assets%2F1769752363492_%EA%B8%88%ED%98%95.jpg?alt=media&token=d93ff708-ffe1-4a7a-ab7e-0469a2b71f61'
 };
 
 const SiteContext = createContext<SiteContextType | undefined>(undefined);
@@ -85,34 +87,59 @@ const hexToRgb = (hex: string) => {
     : '7 29 73';
 };
 
+// Firestore Collection Name
+const COLLECTION_NAME = 'site_data';
+
 export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [config, setConfig] = useState<SiteConfig>(() => {
-    const saved = localStorage.getItem('siteConfig');
-    return saved ? JSON.parse(saved) : DEFAULT_CONFIG;
-  });
-
-  const [posts, setPosts] = useState<Post[]>(() => {
-    const saved = localStorage.getItem('sitePosts');
-    return saved ? JSON.parse(saved) : DEFAULT_POSTS;
-  });
-
-  const [products, setProducts] = useState<Product[]>(() => {
-    const saved = localStorage.getItem('siteProducts');
-    return saved ? JSON.parse(saved) : DEFAULT_PRODUCTS;
-  });
-
-  const [certifications, setCertifications] = useState<Certification[]>(() => {
-    const saved = localStorage.getItem('siteCertifications');
-    return saved ? JSON.parse(saved) : DEFAULT_CERTIFICATIONS;
-  });
-
-  const [content, setContent] = useState<ContentMap>(() => {
-    const saved = localStorage.getItem('siteContent');
-    return saved ? JSON.parse(saved) : DEFAULT_CONTENT;
-  });
-
+  // Initially use DEFAULTs to avoid flicker, then hydrate from Firestore
+  const [config, setConfig] = useState<SiteConfig>(DEFAULT_CONFIG);
+  const [posts, setPosts] = useState<Post[]>(DEFAULT_POSTS);
+  const [products, setProducts] = useState<Product[]>(DEFAULT_PRODUCTS);
+  const [certifications, setCertifications] = useState<Certification[]>(DEFAULT_CERTIFICATIONS);
+  const [content, setContent] = useState<ContentMap>(DEFAULT_CONTENT);
+  
   const [language, setLanguage] = useState<Language>('KOR');
+  const [isSyncing, setIsSyncing] = useState(true);
 
+  // --- Firestore Realtime Sync ---
+  // This is crucial: We must listen to Firestore so when Admin uploads an image (and updates the URL in DB),
+  // all other clients receive that new URL instantly.
+  useEffect(() => {
+    // Helper to subscribe to a document
+    const subscribe = (docName: string, setter: any, defaultData: any) => {
+      return onSnapshot(doc(db, COLLECTION_NAME, docName), (snapshot: any) => {
+        if (snapshot.exists()) {
+          // If document exists in DB, use it (This means Admin has customized it)
+          setter(snapshot.data().data);
+        } else {
+          // If not exists (first run), we use hardcoded defaults.
+          // We optionally write them to DB so Admin can edit them later.
+          // For now, we just use local defaults to keep it fast.
+          setter(defaultData);
+        }
+      }, (error: any) => {
+        console.error(`Error syncing ${docName}:`, error);
+      });
+    };
+
+    const unsubConfig = subscribe('config', setConfig, DEFAULT_CONFIG);
+    const unsubPosts = subscribe('posts', setPosts, DEFAULT_POSTS);
+    const unsubProducts = subscribe('products', setProducts, DEFAULT_PRODUCTS);
+    const unsubCerts = subscribe('certifications', setCertifications, DEFAULT_CERTIFICATIONS);
+    const unsubContent = subscribe('content', setContent, DEFAULT_CONTENT);
+
+    setIsSyncing(false);
+
+    return () => {
+      unsubConfig();
+      unsubPosts();
+      unsubProducts();
+      unsubCerts();
+      unsubContent();
+    };
+  }, []);
+
+  // Update CSS Variables & Meta tags
   useEffect(() => {
     const rgb = hexToRgb(config.primaryColor);
     document.documentElement.style.setProperty('--brand-blue', rgb);
@@ -121,14 +148,21 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (metaDesc) metaDesc.setAttribute('content', config.siteDescription);
   }, [config, language]);
 
-  useEffect(() => { localStorage.setItem('siteConfig', JSON.stringify(config)); }, [config]);
-  useEffect(() => { localStorage.setItem('sitePosts', JSON.stringify(posts)); }, [posts]);
-  useEffect(() => { localStorage.setItem('siteProducts', JSON.stringify(products)); }, [products]);
-  useEffect(() => { localStorage.setItem('siteCertifications', JSON.stringify(certifications)); }, [certifications]);
-  useEffect(() => { localStorage.setItem('siteContent', JSON.stringify(content)); }, [content]);
+  // --- Action Handlers (Write to Firestore) ---
+  // When Admin changes something, we save to DB.
+  
+  const saveData = async (docName: string, data: any) => {
+    try {
+      await setDoc(doc(db, COLLECTION_NAME, docName), { data });
+    } catch (error) {
+      console.error(`Failed to save ${docName}:`, error);
+      alert("변경사항 저장에 실패했습니다. (네트워크/권한 문제)");
+    }
+  };
 
   const updateConfig = (newConfig: Partial<SiteConfig>) => {
-    setConfig(prev => ({ ...prev, ...newConfig }));
+    const updated = { ...config, ...newConfig };
+    saveData('config', updated);
   };
 
   const addPost = (newPostData: Omit<Post, 'id' | 'date' | 'views'>) => {
@@ -138,31 +172,37 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       date: new Date().toISOString().split('T')[0],
       views: 0,
     };
-    setPosts([newPost, ...posts]);
+    const updated = [newPost, ...posts];
+    saveData('posts', updated);
   };
 
   const deletePost = (id: string) => {
-    setPosts(posts.filter(p => p.id !== id));
+    const updated = posts.filter(p => p.id !== id);
+    saveData('posts', updated);
   };
 
   const addCertification = (cert: Omit<Certification, 'id'>) => {
     const newCert = { ...cert, id: Date.now().toString() };
-    setCertifications([...certifications, newCert]);
+    const updated = [...certifications, newCert];
+    saveData('certifications', updated);
   };
 
   const deleteCertification = (id: string) => {
-    setCertifications(certifications.filter(c => c.id !== id));
+    const updated = certifications.filter(c => c.id !== id);
+    saveData('certifications', updated);
   };
 
   const updateContent = (key: string, value: string) => {
-    setContent(prev => ({ ...prev, [key]: value }));
+    const updated = { ...content, [key]: value };
+    saveData('content', updated);
   };
 
   const updateProduct = (id: string, updates: Partial<Product>) => {
-    setProducts(prev => prev.map(p => p.id === id ? { ...p, ...updates } : p));
+    const updated = products.map(p => p.id === id ? { ...p, ...updates } : p);
+    saveData('products', updated);
   };
 
-  // --- New Feature: Data Export/Import ---
+  // --- Export/Import ---
   
   const exportSiteData = () => {
     const data = {
@@ -188,25 +228,13 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const importSiteData = (jsonData: string): boolean => {
     try {
       const data = JSON.parse(jsonData);
-      
-      // Basic validation
-      if (!data.config || !data.content) {
-        throw new Error("Invalid data format");
-      }
+      if (!data.config || !data.content) throw new Error("Invalid data format");
 
-      // Update State
-      if (data.config) setConfig(data.config);
-      if (data.posts) setPosts(data.posts);
-      if (data.products) setProducts(data.products);
-      if (data.certifications) setCertifications(data.certifications);
-      if (data.content) setContent(data.content);
-
-      // Force Update LocalStorage immediately
-      localStorage.setItem('siteConfig', JSON.stringify(data.config));
-      localStorage.setItem('sitePosts', JSON.stringify(data.posts || []));
-      localStorage.setItem('siteProducts', JSON.stringify(data.products || []));
-      localStorage.setItem('siteCertifications', JSON.stringify(data.certifications || []));
-      localStorage.setItem('siteContent', JSON.stringify(data.content));
+      saveData('config', data.config);
+      saveData('posts', data.posts || []);
+      saveData('products', data.products || []);
+      saveData('certifications', data.certifications || []);
+      saveData('content', data.content);
 
       return true;
     } catch (e) {
@@ -233,7 +261,8 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       updateContent,
       updateProduct,
       exportSiteData,
-      importSiteData
+      importSiteData,
+      isSyncing
     }}>
       {children}
     </SiteContext.Provider>
