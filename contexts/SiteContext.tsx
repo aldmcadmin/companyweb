@@ -1,7 +1,8 @@
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { Post, SiteConfig, Language, Certification, ContentMap, Product } from '../types';
 import { TRANSLATIONS } from '../translations';
+import { db, doc, onSnapshot, setDoc } from '../utils/firebase';
 
 interface SiteContextType {
   config: SiteConfig;
@@ -21,6 +22,7 @@ interface SiteContextType {
   updateProduct: (id: string, updates: Partial<Product>) => void;
   exportSiteData: () => void;
   importSiteData: (jsonData: string) => boolean;
+  isSynced: boolean; // Indicates if data is live from server
 }
 
 const DEFAULT_CONFIG: SiteConfig = {
@@ -86,49 +88,82 @@ const hexToRgb = (hex: string) => {
 };
 
 export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [config, setConfig] = useState<SiteConfig>(() => {
-    const saved = localStorage.getItem('siteConfig');
-    return saved ? JSON.parse(saved) : DEFAULT_CONFIG;
-  });
-
-  const [posts, setPosts] = useState<Post[]>(() => {
-    const saved = localStorage.getItem('sitePosts');
-    return saved ? JSON.parse(saved) : DEFAULT_POSTS;
-  });
-
-  const [products, setProducts] = useState<Product[]>(() => {
-    const saved = localStorage.getItem('siteProducts');
-    return saved ? JSON.parse(saved) : DEFAULT_PRODUCTS;
-  });
-
-  const [certifications, setCertifications] = useState<Certification[]>(() => {
-    const saved = localStorage.getItem('siteCertifications');
-    return saved ? JSON.parse(saved) : DEFAULT_CERTIFICATIONS;
-  });
-
-  const [content, setContent] = useState<ContentMap>(() => {
-    const saved = localStorage.getItem('siteContent');
-    return saved ? JSON.parse(saved) : DEFAULT_CONTENT;
-  });
-
+  // Use local state for immediate render, but will sync with DB
+  const [config, setConfig] = useState<SiteConfig>(DEFAULT_CONFIG);
+  const [posts, setPosts] = useState<Post[]>(DEFAULT_POSTS);
+  const [products, setProducts] = useState<Product[]>(DEFAULT_PRODUCTS);
+  const [certifications, setCertifications] = useState<Certification[]>(DEFAULT_CERTIFICATIONS);
+  const [content, setContent] = useState<ContentMap>(DEFAULT_CONTENT);
   const [language, setLanguage] = useState<Language>('KOR');
+  const [isSynced, setIsSynced] = useState(false);
 
+  // Database Reference
+  const dbRef = doc(db, 'site', 'global_settings');
+
+  // --- Real-time Sync with Firestore ---
+  useEffect(() => {
+    // 1. Subscribe to Firestore updates
+    const unsubscribe = onSnapshot(dbRef, (docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        if (data.config) setConfig(data.config);
+        if (data.posts) setPosts(data.posts);
+        if (data.products) setProducts(data.products);
+        if (data.certifications) setCertifications(data.certifications);
+        if (data.content) setContent(data.content);
+        setIsSynced(true);
+        console.log("🔥 Site data synced from Cloud Firestore");
+      } else {
+        // First time initialization: If DB is empty, save default data to it
+        console.log("⚠️ No data in Firestore. Initializing default data...");
+        saveToFirestore({
+          config: DEFAULT_CONFIG,
+          posts: DEFAULT_POSTS,
+          products: DEFAULT_PRODUCTS,
+          certifications: DEFAULT_CERTIFICATIONS,
+          content: DEFAULT_CONTENT
+        });
+      }
+    }, (error) => {
+       console.error("Firestore sync error:", error);
+       // Fallback to localStorage if Firestore fails (offline etc)
+       loadFromLocalStorage();
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  // Helper to save entire state to Firestore
+  const saveToFirestore = async (newData: any) => {
+     try {
+        await setDoc(dbRef, newData, { merge: true });
+     } catch (e) {
+        console.error("Failed to save to Firestore:", e);
+        alert("데이터베이스 저장 실패! Firestore 규칙을 확인해주세요.");
+     }
+  };
+
+  // Helper to load from LocalStorage (Fallback)
+  const loadFromLocalStorage = () => {
+    const savedConfig = localStorage.getItem('siteConfig');
+    if (savedConfig) setConfig(JSON.parse(savedConfig));
+    
+    // ... load others if needed, but Firestore is primary now.
+  };
+
+  // --- Effects ---
   useEffect(() => {
     const rgb = hexToRgb(config.primaryColor);
     document.documentElement.style.setProperty('--brand-blue', rgb);
     document.title = `${config.siteName} | ${language === 'KOR' ? '알루미늄 전문기업' : 'Aluminum Specialist'}`;
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) metaDesc.setAttribute('content', config.siteDescription);
   }, [config, language]);
 
-  useEffect(() => { localStorage.setItem('siteConfig', JSON.stringify(config)); }, [config]);
-  useEffect(() => { localStorage.setItem('sitePosts', JSON.stringify(posts)); }, [posts]);
-  useEffect(() => { localStorage.setItem('siteProducts', JSON.stringify(products)); }, [products]);
-  useEffect(() => { localStorage.setItem('siteCertifications', JSON.stringify(certifications)); }, [certifications]);
-  useEffect(() => { localStorage.setItem('siteContent', JSON.stringify(content)); }, [content]);
+  // --- Update Handlers (Writes to Firestore) ---
 
   const updateConfig = (newConfig: Partial<SiteConfig>) => {
-    setConfig(prev => ({ ...prev, ...newConfig }));
+    const updated = { ...config, ...newConfig };
+    setConfig(updated); // Optimistic update
+    saveToFirestore({ config: updated });
   };
 
   const addPost = (newPostData: Omit<Post, 'id' | 'date' | 'views'>) => {
@@ -138,42 +173,44 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       date: new Date().toISOString().split('T')[0],
       views: 0,
     };
-    setPosts([newPost, ...posts]);
+    const updatedPosts = [newPost, ...posts];
+    setPosts(updatedPosts);
+    saveToFirestore({ posts: updatedPosts });
   };
 
   const deletePost = (id: string) => {
-    setPosts(posts.filter(p => p.id !== id));
+    const updatedPosts = posts.filter(p => p.id !== id);
+    setPosts(updatedPosts);
+    saveToFirestore({ posts: updatedPosts });
   };
 
   const addCertification = (cert: Omit<Certification, 'id'>) => {
     const newCert = { ...cert, id: Date.now().toString() };
-    setCertifications([...certifications, newCert]);
+    const updatedCerts = [...certifications, newCert];
+    setCertifications(updatedCerts);
+    saveToFirestore({ certifications: updatedCerts });
   };
 
   const deleteCertification = (id: string) => {
-    setCertifications(certifications.filter(c => c.id !== id));
+    const updatedCerts = certifications.filter(c => c.id !== id);
+    setCertifications(updatedCerts);
+    saveToFirestore({ certifications: updatedCerts });
   };
 
   const updateContent = (key: string, value: string) => {
-    setContent(prev => ({ ...prev, [key]: value }));
+    const updatedContent = { ...content, [key]: value };
+    setContent(updatedContent);
+    saveToFirestore({ content: updatedContent });
   };
 
   const updateProduct = (id: string, updates: Partial<Product>) => {
-    setProducts(prev => prev.map(p => p.id === id ? { ...p, ...updates } : p));
+    const updatedProducts = products.map(p => p.id === id ? { ...p, ...updates } : p);
+    setProducts(updatedProducts);
+    saveToFirestore({ products: updatedProducts });
   };
 
-  // --- New Feature: Data Export/Import ---
-  
   const exportSiteData = () => {
-    const data = {
-      config,
-      posts,
-      products,
-      certifications,
-      content,
-      timestamp: new Date().toISOString()
-    };
-    
+    const data = { config, posts, products, certifications, content, timestamp: new Date().toISOString() };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -188,52 +225,31 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const importSiteData = (jsonData: string): boolean => {
     try {
       const data = JSON.parse(jsonData);
+      if (!data.config) throw new Error("Invalid format");
       
-      // Basic validation
-      if (!data.config || !data.content) {
-        throw new Error("Invalid data format");
-      }
-
-      // Update State
+      // Update local
       if (data.config) setConfig(data.config);
       if (data.posts) setPosts(data.posts);
       if (data.products) setProducts(data.products);
       if (data.certifications) setCertifications(data.certifications);
       if (data.content) setContent(data.content);
 
-      // Force Update LocalStorage immediately
-      localStorage.setItem('siteConfig', JSON.stringify(data.config));
-      localStorage.setItem('sitePosts', JSON.stringify(data.posts || []));
-      localStorage.setItem('siteProducts', JSON.stringify(data.products || []));
-      localStorage.setItem('siteCertifications', JSON.stringify(data.certifications || []));
-      localStorage.setItem('siteContent', JSON.stringify(data.content));
-
+      // Push to Cloud
+      saveToFirestore(data);
       return true;
     } catch (e) {
-      console.error("Import failed:", e);
+      console.error(e);
       return false;
     }
   };
 
   return (
     <SiteContext.Provider value={{ 
-      config, 
-      posts, 
-      products,
-      certifications,
-      content,
-      language,
+      config, posts, products, certifications, content, language,
       t: TRANSLATIONS[language],
-      setLanguage,
-      updateConfig, 
-      addPost, 
-      deletePost,
-      addCertification,
-      deleteCertification,
-      updateContent,
-      updateProduct,
-      exportSiteData,
-      importSiteData
+      setLanguage, updateConfig, addPost, deletePost,
+      addCertification, deleteCertification, updateContent, updateProduct,
+      exportSiteData, importSiteData, isSynced
     }}>
       {children}
     </SiteContext.Provider>
