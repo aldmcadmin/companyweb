@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import { useSite } from '../contexts/SiteContext';
-import { Users, Eye, FileText, MousePointer, Plus, Trash2, Search, Palette, Globe, Save, Upload, Image as ImageIcon, X, LayoutTemplate, Layers, Award, Package, Pencil, Wand2, Loader2, Download, RefreshCcw, Cloud, HardDrive, CheckCircle2 } from 'lucide-react';
+import { Users, Eye, FileText, MousePointer, Plus, Trash2, Search, Palette, Globe, Save, Upload, Image as ImageIcon, X, LayoutTemplate, Layers, Award, Package, Pencil, Wand2, Loader2, Download, RefreshCcw, AlertTriangle } from 'lucide-react';
 import { BorderRadiusSize } from '../types';
 import { uploadImageToStorage } from '../utils/firebase';
 
@@ -21,41 +21,18 @@ export const AdminDashboard: React.FC = () => {
   return (
     <AdminLayout>
       <div className="space-y-8">
-        {/* Sync Status Banner */}
-        <div className="bg-gradient-to-r from-gray-50 to-blue-50 border border-blue-100 rounded-2xl p-6 shadow-sm">
-            <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
-                
-                {/* Cloud Status */}
-                <div className="flex items-center gap-3">
-                    <div className="p-3 bg-white rounded-full text-brand-blue shadow-sm">
-                       <Cloud className="w-6 h-6" />
-                    </div>
-                    <div>
-                        <h3 className="font-bold text-gray-900 flex items-center gap-2">
-                           이미지/사진 <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">클라우드 저장됨</span>
-                        </h3>
-                        <p className="text-xs text-gray-500">Firebase Storage에 영구 저장됩니다.</p>
-                    </div>
-                </div>
-
-                <div className="hidden md:block w-px h-10 bg-gray-200"></div>
-
-                {/* Local Status */}
-                <div className="flex items-center gap-3">
-                    <div className="p-3 bg-white rounded-full text-orange-500 shadow-sm">
-                       <HardDrive className="w-6 h-6" />
-                    </div>
-                    <div>
-                        <h3 className="font-bold text-gray-900 flex items-center gap-2">
-                           텍스트/설정 <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full">내 PC에만 저장 (Draft)</span>
-                        </h3>
-                        <p className="text-xs text-gray-500">
-                           문구 수정은 이 브라우저에서만 미리보기가 가능합니다.<br/>
-                           사이트에 반영하려면 <span className="font-bold">백업 파일</span>을 개발자에게 전달하세요.
-                        </p>
-                    </div>
-                </div>
-
+        {/* Important Notice */}
+        <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-6 flex items-start gap-4">
+            <div className="p-2 bg-yellow-100 rounded-full text-yellow-600">
+               <AlertTriangle className="w-6 h-6" />
+            </div>
+            <div>
+               <h3 className="text-yellow-800 font-bold text-lg mb-1">관리자 주의사항 (데이터 동기화 안내)</h3>
+               <p className="text-yellow-700 text-sm leading-relaxed">
+                  이제 이미지를 업로드하면 <strong>Firebase 서버</strong>에 저장되어 어디서든 이미지가 보입니다.<br/>
+                  다만, 텍스트 변경사항이나 설정값은 여전히 <strong>현재 브라우저</strong>에만 저장되므로, 
+                  다른 PC로 설정을 옮기려면 <strong>[사이트 설정] &gt; [데이터 백업 및 복원]</strong> 기능을 이용하세요.
+               </p>
             </div>
         </div>
 
