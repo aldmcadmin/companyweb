@@ -21,6 +21,7 @@ interface SiteContextType {
   updateProduct: (id: string, updates: Partial<Product>) => void;
   exportSiteData: () => void;
   importSiteData: (jsonData: string) => boolean;
+  isSyncing: boolean; // Always false in this mode
 }
 
 const DEFAULT_CONFIG: SiteConfig = {
@@ -86,6 +87,10 @@ const hexToRgb = (hex: string) => {
 };
 
 export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // Use LocalStorage for Admin "Drafts", Default for "Production"
+  // If we want to hardcode, we rely on the DEFAULT_ constants primarily.
+  // LocalStorage is used so the admin can "preview" changes before asking developer to commit them.
+  
   const [config, setConfig] = useState<SiteConfig>(() => {
     const saved = localStorage.getItem('siteConfig');
     return saved ? JSON.parse(saved) : DEFAULT_CONFIG;
@@ -113,6 +118,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const [language, setLanguage] = useState<Language>('KOR');
 
+  // Update CSS Variables & Meta tags
   useEffect(() => {
     const rgb = hexToRgb(config.primaryColor);
     document.documentElement.style.setProperty('--brand-blue', rgb);
@@ -121,11 +127,13 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (metaDesc) metaDesc.setAttribute('content', config.siteDescription);
   }, [config, language]);
 
+  // Sync to LocalStorage (for local persistence/drafting)
   useEffect(() => { localStorage.setItem('siteConfig', JSON.stringify(config)); }, [config]);
   useEffect(() => { localStorage.setItem('sitePosts', JSON.stringify(posts)); }, [posts]);
   useEffect(() => { localStorage.setItem('siteProducts', JSON.stringify(products)); }, [products]);
   useEffect(() => { localStorage.setItem('siteCertifications', JSON.stringify(certifications)); }, [certifications]);
   useEffect(() => { localStorage.setItem('siteContent', JSON.stringify(content)); }, [content]);
+
 
   const updateConfig = (newConfig: Partial<SiteConfig>) => {
     setConfig(prev => ({ ...prev, ...newConfig }));
@@ -162,8 +170,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setProducts(prev => prev.map(p => p.id === id ? { ...p, ...updates } : p));
   };
 
-  // --- New Feature: Data Export/Import ---
-  
+  // Export/Import for "Manual Sync" (Admin sends file to Developer)
   const exportSiteData = () => {
     const data = {
       config,
@@ -188,25 +195,13 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const importSiteData = (jsonData: string): boolean => {
     try {
       const data = JSON.parse(jsonData);
-      
-      // Basic validation
-      if (!data.config || !data.content) {
-        throw new Error("Invalid data format");
-      }
+      if (!data.config || !data.content) throw new Error("Invalid data format");
 
-      // Update State
-      if (data.config) setConfig(data.config);
-      if (data.posts) setPosts(data.posts);
-      if (data.products) setProducts(data.products);
-      if (data.certifications) setCertifications(data.certifications);
-      if (data.content) setContent(data.content);
-
-      // Force Update LocalStorage immediately
-      localStorage.setItem('siteConfig', JSON.stringify(data.config));
-      localStorage.setItem('sitePosts', JSON.stringify(data.posts || []));
-      localStorage.setItem('siteProducts', JSON.stringify(data.products || []));
-      localStorage.setItem('siteCertifications', JSON.stringify(data.certifications || []));
-      localStorage.setItem('siteContent', JSON.stringify(data.content));
+      setConfig(data.config);
+      setPosts(data.posts || []);
+      setProducts(data.products || []);
+      setCertifications(data.certifications || []);
+      setContent(data.content);
 
       return true;
     } catch (e) {
@@ -233,7 +228,8 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       updateContent,
       updateProduct,
       exportSiteData,
-      importSiteData
+      importSiteData,
+      isSyncing: false // Static mode
     }}>
       {children}
     </SiteContext.Provider>

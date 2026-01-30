@@ -1,10 +1,8 @@
 
-// @ts-ignore
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-// @ts-ignore
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
-// @ts-ignore
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+// Use esm.sh for Firebase to ensure standard module resolution in browser-based environments
+import { initializeApp } from "https://esm.sh/firebase@10.8.1/app";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://esm.sh/firebase@10.8.1/storage";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://esm.sh/firebase@10.8.1/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBBr9JVXr-SZnY9051niEWk4THj0J4u79w",

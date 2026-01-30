@@ -130,9 +130,9 @@ const Login: React.FC = () => {
           <div className="mt-8 text-center space-y-4">
              <Logo className="h-6 mx-auto opacity-50" />
              
-             {/* 버전 확인용 라벨: 강제 변경을 위해 v2.4로 업데이트 */}
+             {/* 버전 확인용 라벨: v3.0 */}
              <div className="inline-flex items-center gap-1 text-[10px] text-gray-400 bg-gray-100 px-2 py-1 rounded-full">
-                <ShieldCheck className="w-3 h-3" /> System v2.4 (Force Deploy)
+                <ShieldCheck className="w-3 h-3" /> System v3.0 (Static Mode)
              </div>
           </div>
         </div>
