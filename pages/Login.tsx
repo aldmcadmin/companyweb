@@ -20,6 +20,8 @@ const Login: React.FC = () => {
 
   // [중요] 로그인 페이지 접속 시 기존 세션 강제 종료 (혹시 모를 캐시 문제 방지)
   useEffect(() => {
+    // 로그인 페이지에 들어왔다는 것은 명시적으로 로그인을 하겠다는 뜻이므로,
+    // 기존에 남아있을지 모르는 dmcadmin 같은 로컬 세션을 정리합니다.
     if (!location.state?.from) {
        logout(); 
     }
@@ -128,9 +130,9 @@ const Login: React.FC = () => {
           <div className="mt-8 text-center space-y-4">
              <Logo className="h-6 mx-auto opacity-50" />
              
-             {/* 버전 확인용 라벨: 배포가 정상적으로 되면 이 문구가 보여야 합니다. */}
+             {/* 버전 확인용 라벨 */}
              <div className="inline-flex items-center gap-1 text-[10px] text-gray-400 bg-gray-100 px-2 py-1 rounded-full">
-                <ShieldCheck className="w-3 h-3" /> System v2.1 (Firebase Auth)
+                <ShieldCheck className="w-3 h-3" /> System v2.2 (Build Fix)
              </div>
           </div>
         </div>
