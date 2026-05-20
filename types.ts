@@ -52,6 +52,14 @@ export interface Certification {
   imageUrl: string;
 }
 
+export interface ProcessStep {
+  id: string;
+  title: string;
+  description?: string;
+  imageUrl: string;
+  order: number;
+}
+
 // Flexible key-value store for page texts and images
 export interface ContentMap {
   [key: string]: string; 

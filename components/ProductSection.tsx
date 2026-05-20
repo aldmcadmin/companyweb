@@ -6,7 +6,11 @@ import ScrollReveal from './ScrollReveal';
 import { useSite } from '../contexts/SiteContext';
 import { Product } from '../types';
 
-const ProductSection: React.FC = () => {
+interface ProductSectionProps {
+  hideHeader?: boolean;
+}
+
+const ProductSection: React.FC<ProductSectionProps> = ({ hideHeader = false }) => {
   const { products, t } = useSite();
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
@@ -27,11 +31,21 @@ const ProductSection: React.FC = () => {
     const translatedItems = (t.products as any).items;
     const translation = translatedItems ? translatedItems[product.id] : null;
     
+    let translatedCategory = product.category;
+    if (product.id === 'p1') translatedCategory = t.nav.light;
+    else if (product.id === 'p2') translatedCategory = t.nav.industry;
+    else if (product.id === 'p3') translatedCategory = t.nav.processing;
+    else if (product.id === 'p4') translatedCategory = t.nav.electronic;
+    else if (product.id === 'p5') translatedCategory = t.nav.construction;
+    else if (product.id === 'p6') translatedCategory = t.nav.environmental;
+    else if (product.id === 'p7') translatedCategory = t.nav.exterior;
+    else if (product.id === 'p8') translatedCategory = t.nav.substitute;
+
     return {
       title: translation ? translation.title : product.title,
       description: translation ? translation.desc : product.description,
       imageUrl: product.imageUrl,
-      category: product.category
+      category: translatedCategory
     };
   };
 
@@ -45,23 +59,25 @@ const ProductSection: React.FC = () => {
       <div className="absolute top-0 left-0 w-full h-40 bg-gradient-to-b from-white to-[#F5F5F7] pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-          <div className="max-w-2xl">
-            <ScrollReveal>
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-6">{t.products.title}</h2>
-            </ScrollReveal>
-            <ScrollReveal delay={0.1}>
-              <p className="text-xl text-gray-500 font-medium leading-relaxed whitespace-pre-line">
-                {t.products.desc}
-              </p>
+        {!hideHeader && (
+          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+            <div className="max-w-2xl">
+              <ScrollReveal>
+                <h2 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-6">{t.products.title}</h2>
+              </ScrollReveal>
+              <ScrollReveal delay={0.1}>
+                <p className="text-xl text-gray-500 font-medium leading-relaxed whitespace-pre-line">
+                  {t.products.desc}
+                </p>
+              </ScrollReveal>
+            </div>
+            <ScrollReveal delay={0.2}>
+              <Link to="/products" className="hidden md:flex items-center gap-2 px-6 py-3 rounded-full bg-white border border-gray-200 text-gray-900 font-bold hover:bg-gray-50 hover:border-gray-300 hover:shadow-lg transition-all duration-300 shadow-sm group">
+                {t.products.view_all} <ArrowUpRight className="w-5 h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </Link>
             </ScrollReveal>
           </div>
-          <ScrollReveal delay={0.2}>
-            <Link to="/products" className="hidden md:flex items-center gap-2 px-6 py-3 rounded-full bg-white border border-gray-200 text-gray-900 font-bold hover:bg-gray-50 hover:border-gray-300 hover:shadow-lg transition-all duration-300 shadow-sm group">
-              {t.products.view_all} <ArrowUpRight className="w-5 h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-            </Link>
-          </ScrollReveal>
-        </div>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {products.map((product, index) => {

@@ -508,23 +508,25 @@ const ProductsListPage = () => {
              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                  <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">{t.products.title}</h1>
                  <p className="text-xl text-gray-500 mb-12">{t.products.desc}</p>
-                 <ProductSection />
+                 <ProductSection hideHeader={true} />
              </div>
           </div>
         </PublicLayout>
     );
 };
 
-const ProductDetailPage = ({ category }: { category: string }) => {
+const ProductDetailPage = ({ categoryKey }: { categoryKey: keyof typeof TRANSLATIONS.KOR.nav }) => {
     const { t } = useSite();
+    const categoryName = t.nav[categoryKey];
+    
     return (
         <PublicLayout>
-          <PageLayout title={`${category}`} subtitle={t.products.desc}>
+          <PageLayout title={`${categoryName}`} subtitle={t.products.desc}>
               <div className="grid md:grid-cols-3 gap-6">
                   {[1, 2, 3, 4, 5, 6].map((i) => (
                       <div key={i} className="group cursor-pointer">
                           <div className="aspect-square bg-gray-100 rounded-2xl mb-4 overflow-hidden relative">
-                               <img src={`https://picsum.photos/seed/${category}${i}/400/400`} alt="Product" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+                               <img src={`https://picsum.photos/seed/${categoryKey}${i}/400/400`} alt="Product" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors"></div>
                           </div>
                           <h4 className="font-bold text-lg group-hover:text-brand-blue transition-colors">{t.products.detail_page.model_name} {String(i).padStart(2, '0')}</h4>
@@ -539,15 +541,30 @@ const ProductDetailPage = ({ category }: { category: string }) => {
 
 // Other Sections
 const ProcessPage = () => {
-    const { t } = useSite();
+    const { t, processSteps } = useSite();
+    const sortedSteps = [...processSteps].sort((a, b) => a.order - b.order);
+
     return (
         <PublicLayout>
           <PageLayout title={t.pages.process.title} subtitle={t.pages.process.subtitle}>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {t.process.steps.map((step, idx) => (
-                      <div key={step} className="p-6 bg-gray-50 rounded-xl text-center hover:bg-white hover:shadow-lg transition-all duration-300 border border-transparent hover:border-gray-100">
-                          <div className="text-3xl font-bold text-brand-blue/20 mb-2">0{idx + 1}</div>
-                          <h3 className="font-bold text-gray-900">{step}</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+                  {sortedSteps.map((step, idx) => (
+                      <div key={step.id} className="group">
+                          <div className="aspect-[4/3] bg-gray-100 rounded-2xl mb-6 overflow-hidden relative shadow-sm group-hover:shadow-xl transition-all duration-500">
+                               <img 
+                                src={step.imageUrl} 
+                                alt={step.title} 
+                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                referrerPolicy="no-referrer"
+                               />
+                               <div className="absolute top-4 left-4 w-10 h-10 bg-brand-blue text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg">
+                                  {idx + 1}
+                               </div>
+                          </div>
+                          <h3 className="text-xl font-bold text-gray-900 mb-2">{step.title}</h3>
+                          {step.description && (
+                            <p className="text-sm text-gray-500 leading-relaxed">{step.description}</p>
+                          )}
                       </div>
                   ))}
               </div>
@@ -678,14 +695,14 @@ const App: React.FC = () => {
             {/* Product Routes */}
             <Route path="/products" element={<ProductsListPage />} />
             {/* Map product detail pages to use translations */}
-            <Route path="/products/light" element={<ProductDetailPage category={TRANSLATIONS.KOR.nav.light} />} />
-            <Route path="/products/industry" element={<ProductDetailPage category={TRANSLATIONS.KOR.nav.industry} />} />
-            <Route path="/products/processing" element={<ProductDetailPage category={TRANSLATIONS.KOR.nav.processing} />} />
-            <Route path="/products/electronic" element={<ProductDetailPage category={TRANSLATIONS.KOR.nav.electronic} />} />
-            <Route path="/products/construction" element={<ProductDetailPage category={TRANSLATIONS.KOR.nav.construction} />} />
-            <Route path="/products/environmental" element={<ProductDetailPage category={TRANSLATIONS.KOR.nav.environmental} />} />
-            <Route path="/products/exterior" element={<ProductDetailPage category={TRANSLATIONS.KOR.nav.exterior} />} />
-            <Route path="/products/substitute" element={<ProductDetailPage category={TRANSLATIONS.KOR.nav.substitute} />} />
+            <Route path="/products/light" element={<ProductDetailPage categoryKey="light" />} />
+            <Route path="/products/industry" element={<ProductDetailPage categoryKey="industry" />} />
+            <Route path="/products/processing" element={<ProductDetailPage categoryKey="processing" />} />
+            <Route path="/products/electronic" element={<ProductDetailPage categoryKey="electronic" />} />
+            <Route path="/products/construction" element={<ProductDetailPage categoryKey="construction" />} />
+            <Route path="/products/environmental" element={<ProductDetailPage categoryKey="environmental" />} />
+            <Route path="/products/exterior" element={<ProductDetailPage categoryKey="exterior" />} />
+            <Route path="/products/substitute" element={<ProductDetailPage categoryKey="substitute" />} />
             
             {/* Other Routes */}
             <Route path="/process" element={<ProcessPage />} />

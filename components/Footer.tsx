@@ -13,18 +13,35 @@ const Footer: React.FC = () => {
   const [activeModal, setActiveModal] = useState<'email' | 'privacy' | null>(null);
 
   const getNavLabel = (key: string) => {
-    switch(key) {
-      case '회사소개': return t.nav.about;
-      case '제품소개': return t.nav.products;
-      case '생산공정': return t.nav.process;
-      case '연구소': return t.nav.rnd;
-      case '고객지원': return t.nav.support;
-      default: return key;
-    }
+    // Top level
+    if (key === '회사소개') return t.nav.about;
+    if (key === '제품소개') return t.nav.products;
+    if (key === '생산공정') return t.nav.process;
+    if (key === '연구소') return t.nav.rnd;
+    if (key === '고객지원') return t.nav.support;
+    
+    // Sub items (About)
+    if (key === '회사개요') return t.nav.intro;
+    if (key === '회사연혁') return t.nav.history;
+    if (key === '경영이념') return t.nav.philosophy;
+    if (key === '인증현황') return t.nav.cert;
+    if (key === '오시는 길') return t.nav.location;
+
+    // Sub items (Products)
+    if (key === '경량소재') return t.nav.light;
+    if (key === '산업용소재') return t.nav.industry;
+    if (key === '가공소재') return t.nav.processing;
+    if (key === '전기전자부품소재') return t.nav.electronic;
+    if (key === '건축소재') return t.nav.construction;
+    if (key === '환경소재') return t.nav.environmental;
+    if (key === '외장소재') return t.nav.exterior;
+    if (key === '대체소재') return t.nav.substitute;
+
+    return key;
   };
 
   const SubItemLabel = ({ label }: { label: string }) => {
-    return <>{label}</>;
+    return <>{getNavLabel(label)}</>;
   };
 
   return (

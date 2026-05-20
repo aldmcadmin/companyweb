@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Post, SiteConfig, Language, Certification, ContentMap, Product } from '../types';
+import { Post, SiteConfig, Language, Certification, ContentMap, Product, ProcessStep } from '../types';
 import { TRANSLATIONS } from '../translations';
 import { db, doc, onSnapshot, setDoc } from '../utils/firebase';
 
@@ -9,6 +9,7 @@ interface SiteContextType {
   posts: Post[];
   products: Product[]; 
   certifications: Certification[];
+  processSteps: ProcessStep[];
   content: ContentMap;
   language: Language;
   t: typeof TRANSLATIONS['KOR'];
@@ -20,6 +21,7 @@ interface SiteContextType {
   deleteCertification: (id: string) => void;
   updateContent: (key: string, value: string) => void;
   updateProduct: (id: string, updates: Partial<Product>) => void;
+  updateProcessStep: (id: string, updates: Partial<ProcessStep>) => void;
   exportSiteData: () => void;
   importSiteData: (jsonData: string) => boolean;
   isSyncing: boolean;
@@ -64,6 +66,17 @@ const DEFAULT_CERTIFICATIONS: Certification[] = [
     { id: 'c8', title: "상표등록증", imageUrl: "http://www.aldmc.co.kr/kor/images/about/cer/cer08_z.gif" },
 ];
 
+const DEFAULT_PROCESS_STEPS: ProcessStep[] = [
+  { id: 'ps1', title: '용해/주조', order: 1, imageUrl: 'https://picsum.photos/id/101/600/400' },
+  { id: 'ps2', title: '압출', order: 2, imageUrl: 'https://picsum.photos/id/102/600/400' },
+  { id: 'ps3', title: '열처리', order: 3, imageUrl: 'https://picsum.photos/id/103/600/400' },
+  { id: 'ps4', title: '교정', order: 4, imageUrl: 'https://picsum.photos/id/104/600/400' },
+  { id: 'ps5', title: '절단', order: 5, imageUrl: 'https://picsum.photos/id/105/600/400' },
+  { id: 'ps6', title: '피막', order: 6, imageUrl: 'https://picsum.photos/id/106/600/400' },
+  { id: 'ps7', title: '가공', order: 7, imageUrl: 'https://picsum.photos/id/107/600/400' },
+  { id: 'ps8', title: '검사/포장', order: 8, imageUrl: 'https://picsum.photos/id/108/600/400' },
+];
+
 const DEFAULT_CONTENT: ContentMap = {
   'home_hero_title_prefix': 'The Future of',
   'home_hero_title_highlight': 'Aluminum Technology',
@@ -96,6 +109,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [posts, setPosts] = useState<Post[]>(DEFAULT_POSTS);
   const [products, setProducts] = useState<Product[]>(DEFAULT_PRODUCTS);
   const [certifications, setCertifications] = useState<Certification[]>(DEFAULT_CERTIFICATIONS);
+  const [processSteps, setProcessSteps] = useState<ProcessStep[]>(DEFAULT_PROCESS_STEPS);
   const [content, setContent] = useState<ContentMap>(DEFAULT_CONTENT);
   
   const [language, setLanguage] = useState<Language>('KOR');
@@ -126,6 +140,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const unsubPosts = subscribe('posts', setPosts, DEFAULT_POSTS);
     const unsubProducts = subscribe('products', setProducts, DEFAULT_PRODUCTS);
     const unsubCerts = subscribe('certifications', setCertifications, DEFAULT_CERTIFICATIONS);
+    const unsubProcess = subscribe('processSteps', setProcessSteps, DEFAULT_PROCESS_STEPS);
     const unsubContent = subscribe('content', setContent, DEFAULT_CONTENT);
 
     setIsSyncing(false);
@@ -135,6 +150,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       unsubPosts();
       unsubProducts();
       unsubCerts();
+      unsubProcess();
       unsubContent();
     };
   }, []);
@@ -202,6 +218,11 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
     saveData('products', updated);
   };
 
+  const updateProcessStep = (id: string, updates: Partial<ProcessStep>) => {
+    const updated = processSteps.map(ps => ps.id === id ? { ...ps, ...updates } : ps);
+    saveData('processSteps', updated);
+  };
+
   // --- Export/Import ---
   
   const exportSiteData = () => {
@@ -210,6 +231,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       posts,
       products,
       certifications,
+      processSteps,
       content,
       timestamp: new Date().toISOString()
     };
@@ -234,6 +256,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       saveData('posts', data.posts || []);
       saveData('products', data.products || []);
       saveData('certifications', data.certifications || []);
+      saveData('processSteps', data.processSteps || []);
       saveData('content', data.content);
 
       return true;
@@ -249,6 +272,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       posts, 
       products,
       certifications,
+      processSteps,
       content,
       language,
       t: TRANSLATIONS[language],
@@ -260,6 +284,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       deleteCertification,
       updateContent,
       updateProduct,
+      updateProcessStep,
       exportSiteData,
       importSiteData,
       isSyncing

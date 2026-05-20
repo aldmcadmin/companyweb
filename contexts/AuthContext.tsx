@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { auth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from '../utils/firebase';
+import { auth, signInWithEmailAndPassword, signOut, onAuthStateChanged, setPersistence, browserSessionPersistence } from '../utils/firebase';
 import { Loader2 } from 'lucide-react';
 
 interface AuthContextType {
@@ -42,7 +42,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     try {
-      // 2. Firebase 인증 시도
+      // 2. 브라우저 세션 유지 설정 (창을 닫으면 로그아웃 됨)
+      await setPersistence(auth, browserSessionPersistence);
+      
+      // 3. Firebase 인증 시도
       await signInWithEmailAndPassword(auth, email, pw);
       return true;
     } catch (error) {
@@ -61,16 +64,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.error("Logout failed:", error);
     }
   };
-
-  // 인증 상태를 확인하는 동안 로딩 화면 표시
-  if (loading) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 text-gray-500">
-        <Loader2 className="w-10 h-10 animate-spin text-brand-blue mb-4" />
-        <p className="text-sm font-medium">보안 접속 확인 중...</p>
-      </div>
-    );
-  }
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, login, logout, loading }}>

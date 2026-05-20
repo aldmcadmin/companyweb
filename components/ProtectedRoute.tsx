@@ -8,8 +8,12 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
   const location = useLocation();
+
+  if (loading) {
+    return null; // Or a very subtle loading indicator, but user requested to remove the screen
+  }
 
   if (!isAuthenticated) {
     // Redirect to login page, saving the location they were trying to access

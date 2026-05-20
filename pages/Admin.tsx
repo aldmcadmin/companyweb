@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import { useSite } from '../contexts/SiteContext';
-import { Users, Eye, FileText, MousePointer, Plus, Trash2, Search, Palette, Globe, Save, Upload, Image as ImageIcon, X, LayoutTemplate, Layers, Award, Package, Pencil, Wand2, Loader2, Download, RefreshCcw, AlertTriangle } from 'lucide-react';
+import { Users, Eye, FileText, MousePointer, Plus, Trash2, Search, Palette, Globe, Save, Upload, Image as ImageIcon, X, LayoutTemplate, Layers, Award, Package, Pencil, Wand2, Loader2, Download, RefreshCcw, AlertTriangle, Settings } from 'lucide-react';
 import { BorderRadiusSize } from '../types';
 import { uploadImageToStorage } from '../utils/firebase';
 
@@ -70,8 +70,8 @@ export const AdminDashboard: React.FC = () => {
 
 // --- Content Manager Component (Updated) ---
 export const AdminContent: React.FC = () => {
-  const { certifications, addCertification, deleteCertification, content, updateContent, products, updateProduct } = useSite();
-  const [activeTab, setActiveTab] = useState<'cert' | 'text' | 'images' | 'products'>('products');
+  const { certifications, addCertification, deleteCertification, content, updateContent, products, updateProduct, processSteps, updateProcessStep } = useSite();
+  const [activeTab, setActiveTab] = useState<'cert' | 'text' | 'images' | 'products' | 'process'>('products');
   const [newCert, setNewCert] = useState({ title: '', imageUrl: '' });
   const [uploading, setUploading] = useState<{[key: string]: boolean}>({});
 
@@ -117,6 +117,19 @@ export const AdminContent: React.FC = () => {
         updateProduct(id, { imageUrl: url });
       } finally {
         setUploading(prev => ({ ...prev, [`prod_${id}`]: false }));
+      }
+    }
+  };
+
+  const handleProcessImageUpload = async (id: string, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setUploading(prev => ({ ...prev, [`step_${id}`]: true }));
+      try {
+        const url = await uploadImageToStorage(file, 'process/');
+        updateProcessStep(id, { imageUrl: url });
+      } finally {
+        setUploading(prev => ({ ...prev, [`step_${id}`]: false }));
       }
     }
   };
@@ -189,6 +202,12 @@ export const AdminContent: React.FC = () => {
                className={`pb-3 px-4 font-bold text-sm transition-colors whitespace-nowrap ${activeTab === 'images' ? 'text-brand-blue border-b-2 border-brand-blue' : 'text-gray-500 hover:text-gray-700'}`}
              >
                이미지 관리
+             </button>
+             <button 
+               onClick={() => setActiveTab('process')}
+               className={`pb-3 px-4 font-bold text-sm transition-colors whitespace-nowrap ${activeTab === 'process' ? 'text-brand-blue border-b-2 border-brand-blue' : 'text-gray-500 hover:text-gray-700'}`}
+             >
+               생산공정 관리
              </button>
           </div>
 
@@ -426,6 +445,67 @@ export const AdminContent: React.FC = () => {
                    </div>
                 </div>
              </div>
+          )}
+
+          {activeTab === 'process' && (
+            <div className="animate-fade-in space-y-8">
+               <div className="bg-emerald-50 p-6 rounded-2xl flex items-center gap-4 border border-emerald-100">
+                  <div className="p-3 bg-white rounded-full text-emerald-600 shadow-sm">
+                     <Settings className="w-6 h-6" />
+                  </div>
+                  <div>
+                     <h3 className="font-bold text-emerald-600 text-lg">생산공정 관리</h3>
+                     <p className="text-gray-600 text-sm">생산공정 페이지에 표시되는 각 단계의 이미지와 설명을 관리합니다.</p>
+                  </div>
+               </div>
+
+               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {[...processSteps].sort((a, b) => a.order - b.order).map((step) => {
+                     const isUploadingStep = uploading[`step_${step.id}`];
+                     return (
+                     <div key={step.id} className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col h-full">
+                        <div className="relative aspect-[4/3] bg-gray-100 rounded-xl overflow-hidden mb-4 border border-gray-200">
+                           {isUploadingStep ? (
+                             <div className="flex flex-col items-center justify-center h-full text-brand-blue">
+                               <Loader2 className="w-6 h-6 animate-spin mb-2" />
+                               <span className="text-xs">업로드 중</span>
+                             </div>
+                           ) : step.imageUrl ? (
+                             <img src={step.imageUrl} alt={step.title} className="w-full h-full object-cover" />
+                           ) : (
+                             <div className="flex items-center justify-center h-full text-gray-400">
+                               <ImageIcon className="w-8 h-8" />
+                             </div>
+                           )}
+                           <label className={`absolute inset-0 bg-black/0 hover:bg-black/40 transition-colors flex items-center justify-center cursor-pointer group ${isUploadingStep ? 'pointer-events-none' : ''}`}>
+                              <span className="bg-white/90 text-gray-900 px-3 py-1.5 rounded-lg font-bold text-xs opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2">
+                                 <Upload className="w-3 h-3" /> 사진 변경
+                              </span>
+                              <input type="file" accept="image/*" className="hidden" onChange={(e) => handleProcessImageUpload(step.id, e)} disabled={isUploadingStep} />
+                           </label>
+                        </div>
+                        
+                        <div className="space-y-3 flex-1">
+                           <div className="flex items-center justify-between">
+                              <label className="text-xs font-bold text-gray-400 block mb-1">단계 {step.order}</label>
+                              <button onClick={() => updateProcessStep(step.id, { imageUrl: '' })} className="text-xs text-red-500 hover:underline">사진 삭제</button>
+                           </div>
+                           <div className="font-bold text-gray-900 text-lg">{step.title}</div>
+                           <div>
+                              <label className="text-xs font-bold text-gray-400 block mb-1">설명 (선택사항)</label>
+                              <textarea 
+                                 rows={2}
+                                 className="w-full text-sm border border-gray-200 rounded-lg p-2 resize-none focus:ring-1 focus:ring-brand-blue outline-none"
+                                 value={step.description || ''}
+                                 placeholder="공정 단계에 대한 설명을 입력하세요..."
+                                 onChange={(e) => updateProcessStep(step.id, { description: e.target.value })}
+                              />
+                           </div>
+                        </div>
+                     </div>
+                  )})}
+               </div>
+            </div>
           )}
        </div>
     </AdminLayout>
