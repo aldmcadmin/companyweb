@@ -46,18 +46,15 @@ const PromoVideo: React.FC = () => {
              </h2>
            </ScrollReveal>
 
-           <ScrollReveal delay={0.2}>
+           <ScrollReveal delay={0.2} className="w-full flex justify-center">
               <button
                 className="relative w-24 h-24 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 group-hover:scale-110 group-hover:bg-white group-hover:text-black text-white transition-all duration-500 ease-spring shadow-[0_0_40px_rgba(255,255,255,0.1)] group-hover:shadow-[0_0_60px_rgba(255,255,255,0.4)]"
               >
                  <Play className="w-10 h-10 ml-1 fill-current" />
                  
                  {/* Ripple Effect Ring */}
-                 <div className="absolute inset-0 rounded-full border border-white/40 animate-ping opacity-75 duration-1000"></div>
+                 <div className="absolute inset-0 rounded-full border border-white/40 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite] opacity-75"></div>
               </button>
-              <p className="text-white/80 text-sm mt-6 font-medium tracking-widest uppercase group-hover:text-white transition-colors">
-                 Watch the film
-              </p>
            </ScrollReveal>
         </div>
       </section>

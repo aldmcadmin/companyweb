@@ -117,7 +117,7 @@ export const TRANSLATIONS = {
     },
     products: {
       title: 'Our Products',
-      desc: '자동차, 전자, 건축 등 다양한 산업 분야에 적용되는 \n대우경금속만의 최고 품질 알루미늄 제품을 만나보세요.',
+      desc: '자동차, 전자, 건축 등 다양한 산업 분야에 적용되는 대우경금속만의 최고 품질 알루미늄 제품을 만나보세요.',
       view_all: '전체 제품 보기',
       detail_btn: '자세히 보기',
       modal: {
@@ -148,7 +148,7 @@ export const TRANSLATIONS = {
     contact: {
       banner: {
         title: '프로젝트를 시작할 \n준비가 되셨나요?',
-        desc: '대우경금속의 전문가들이 귀사의 비즈니스에 최적화된\n알루미늄 솔루션을 제안해 드립니다.',
+        desc: '대우경금속의 전문가들이 귀사의 비즈니스에 최적화된\n알루미늄 압출 솔루션을 제안해 드립니다.',
         btn: '견적 문의하기',
         hours: '평일 09:00 - 18:00 상담 가능'
       },
@@ -351,7 +351,7 @@ export const TRANSLATIONS = {
     contact: {
       banner: {
         title: 'Ready to Start \nYour Project?',
-        desc: 'Our experts will propose the optimized aluminum solution \nfor your business.',
+        desc: 'Our experts will propose the optimized aluminum extrusion solution \nfor your business.',
         btn: 'Get a Quote',
         hours: 'Mon-Fri 09:00 - 18:00'
       },
@@ -554,7 +554,7 @@ export const TRANSLATIONS = {
     contact: {
       banner: {
         title: 'プロジェクトを始める\n準備はできましたか？',
-        desc: '大宇軽金属の専門家が御社のビジネスに最適化された\nアルミニウムソリューションを提案します。',
+        desc: '大宇軽金属の専門家が御社のビジネスに最適化された\nアルミニウム押出ソリューションを提案します。',
         btn: '見積もりのお問い合わせ',
         hours: '平日 09:00 - 18:00 相談可能'
       },
