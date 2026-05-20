@@ -1,0 +1,440 @@
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useSite } from '../contexts/SiteContext';
+import ScrollReveal from '../components/ScrollReveal';
+import { Phone, MapPin, TrendingUp, ThumbsUp, Lightbulb, UserCheck, Sparkles, Award, Printer, Navigation } from 'lucide-react';
+import { Language } from '../types';
+
+const AboutPage = () => {
+  const { content, t, language, certifications } = useSite();
+  const location = useLocation();
+  const isDefaultLang = language === 'KOR';
+
+  // For location tab
+  const [activeTab, setActiveTab] = useState<'daegu' | 'changnyeong'>('daegu');
+
+  useEffect(() => {
+    // Determine section from pathname (e.g. /about/intro -> 'intro')
+    const hash = location.pathname.split('/').pop() || 'intro';
+    // Small timeout ensures the DOM has updated and element exists
+    setTimeout(() => {
+      const element = document.getElementById(hash);
+      if (element) {
+        let offset = 100;
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - offset;
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }, 100);
+  }, [location.pathname]);
+
+  // History Data
+  const historyData = t.history.groups;
+
+  // Philosophy Data
+  const coreValues = [
+    {
+      icon: <ThumbsUp className="w-8 h-8" />,
+      title: t.philosophy.cv_1_title,
+      subtitle: t.philosophy.cv_1_sub,
+      desc: t.philosophy.cv_1_desc,
+      bg: "bg-blue-50"
+    },
+    {
+      icon: <Lightbulb className="w-8 h-8" />,
+      title: t.philosophy.cv_2_title,
+      subtitle: t.philosophy.cv_2_sub,
+      desc: t.philosophy.cv_2_desc,
+      bg: "bg-blue-50"
+    },
+    {
+      icon: <UserCheck className="w-8 h-8" />,
+      title: t.philosophy.cv_3_title,
+      subtitle: t.philosophy.cv_3_sub,
+      desc: t.philosophy.cv_3_desc,
+      bg: "bg-blue-50"
+    }
+  ];
+
+  // Location Data
+  const locations = {
+    daegu: {
+      name: t.footer.daegu,
+      address: t.footer.address_daegu,
+      tel: '053-611-6061',
+      fax: '053-611-6066',
+      mapQuery: '대구광역시 달성군 구지면 달성2차동3로 46'
+    },
+    changnyeong: {
+      name: t.footer.changnyeong,
+      address: t.footer.address_changnyeong,
+      tel: '055-533-0013',
+      fax: '055-533-0225',
+      mapQuery: '경남 창녕군 대합면 대합産業단지로 22-44'
+    }
+  };
+  const activeLoc = locations[activeTab];
+
+  return (
+    <div className="pt-24 pb-24 min-h-screen bg-brand-gray space-y-32">
+      {/* 1. Intro Section (회사개요) */}
+      <section id="intro" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
+        <ScrollReveal>
+          <div className="text-center mb-16">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
+              {t.pages.intro.title}
+            </h1>
+            <p className="text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed">
+              {t.pages.intro.subtitle}
+            </p>
+            <div className="h-1 w-20 bg-brand-blue mx-auto mt-8 rounded-full"></div>
+          </div>
+        </ScrollReveal>
+
+        <div className="space-y-16">
+          <ScrollReveal>
+            <div className="text-center max-w-3xl mx-auto space-y-6 mb-12">
+              <h3 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight">
+                {isDefaultLang ? content['intro_main_title_1'] : (language === 'ENG' ? 'Global Leader in' : 'Global Leader in')} <br/>
+                <span className="text-brand-blue">{isDefaultLang ? content['intro_main_title_2'] : (language === 'ENG' ? 'Aluminum Extrusion' : 'Aluminum Extrusion')}</span>
+              </h3>
+              <p className="text-gray-600 leading-relaxed text-lg break-keep">
+                {isDefaultLang ? content['intro_desc'] : t.pages.intro.subtitle}
+              </p>
+            </div>
+          </ScrollReveal>
+
+          {/* Factory Images */}
+          <div className="grid md:grid-cols-2 gap-8">
+            <ScrollReveal delay={0.1}>
+                <div className="group relative rounded-3xl overflow-hidden shadow-xl h-[300px] md:h-[400px]">
+                  <img 
+                    src={content['intro_img_1']} 
+                    alt="대구공장 전경" 
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-8">
+                      <div className="text-white transform transition-transform duration-300 group-hover:-translate-y-2">
+                        <h4 className="text-2xl font-bold mb-2">{t.footer.daegu}</h4>
+                        <p className="text-white/80 text-sm font-medium">{language === 'KOR' ? '최첨단 압출 설비 및 본사 운영\nIATF 16949 인증 사업장' : (language === 'ENG' ? 'HQ & State-of-the-art Facility' : '最先端押出設備および本社運営')}</p>
+                      </div>
+                  </div>
+                </div>
+            </ScrollReveal>
+            <ScrollReveal delay={0.2}>
+                <div className="group relative rounded-3xl overflow-hidden shadow-xl h-[300px] md:h-[400px]">
+                  <img 
+                    src={content['intro_img_2']} 
+                    alt="창녕공장 전경" 
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-8">
+                      <div className="text-white transform transition-transform duration-300 group-hover:-translate-y-2">
+                        <h4 className="text-2xl font-bold mb-2">{t.footer.changnyeong}</h4>
+                         <p className="text-white/80 text-sm font-medium">{language === 'KOR' ? '대규모 물류 센터 및 제2 생산 거점\n스마트 팩토리 시스템 구축' : (language === 'ENG' ? 'Large-scale Logistics & 2nd Factory' : '大規模物流センターおよび第2生産拠点')}</p>
+                      </div>
+                  </div>
+                </div>
+            </ScrollReveal>
+          </div>
+
+          <ScrollReveal delay={0.3}>
+            <div className="bg-white rounded-[2.5rem] p-8 md:p-12 border border-gray-100 shadow-sm transition-all duration-300 hover:shadow-lg">
+                <h3 className="text-xl font-bold text-gray-900 mb-8 flex items-center gap-3">
+                  <span className="w-1.5 h-6 bg-brand-blue rounded-full"></span>
+                   {language === 'KOR' ? '기업 상세 정보' : (language === 'ENG' ? 'Company Details' : '企業詳細情報')}
+                </h3>
+                
+                <div className="space-y-6">
+                  {/* Row Item */}
+                  <div className="flex flex-col md:flex-row md:items-baseline border-b border-gray-200 pb-6">
+                      <div className="w-40 font-bold text-gray-500 shrink-0 mb-2 md:mb-0">{language === 'KOR' ? '회사명' : (language === 'ENG' ? 'Company Name' : '会社名')}</div>
+                      <div className="font-bold text-lg text-gray-900">{language === 'KOR' ? '(주)대우경금속' : 'Daewoo Light Metal Co., Ltd.'}</div>
+                  </div>
+
+                  <div className="flex flex-col md:flex-row md:items-baseline border-b border-gray-200 pb-6">
+                      <div className="w-40 font-bold text-gray-500 shrink-0 mb-2 md:mb-0">{language === 'KOR' ? '대표이사' : (language === 'ENG' ? 'CEO' : '代表取締役')}</div>
+                      <div className="font-bold text-lg text-gray-900">{language === 'KOR' ? '김도연' : 'Kim Do-yeon'}</div>
+                  </div>
+
+                  <div className="flex flex-col md:flex-row md:items-baseline border-b border-gray-200 pb-6">
+                      <div className="w-40 font-bold text-gray-500 shrink-0 mb-2 md:mb-0">{language === 'KOR' ? '주요사업' : (language === 'ENG' ? 'Main Business' : '主要事業')}</div>
+                      <div className="text-gray-800 leading-relaxed">{language === 'KOR' ? '알루미늄 압출 제조 및 판매 (자동차, 전자, 건축, 산업용 소재)' : (language === 'ENG' ? 'Aluminum Extrusion Manufacturing & Sales' : 'アルミニウム押出製造および販売')}</div>
+                  </div>
+
+                  <div className="flex flex-col md:flex-row md:items-start border-b gap-4 border-gray-200 pb-6">
+                      <div className="w-40 font-bold text-gray-500 shrink-0 mb-4 md:mb-0 pt-1">{language === 'KOR' ? '사업장 안내' : (language === 'ENG' ? 'Locations' : '事業所案内')}</div>
+                      <div className="flex-1 space-y-4">
+                        <div className="bg-gray-50 p-5 rounded-2xl border border-gray-100 hover:shadow-md transition-shadow">
+                            <span className="font-bold block text-brand-blue mb-2">{t.footer.daegu}</span>
+                            <p className="text-gray-700 text-sm mb-2">{t.footer.address_daegu}</p>
+                            <p className="text-xs text-gray-500">T. 053-611-6061 | F. 053-611-6066</p>
+                        </div>
+                        <div className="bg-gray-50 p-5 rounded-2xl border border-gray-100 hover:shadow-md transition-shadow">
+                            <span className="font-bold block text-brand-blue mb-2">{t.footer.changnyeong}</span>
+                            <p className="text-gray-700 text-sm mb-2">{t.footer.address_changnyeong}</p>
+                            <p className="text-xs text-gray-500">T. 055-533-0013 | F. 055-533-0225</p>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* 2. Philosophy Section (경영이념) */}
+      <section id="philosophy" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <ScrollReveal>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
+              {t.pages.philosophy.title}
+            </h2>
+            <div className="h-1 w-20 bg-brand-blue mx-auto mt-8 rounded-full"></div>
+          </div>
+        </ScrollReveal>
+        
+        <div className="space-y-24">
+          <ScrollReveal>
+             <div className="group relative w-full rounded-[2.5rem] overflow-hidden shadow-2xl transition-all duration-500 hover:shadow-[0_20px_60px_-15px_rgba(7,29,73,0.3)]">
+                <div className="absolute inset-0 bg-[conic-gradient(at_bottom_left,_var(--tw-gradient-stops))] from-slate-900 via-[#071D49] to-[#0A265E] animate-pulse"></div>
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,#1e3a8a,transparent)] opacity-60 mix-blend-screen"></div>
+                <div className="absolute inset-0 opacity-20" style={{ 
+                    backgroundImage: 'radial-gradient(rgba(255,255,255,0.3) 1px, transparent 1px)', 
+                    backgroundSize: '40px 40px' 
+                }}></div>
+
+                <div className="relative z-10 flex flex-col items-center justify-center py-24 px-6 text-center">
+                   <div className="relative mb-10">
+                      <div className="absolute inset-0 rounded-full bg-blue-400/20 animate-ping blur-xl"></div>
+                      <div className="absolute inset-0 rounded-full border border-white/20 scale-150 animate-pulse"></div>
+                      <div className="w-24 h-24 bg-gradient-to-tr from-white/10 to-white/5 backdrop-blur-md rounded-full border border-white/20 flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.1)] group-hover:scale-110 transition-transform duration-500 ease-spring">
+                         <TrendingUp className="w-10 h-10 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]" strokeWidth={1.5} />
+                      </div>
+                   </div>
+                   <h2 className="text-5xl md:text-7xl font-bold mb-8 tracking-tight text-white drop-shadow-lg">
+                     Nonstop <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 via-white to-blue-200 animate-text-shimmer bg-[length:200%_auto]">Jump</span>
+                   </h2>
+                   <div className="w-16 h-1 bg-gradient-to-r from-transparent via-blue-400 to-transparent mb-8 opacity-50"></div>
+                   <p className="text-lg md:text-2xl text-blue-50/90 max-w-3xl mx-auto leading-relaxed font-light tracking-wide mix-blend-overlay">
+                     {t.philosophy.nonstop_desc}
+                   </p>
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+             </div>
+          </ScrollReveal>
+
+          <div>
+            <ScrollReveal>
+               <div className="text-center mb-12">
+                  <h3 className="text-2xl font-bold text-gray-900 flex items-center justify-center gap-2">
+                     <Sparkles className="w-5 h-5 text-brand-blue" />
+                     {t.philosophy.core_values_title}
+                  </h3>
+                  <div className="w-12 h-1 bg-gray-200 mx-auto mt-4 rounded-full"></div>
+               </div>
+            </ScrollReveal>
+            <div className="grid md:grid-cols-3 gap-8">
+               {coreValues.map((val, idx) => (
+                  <ScrollReveal key={idx} delay={idx * 0.1}>
+                     <div className="group bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-500 ease-spring h-full flex flex-col items-center text-center">
+                        <div className={`w-20 h-20 ${val.bg} rounded-2xl flex items-center justify-center mb-6 text-brand-blue group-hover:scale-110 transition-transform duration-300`}>
+                           {val.icon}
+                        </div>
+                        <h4 className="text-2xl font-bold text-gray-900 mb-1">{val.title}</h4>
+                        <p className="text-xs font-bold text-brand-blue uppercase tracking-widest mb-6 opacity-60">{val.subtitle}</p>
+                        <p className="text-gray-500 leading-relaxed whitespace-pre-line break-keep">
+                           {val.desc}
+                        </p>
+                     </div>
+                  </ScrollReveal>
+               ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. History Section (회사연혁) */}
+      <section id="history" className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <ScrollReveal>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
+              {t.pages.history.title}
+            </h2>
+            <div className="h-1 w-20 bg-brand-blue mx-auto mt-8 rounded-full"></div>
+          </div>
+        </ScrollReveal>
+
+        <div className="py-8">
+             <div className="flex justify-center mb-20">
+                <ScrollReveal mode="scale">
+                  <div className="w-40 h-40 rounded-full bg-brand-blue text-white flex flex-col items-center justify-center shadow-xl shadow-blue-900/20 border-8 border-white ring-1 ring-gray-100">
+                       <span className="text-xl font-medium opacity-90">Present</span>
+                       <span className="text-lg opacity-80 my-0.5">~</span>
+                       <span className="text-3xl font-bold">2013</span>
+                  </div>
+                </ScrollReveal>
+             </div>
+
+             <div className="space-y-20 relative">
+                <div className="absolute left-[19px] md:left-1/2 top-0 bottom-0 w-[2px] bg-blue-100 -translate-x-1/2"></div>
+                {historyData.map((group, gIdx) => {
+                    const isLeft = gIdx % 2 !== 0; 
+                    return (
+                      <div key={group.year} className="relative">
+                          <ScrollReveal>
+                              <div className="flex items-center mb-8 relative">
+                                  <div className="absolute left-[19px] md:left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-white border-[5px] border-brand-blue z-10 shadow-sm"></div>
+                                  <div className="pl-14 md:pl-0 md:absolute md:left-1/2 md:-translate-x-1/2 md:-top-14 z-10">
+                                      <span className="text-4xl font-bold text-brand-blue bg-brand-gray px-4 inline-block">{group.year}</span>
+                                  </div>
+                              </div>
+                          </ScrollReveal>
+                          <div className={`pl-14 md:pl-0 md:flex ${isLeft ? 'md:flex-row-reverse' : ''} md:gap-0`}>
+                              <div className="hidden md:block md:w-1/2"></div>
+                              <div className={`md:w-1/2 ${isLeft ? 'md:pr-16 md:text-right' : 'md:pl-16 md:text-left'} space-y-5 pb-6`}>
+                                  {group.events.map((event, idx) => (
+                                      <ScrollReveal key={idx} delay={idx * 0.05}>
+                                          <div className={`group flex flex-col md:block hover:bg-white hover:border-gray-200 border border-transparent hover:shadow-sm hover:rounded-xl p-3 -m-3 transition-all duration-300`}>
+                                              <span className="inline-block text-brand-blue/70 font-bold text-sm mb-1 md:mr-2">
+                                                {event.date}
+                                              </span>
+                                              <span className="text-gray-800 font-medium text-lg leading-snug group-hover:text-brand-blue transition-colors">
+                                                {event.desc}
+                                              </span>
+                                          </div>
+                                      </ScrollReveal>
+                                  ))}
+                              </div>
+                          </div>
+                      </div>
+                    );
+                })}
+             </div>
+             <div className="relative h-10">
+                <div className="absolute left-[19px] md:left-1/2 -translate-x-1/2 top-0 w-3 h-3 rounded-full bg-blue-200"></div>
+             </div>
+        </div>
+      </section>
+
+      {/* 4. Certification Section (인증현황) */}
+      <section id="cert" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <ScrollReveal>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
+              {t.pages.cert.title}
+            </h2>
+            <div className="h-1 w-20 bg-brand-blue mx-auto mt-8 rounded-full"></div>
+          </div>
+        </ScrollReveal>
+
+        <ScrollReveal>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+                {certifications.map((cer, idx) => (
+                    <div key={cer.id} className="group flex flex-col items-center">
+                        <div className="w-full bg-white border border-gray-100 p-2 md:p-4 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.03)] group-hover:shadow-xl group-hover:-translate-y-2 transition-all duration-300 ease-spring cursor-pointer">
+                            <div className="aspect-[3/4] overflow-hidden rounded-lg bg-white relative flex items-center justify-center">
+                                <div className="absolute inset-0 flex items-center justify-center text-gray-300 bg-gray-50 text-xs">
+                                    <Award className="w-12 h-12 opacity-20" />
+                                </div>
+                                <img 
+                                  src={cer.imageUrl} 
+                                  alt={cer.title} 
+                                  className="relative z-10 w-full h-full object-contain transform transition-transform duration-500 group-hover:scale-105"
+                                  onError={(e) => {
+                                     e.currentTarget.style.opacity = '0.3';
+                                  }}
+                                />
+                            </div>
+                        </div>
+                        <p className="mt-4 text-center font-bold text-gray-800 text-sm md:text-base group-hover:text-brand-blue transition-colors">
+                            {cer.title}
+                        </p>
+                    </div>
+                ))}
+            </div>
+        </ScrollReveal>
+      </section>
+
+      {/* 5. Location Section (오시는 길) */}
+      <section id="location" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-32">
+        <ScrollReveal>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
+              {t.pages.location.title}
+            </h2>
+            <div className="h-1 w-20 bg-brand-blue mx-auto mt-8 rounded-full"></div>
+          </div>
+        </ScrollReveal>
+
+        <div className="space-y-8">
+            <ScrollReveal>
+              <div className="w-full h-[400px] md:h-[500px] bg-gray-100 rounded-3xl overflow-hidden shadow-lg border border-gray-100 relative">
+                 <iframe 
+                    title="Location Map"
+                    width="100%" 
+                    height="100%" 
+                    frameBorder="0" 
+                    scrolling="no" 
+                    marginHeight={0} 
+                    marginWidth={0} 
+                    src={`https://maps.google.com/maps?q=${encodeURIComponent(activeLoc.mapQuery)}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
+                    className="w-full h-full"
+                 ></iframe>
+                 <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow-md border border-gray-200">
+                    <span className="font-bold text-brand-blue flex items-center gap-2">
+                       <MapPin className="w-4 h-4" /> {activeLoc.name}
+                    </span>
+                 </div>
+              </div>
+            </ScrollReveal>
+
+            <div className="grid md:grid-cols-2 gap-6">
+                {(['daegu', 'changnyeong'] as const).map((key) => {
+                   const loc = locations[key];
+                   const isActive = activeTab === key;
+                   return (
+                     <ScrollReveal key={key} delay={0.1}>
+                       <div 
+                          onClick={() => setActiveTab(key)}
+                          className={`p-6 md:p-8 rounded-2xl cursor-pointer transition-all duration-300 ease-spring ${
+                             isActive 
+                             ? 'bg-white shadow-xl scale-[1.02] border-2 border-brand-blue z-10 relative' 
+                             : 'bg-white hover:bg-gray-50 hover:shadow-md border border-gray-200'
+                          }`}
+                       >
+                           <div className="flex justify-between items-start mb-4">
+                              <h4 className={`font-bold text-xl ${isActive ? 'text-brand-blue' : 'text-gray-900'}`}>{loc.name}</h4>
+                              {isActive && <div className="bg-brand-blue text-white p-1 rounded-full"><Navigation className="w-4 h-4" /></div>}
+                           </div>
+                           <div className="space-y-3 text-sm md:text-base">
+                              <p className="flex items-start gap-3 text-gray-600">
+                                 <MapPin className={`w-5 h-5 shrink-0 mt-0.5 ${isActive ? 'text-brand-blue' : 'text-gray-400'}`} />
+                                 <span>{loc.address}</span>
+                              </p>
+                              <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 pl-8">
+                                 <p className="flex items-center gap-2 text-gray-500">
+                                    <Phone className="w-4 h-4" /> {loc.tel}
+                                 </p>
+                                 <p className="flex items-center gap-2 text-gray-500">
+                                    <Printer className="w-4 h-4" /> {loc.fax}
+                                 </p>
+                              </div>
+                           </div>
+                       </div>
+                     </ScrollReveal>
+                   );
+                })}
+            </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default AboutPage;

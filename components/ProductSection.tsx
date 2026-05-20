@@ -60,7 +60,7 @@ const ProductSection: React.FC<ProductSectionProps> = ({ hideHeader = false }) =
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {!hideHeader && (
-          <div className="flex flex-col items-center text-center mb-10 gap-4">
+          <div className="flex flex-col items-center text-center mb-8 gap-4">
             <ScrollReveal>
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight">{t.products.title}</h2>
             </ScrollReveal>
@@ -69,7 +69,7 @@ const ProductSection: React.FC<ProductSectionProps> = ({ hideHeader = false }) =
                 {t.products.desc}
               </p>
             </ScrollReveal>
-            <ScrollReveal delay={0.2} className="mt-2 text-center w-full flex justify-center">
+            <ScrollReveal delay={0.2} className="text-center w-full flex justify-center">
               <Link to="/products" className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white border border-gray-200 text-gray-900 font-bold hover:bg-gray-50 hover:border-gray-300 hover:shadow-lg transition-all duration-300 shadow-sm group">
                 {t.products.view_all} <ArrowUpRight className="w-5 h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </Link>

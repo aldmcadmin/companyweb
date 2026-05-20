@@ -4,12 +4,12 @@ import { NavItem, Product } from './types';
 export const NAV_ITEMS: NavItem[] = [
   {
     label: '회사소개',
-    path: '/about',
+    path: '/about/intro',
     subItems: [
       { label: '회사개요', path: '/about/intro' },
       { label: '회사연혁', path: '/about/history' },
-      { label: '경영이념', path: '/about' },
-      { label: '인증현황', path: '/about/cer' }, 
+      { label: '경영이념', path: '/about/philosophy' },
+      { label: '인증현황', path: '/about/cert' }, 
       { label: '오시는 길', path: '/about/location' },
     ]
   },
