@@ -130,7 +130,7 @@ const Hero: React.FC = () => {
             </span>
           </h1>
           
-          <p className="text-lg md:text-2xl text-gray-400 leading-relaxed max-w-2xl opacity-0 animate-slow-reveal" style={{ animationDelay: '0.7s' }}>
+          <p className="text-lg md:text-2xl text-gray-400 leading-relaxed max-w-3xl opacity-0 animate-slow-reveal whitespace-pre-line break-keep" style={{ animationDelay: '0.7s' }}>
             {isDefaultLang ? (content['home_hero_desc'] || t.hero.desc) : t.hero.desc}
           </p>
           

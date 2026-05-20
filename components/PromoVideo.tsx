@@ -7,9 +7,9 @@ const PromoVideo: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   // Video Configuration
-  const videoId = "yeNCB5BHlKE";
+  const videoId = "naTeRG6LQ8w";
   const siParam = "lqkesAld0AZtEWIr"; // Updated SI parameter from new snippet
-  const startParam = "4"; // Start at 4 seconds
+  const startParam = "0"; // Start at 0 seconds
 
   return (
     <>

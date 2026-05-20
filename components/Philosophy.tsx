@@ -113,8 +113,8 @@ const Philosophy: React.FC = () => {
         {/* Header Section */}
         <div className="mb-24 lg:mb-32">
           <ScrollReveal>
-             <h2 className="text-lg font-bold text-brand-blue mb-4 flex items-center gap-2">
-               <span className="w-8 h-[2px] bg-brand-blue inline-block"></span>
+             <h2 className="text-2xl md:text-3xl font-bold text-brand-blue mb-6 flex items-center gap-3">
+               <span className="w-10 h-[2px] bg-brand-blue inline-block"></span>
                {t.philosophy.label}
              </h2>
           </ScrollReveal>
@@ -124,14 +124,14 @@ const Philosophy: React.FC = () => {
             </p>
           </ScrollReveal>
           <ScrollReveal delay={0.2}>
-            <p className="max-w-2xl text-2xl text-gray-500 font-medium leading-relaxed whitespace-pre-line">
+            <p className="max-w-3xl text-2xl text-gray-500 font-medium leading-relaxed whitespace-pre-line break-keep">
               {t.philosophy.desc}
             </p>
           </ScrollReveal>
         </div>
 
         {/* Content Section: Image & Values */}
-        <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 mb-32">
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 mb-32">
           
           {/* Left: Image Card */}
           <div className="lg:w-1/2 relative">
@@ -146,7 +146,7 @@ const Philosophy: React.FC = () => {
                   
                   <div className="absolute bottom-8 left-8 right-8">
                      <div className="bg-white/90 backdrop-blur-lg p-8 rounded-3xl shadow-lg border border-white/20 transform transition-transform duration-500 group-hover:-translate-y-2">
-                        <span className="text-brand-blue font-bold tracking-wide text-sm uppercase mb-2 block">Since 1990</span>
+                        <span className="text-brand-blue font-bold tracking-wide text-sm uppercase mb-2 block">Since 2013</span>
                         <p className="text-gray-900 font-bold text-2xl whitespace-pre-line">
                            {t.philosophy.card_title}
                         </p>
@@ -168,7 +168,7 @@ const Philosophy: React.FC = () => {
                     <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-brand-blue transition-colors">
                       {item.title}
                     </h3>
-                    <p className="text-lg text-gray-500 leading-relaxed font-medium group-hover:text-gray-600 transition-colors">
+                    <p className="text-base text-gray-500 leading-relaxed font-medium group-hover:text-gray-600 transition-colors break-keep whitespace-pre-line">
                       {item.desc}
                     </p>
                   </div>
@@ -196,13 +196,13 @@ const Philosophy: React.FC = () => {
                     <div className="flex items-baseline justify-center md:justify-start gap-1 mb-6">
                        {/* Reduced size from 10rem to 7xl/8xl for better proportion */}
                        <span className="text-6xl md:text-8xl font-bold tracking-tighter text-[#071D49] leading-none">
-                         50,000
+                         15,000
                        </span>
                        <span className="text-3xl md:text-5xl font-light text-slate-400 mb-2 md:mb-3">+</span>
                     </div>
                     
                     <p className="text-lg md:text-xl text-gray-500 leading-relaxed font-medium max-w-lg">
-                       연간 5만 톤 이상의 생산 능력을 통해<br/>
+                       연간 1.5만 톤 이상의 생산 능력을 통해<br/>
                        고객의 비즈니스 성장을 든든하게 지원합니다.
                     </p>
                  </div>

@@ -102,6 +102,9 @@ export const AdminContent: React.FC = () => {
       try {
         const url = await uploadImageToStorage(file, 'content_images/');
         updateContent(key, url);
+        alert('이미지가 성공적으로 업로드되었습니다.');
+      } catch (error: any) {
+        alert(`업로드 실패: ${error.message}`);
       } finally {
         setUploading(prev => ({ ...prev, [key]: false }));
       }
@@ -115,6 +118,9 @@ export const AdminContent: React.FC = () => {
       try {
         const url = await uploadImageToStorage(file, 'products/');
         updateProduct(id, { imageUrl: url });
+        alert('제품 이미지가 성공적으로 업로드되었습니다.');
+      } catch (error: any) {
+        alert(`업로드 실패: ${error.message}`);
       } finally {
         setUploading(prev => ({ ...prev, [`prod_${id}`]: false }));
       }
@@ -128,6 +134,9 @@ export const AdminContent: React.FC = () => {
       try {
         const url = await uploadImageToStorage(file, 'process/');
         updateProcessStep(id, { imageUrl: url });
+        alert('공정 이미지가 성공적으로 업로드되었습니다.');
+      } catch (error: any) {
+        alert(`업로드 실패: ${error.message}`);
       } finally {
         setUploading(prev => ({ ...prev, [`step_${id}`]: false }));
       }

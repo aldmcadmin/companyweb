@@ -42,8 +42,18 @@ export const uploadImageToStorage = async (file: File, pathPrefix: string = 'ima
     
     const storageRef = ref(storage, fullPath);
     
-    // Upload
-    const snapshot = await uploadBytes(storageRef, file);
+    // Create a timeout promise to prevent infinite loading (e.g. if Storage is not enabled)
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      setTimeout(() => {
+        reject(new Error('업로드 시간 초과. Firebase Storage가 활성화되어 있는지 확인해 주세요.'));
+      }, 15000); // 15 seconds timeout
+    });
+    
+    // Upload with timeout
+    const snapshot = await Promise.race([
+      uploadBytes(storageRef, file),
+      timeoutPromise
+    ]) as any;
     
     // Get URL
     const downloadURL = await getDownloadURL(snapshot.ref);
@@ -53,7 +63,7 @@ export const uploadImageToStorage = async (file: File, pathPrefix: string = 'ima
     if (error instanceof Error) {
         // Handle common errors gracefully
         // @ts-ignore
-        if (error.code === 'storage/unauthorized' || error.message.includes('unauthorized')) {
+        if (error.code === 'storage/unauthorized' || error.message?.includes('unauthorized')) {
             alert("업로드 권한이 없습니다. 관리자 계정으로 로그인되어 있는지 확인해주세요.");
         } else {
             alert(`이미지 업로드 실패: ${error.message}`);
