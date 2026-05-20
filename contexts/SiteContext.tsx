@@ -79,10 +79,10 @@ const DEFAULT_PROCESS_STEPS: ProcessStep[] = [
 
 const DEFAULT_CONTENT: ContentMap = {
   'home_hero_title_prefix': 'The Future of',
-  'home_hero_title_highlight': 'Aluminum Technology',
-  'home_hero_desc': '차별화된 기술력과 서비스로 알루미늄 산업을 선도합니다. 고객 맞춤형 설계부터 완벽한 납기까지, 우리는 기준을 만듭니다.',
+  'home_hero_title_highlight': 'Aluminum Extrusion',
+  'home_hero_desc': '대우경금속은 차별화된 기술력과 서비스로 알루미늄 압출 산업을 선도합니다. 고객 맞춤형 설계부터 완벽한 납기까지, 우리는 기준을 만듭니다.',
   'home_hero_bg': 'https://plus.unsplash.com/premium_photo-1672423154405-5fd922c11af2?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-  'home_hero_badge': 'Total Aluminum Solutions',
+  'home_hero_badge': 'Aluminum Extrusion Total Solution',
   'intro_main_title_1': 'Global Leader in',
   'intro_main_title_2': 'Aluminum Extrusion',
   'intro_desc': '대우경금속은 고객 맞춤형 설계, 생산, 피막, 기계가공 및 적기적소의 납기까지 Total 서비스를 제공합니다. 최첨단 설비와 축적된 기술력을 바탕으로 다양한 산업 분야의 핵심 소재를 공급하고 있습니다.',
@@ -124,7 +124,18 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return onSnapshot(doc(db, COLLECTION_NAME, docName), (snapshot: any) => {
         if (snapshot.exists()) {
           // If document exists in DB, use it (This means Admin has customized it)
-          setter(snapshot.data().data);
+          let data = snapshot.data().data;
+          
+          // Apply user requested overrides automatically if they are still using the old values
+          if (docName === 'content') {
+             if (data['home_hero_badge'] === 'Total Aluminum Solutions') data['home_hero_badge'] = 'Aluminum Extrusion Total Solution';
+             if (data['home_hero_title_highlight'] === 'Aluminum Technology') data['home_hero_title_highlight'] = 'Aluminum Extrusion';
+             if (data['home_hero_desc'] === '차별화된 기술력과 서비스로 알루미늄 산업을 선도합니다. 고객 맞춤형 설계부터 완벽한 납기까지, 우리는 기준을 만듭니다.') {
+                 data['home_hero_desc'] = '대우경금속은 차별화된 기술력과 서비스로 알루미늄 압출 산업을 선도합니다. 고객 맞춤형 설계부터 완벽한 납기까지, 우리는 기준을 만듭니다.';
+             }
+          }
+          
+          setter(data);
         } else {
           // If not exists (first run), we use hardcoded defaults.
           // We optionally write them to DB so Admin can edit them later.
