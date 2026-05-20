@@ -9,19 +9,18 @@ import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, setPe
 import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB9Bw_sekzOhuE8FzQaXALCAKF5kEuynHc",
-  authDomain: "company-homepage-28347.firebaseapp.com",
-  projectId: "company-homepage-28347",
-  storageBucket: "company-homepage-28347.firebasestorage.app",
-  messagingSenderId: "681606109122",
-  appId: "1:681606109122:web:86e19de7f0a6b882a2a85b",
-  measurementId: ""
+  apiKey: "AIzaSyDKWWaI4hiFx1LGaPyrIkILo0yG0WhZCTY",
+  authDomain: "aldmc-e447e.firebaseapp.com",
+  projectId: "aldmc-e447e",
+  storageBucket: "aldmc-e447e.firebasestorage.app",
+  messagingSenderId: "833121703524",
+  appId: "1:833121703524:web:51b2eda8c43871755bb171"
 };
 
 const app = initializeApp(firebaseConfig);
 export const storage = getStorage(app);
 export const auth = getAuth(app);
-export const db = getFirestore(app, "ai-studio-734427b9-b0ec-497b-ad72-9c85607c7035");
+export const db = getFirestore(app);
 
 // Export auth functions for use in Context
 export { signInWithEmailAndPassword, signOut, onAuthStateChanged, setPersistence, browserSessionPersistence };
