@@ -132,20 +132,20 @@ const Header: React.FC = () => {
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center justify-center space-x-2">
+            <nav className="hidden md:flex items-center justify-center gap-2">
               {NAV_ITEMS.map((item) => (
-                <div key={item.path} className="relative group px-3 py-2">
+                <div key={item.path} className="relative group min-w-[90px] px-3 py-2 flex justify-center">
                   <Link 
                     to={item.path}
-                    className={`text-sm font-medium transition-all duration-200 flex items-center gap-1.5
+                    className={`text-sm transition-colors duration-200 flex items-center gap-1.5 font-medium
                       ${!isTransparent 
-                        ? (isParentActive(item.path) ? `text-[${config.primaryColor}] font-bold` : 'text-gray-600 hover:text-brand-blue') 
-                        : (isParentActive(item.path) ? 'text-white font-bold' : 'text-white/80 hover:text-white')
+                        ? (isParentActive(item.path) ? 'text-brand-blue' : 'text-gray-600 hover:text-brand-blue') 
+                        : (isParentActive(item.path) ? 'text-white' : 'text-white/80 hover:text-white')
                       }`}
                   >
                     {getNavLabel(item.label)}
                     {item.subItems && (
-                      <ChevronDown className={`w-3 h-3 transition-transform duration-300 group-hover:rotate-180 opacity-60`} />
+                      <ChevronDown className={`w-3 h-3 shrink-0 transition-transform duration-300 group-hover:rotate-180 opacity-60`} />
                     )}
                   </Link>
                   

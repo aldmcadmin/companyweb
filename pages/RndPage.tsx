@@ -18,12 +18,12 @@ const RndPage = () => {
       <section className="bg-brand-blue text-white py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
           <ScrollReveal>
-             <span className="inline-block py-1 px-3 rounded-full bg-white/10 border border-white/20 text-sm font-semibold tracking-wider mb-6">
-                Aluminium Extrusion Institute of Technology
-             </span>
-             <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+             <h1 className="text-3xl md:text-5xl font-bold mb-4 tracking-tight drop-shadow-sm">
                 {t.pages.rnd.title}
              </h1>
+             <p className="text-base md:text-lg font-light tracking-[0.15em] text-blue-100 font-sans uppercase">
+                Aluminium Extrusion Institute of Technology
+             </p>
           </ScrollReveal>
         </div>
       </section>
@@ -43,7 +43,7 @@ const RndPage = () => {
                    {t.rnd.overview.title}
                    <Atom className="w-6 h-6 text-brand-blue" />
                  </h2>
-                 <p className="text-gray-600 leading-[1.8] text-base text-justify break-keep">
+                 <p className="text-gray-600 leading-[1.8] text-base break-keep">
                    {t.rnd.overview.content}
                  </p>
              </div>
