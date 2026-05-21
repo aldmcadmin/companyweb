@@ -112,13 +112,40 @@ export const TRANSLATIONS = {
     },
     rnd: {
       title: 'Innovation for Future',
-      desc: '기업부설연구소에서는 고강도/경량화 신소재 개발 및 차세대 친환경 공정 기술 연구에 매진하고 있습니다.',
-      cards: ['신소재 개발', '공정 최적화', '품질 보증']
+      desc: '대우경금속은 고객 맞춤형 설계, 생산, 피막, 기계가공 및 적기적소의 납기까지 Total 서비스를 고객여러분께 제공하고 있습니다.',
+      overview: {
+        title: '개요',
+        content: '대우경금속 기술연구소는 2013년에 설립이 되었으며, 우수한 연구인력과 최신 설비를 바탕으로 소재 개발, 신제품 개발, 공정 개선 등 급변하는 시장에 대응하여 끊임없이 노력하고 있습니다. 또한, 우수한 인적 자원 확보를 통해 자체 경쟁력을 확보해 가고 있으며, 산·학·연 협력을 통한 공동개발 프로젝트와 연구개발 외부인프라 구축을 통하여 보다 나은 제품 개발과 서비스로 고객님께 다가가고 있습니다.'
+      },
+      fields_title: '연구개발분야',
+      fields: [
+        {
+          title: '소재개발',
+          items: [
+            '내구성 및 내식성 향상을 위한 신규 합금 개발',
+            '경량화 신규 복합 소재 개발'
+          ]
+        },
+        {
+          title: '신제품개발',
+          items: [
+            '산업재 및 생활재 기반 제품 개발'
+          ]
+        },
+        {
+          title: '공정개선',
+          items: [
+            '알루미늄 제품 표면 코팅 및 개질 기술 개발',
+            '공정개선 기술 개발 외'
+          ]
+        }
+      ]
     },
     products: {
       title: 'Our Products',
-      desc: '자동차, 전자, 건축 등 다양한 산업 분야에 적용되는 대우경금속만의 최고 품질 알루미늄 제품을 만나보세요.',
+      desc: '자동차, 전자, 건축 등 다양한 산업 분야에 적용되는 대우경금속만의 고품질 알루미늄 압출 제품을 만나보세요.',
       view_all: '전체 제품 보기',
+      back_to: '제품소개로 돌아가기',
       detail_btn: '자세히 보기',
       modal: {
         feature_title: '제품 특징',
@@ -127,18 +154,18 @@ export const TRANSLATIONS = {
           '엄격한 품질 관리 및 테스트 통과',
           '다양한 산업 규격 준수'
         ],
-        contact_btn: '견적 문의하기',
-        note: '대량 주문 및 상세 사양은 문의를 통해 확인해주세요.'
+        contact_btn: '더 알아보기',
+        note: ''
       },
       items: {
-        p1: { title: '경량소재', desc: '자동차 경량화를 위한 고강도 알루미늄 소재' },
-        p2: { title: '산업용소재', desc: '다양한 산업 설비 및 기계 구조용 소재' },
-        p3: { title: '가공소재', desc: '정밀 가공성이 우수한 고품질 소재' },
-        p4: { title: '전기전자부품소재', desc: '전기 전도성과 방열성이 뛰어난 부품 소재' },
-        p5: { title: '건축소재', desc: '내구성과 심미성을 갖춘 건축 내외장재' },
-        p6: { title: '환경소재', desc: '친환경 재활용이 가능한 지속 가능한 소재' },
-        p7: { title: '외장소재', desc: '건물 및 제품의 외관을 돋보이게 하는 외장재' },
-        p8: { title: '대체소재', desc: '기존 금속을 대체하는 고성능 합금 소재' }
+        p1: { title: '경량소재', desc: '자동차 경량화를 위한 고강도 알루미늄 소재', badge: '더 가볍고 단단하게' },
+        p2: { title: '산업용소재', desc: '다양한 산업 설비 및 기계 구조용 소재', badge: '산업의 기초를 탄탄하게' },
+        p3: { title: '가공소재', desc: '정밀 가공성이 우수한 고품질 소재', badge: '정밀하고 원활한 가공' },
+        p4: { title: '전기전자부품소재', desc: '전기 전도성과 방열성이 뛰어난 부품 소재', badge: '안전하고 효율적인 방열' },
+        p5: { title: '건축소재', desc: '내구성과 심미성을 갖춘 건축 내외장재', badge: '아름답고 견고한 건축' },
+        p6: { title: '환경소재', desc: '친환경 재활용이 가능한 지속 가능한 소재', badge: '지속 가능한 미래' },
+        p7: { title: '외장소재', desc: '건물 및 제품의 외관을 돋보이게 하는 외장재', badge: '돋보이는 프리미엄 외관' },
+        p8: { title: '대체소재', desc: '기존 금속을 대체하는 고성능 합금 소재', badge: '한계를 뛰어넘는 신소재' }
       },
       detail_page: {
         model_name: '제품 모델명',
@@ -315,13 +342,40 @@ export const TRANSLATIONS = {
     },
     rnd: {
       title: 'Innovation for Future',
-      desc: 'Our R&D Center focuses on developing high-strength/lightweight new materials and next-generation eco-friendly process technologies.',
-      cards: ['New Material Dev', 'Process Optimization', 'Quality Assurance']
+      desc: 'Daewoo Light Metal provides Total Services to our customers, from customized design and production to anodizing, machining, and timely delivery.',
+      overview: {
+        title: 'Overview',
+        content: 'Established in 2013, the Daewoo Light Metal R&D Center is continuously striving to respond to the rapidly changing market based on excellent research personnel and the latest equipment, including material development, new product development, and process improvement. In addition, we are securing our own competitiveness by acquiring excellent human resources and approaching customers with better product development and services through joint development projects via industry-academia-research cooperation and the establishment of external R&D infrastructure.'
+      },
+      fields_title: 'R&D Fields',
+      fields: [
+        {
+          title: 'Material Development',
+          items: [
+            'Development of new alloys for durability and corrosion resistance',
+            'Development of new lightweight composite materials'
+          ]
+        },
+        {
+          title: 'New Product Dev',
+          items: [
+            'Development of products based on industrial and consumer goods'
+          ]
+        },
+        {
+          title: 'Process Improvement',
+          items: [
+            'Development of surface coating and modification technology',
+            'Other process improvement technologies'
+          ]
+        }
+      ]
     },
     products: {
       title: 'Our Products',
       desc: 'Discover Daewoo Light Metal\'s highest quality aluminum products \napplied to various industries including automotive, electronics, and construction.',
       view_all: 'View All',
+      back_to: 'Back to products',
       detail_btn: 'Read More',
       modal: {
         feature_title: 'Product Features',
@@ -330,18 +384,18 @@ export const TRANSLATIONS = {
           'Strict quality control and testing passed',
           'Compliant with various industrial standards'
         ],
-        contact_btn: 'Get a Quote',
-        note: 'Please contact us for bulk orders and detailed specifications.'
+        contact_btn: 'Learn more',
+        note: ''
       },
       items: {
-        p1: { title: 'Lightweight Materials', desc: 'High-strength aluminum for automotive weight reduction' },
-        p2: { title: 'Industrial Materials', desc: 'Materials for various industrial equipment and structures' },
-        p3: { title: 'Processed Materials', desc: 'High-quality materials with excellent machinability' },
-        p4: { title: 'Electronic Parts', desc: 'Components with excellent conductivity and heat dissipation' },
-        p5: { title: 'Construction Materials', desc: 'Durable and aesthetic architectural materials' },
-        p6: { title: 'Eco Materials', desc: 'Eco-friendly, sustainable recyclable materials' },
-        p7: { title: 'Exterior Materials', desc: 'Exterior materials that enhance building appearance' },
-        p8: { title: 'Substitute Materials', desc: 'High-performance alloys replacing existing metals' }
+        p1: { title: 'Lightweight Materials', desc: 'High-strength aluminum for automotive weight reduction', badge: 'Light & Strong' },
+        p2: { title: 'Industrial Materials', desc: 'Materials for various industrial equipment and structures', badge: 'Industrial Foundation' },
+        p3: { title: 'Processed Materials', desc: 'High-quality materials with excellent machinability', badge: 'Precision Processing' },
+        p4: { title: 'Electronic Parts', desc: 'Components with excellent conductivity and heat dissipation', badge: 'Efficient Heat Dissipation' },
+        p5: { title: 'Construction Materials', desc: 'Durable and aesthetic architectural materials', badge: 'Durable Construction' },
+        p6: { title: 'Eco Materials', desc: 'Eco-friendly, sustainable recyclable materials', badge: 'Sustainable Future' },
+        p7: { title: 'Exterior Materials', desc: 'Exterior materials that enhance building appearance', badge: 'Premium Exterior' },
+        p8: { title: 'Substitute Materials', desc: 'High-performance alloys replacing existing metals', badge: 'Advanced Substitute' }
       },
       detail_page: {
         model_name: 'Product Model',
@@ -518,13 +572,40 @@ export const TRANSLATIONS = {
     },
     rnd: {
       title: 'Innovation for Future',
-      desc: '企業付設研究所では、高強度/軽量化新素材の開発および次世代エコ工程技術の研究に邁進しています。',
-      cards: ['新素材開発', '工程最適化', '品質保証']
+      desc: '大宇軽金属は、顧客適合型の設計、生産、被膜、機械加工からタイムリーな納期まで、お客様にトータルサービスを提供しています。',
+      overview: {
+        title: '概要',
+        content: '大宇軽金属の技術研究所は2013年に設立され、優秀な研究人員と最新の設備をもとに、素材開発、新製品開発、工程改善など、急変する市場に対応するために絶えず努力しています。また、優秀な人的資源の確保を通じて自社競争力を確保しており、産・学・研の協力を通じた共同開発プロジェクトや研究開発の外部インフラ構築を通じて、より良い製品開発とサービスでお客様のニーズにお応えしています。'
+      },
+      fields_title: '研究開発分野',
+      fields: [
+        {
+          title: '素材開発',
+          items: [
+            '耐久性および耐食性向上のための新規合金開発',
+            '軽量化新規複合素材開発'
+          ]
+        },
+        {
+          title: '新製品開発',
+          items: [
+            '産業材および生活材基盤の製品開発'
+          ]
+        },
+        {
+          title: '工程改善',
+          items: [
+            'アルミニウム製品の表面コーティングおよび改質技術開発',
+            '工程改善技術開発 ほか'
+          ]
+        }
+      ]
     },
     products: {
       title: 'Our Products',
       desc: '自動車、電子、建築など様々な産業分野に適用される\n大宇軽金属だけの最高品質のアルミニウム製品をご覧ください。',
       view_all: '全製品を見る',
+      back_to: '製品紹介に戻る',
       detail_btn: '詳しく見る',
       modal: {
         feature_title: '製品の特徴',
@@ -533,18 +614,18 @@ export const TRANSLATIONS = {
           '厳格な品質管理およびテスト通過',
           '様々な産業規格を遵守'
         ],
-        contact_btn: '見積もりのお問い合わせ',
-        note: '大量注文および詳細仕様はお問い合わせを通じてご確認ください。'
+        contact_btn: '詳細を見る',
+        note: ''
       },
       items: {
-        p1: { title: '軽量素材', desc: '自動車軽量化のための高強度アルミニウム素材' },
-        p2: { title: '産業用素材', desc: '様々な産業設備および機械構造用素材' },
-        p3: { title: '加工素材', desc: '精密加工性に優れた高品質素材' },
-        p4: { title: '電気電子部品素材', desc: '電気伝導性と放熱性に優れた部品素材' },
-        p5: { title: '建築素材', desc: '耐久性と審美性を備えた建築内外装材' },
-        p6: { title: '環境素材', desc: '環境に優しいリサイクル可能な持続可能な素材' },
-        p7: { title: '外装素材', desc: '建物や製品の外観を引き立てる外装材' },
-        p8: { title: '代替素材', desc: '既存の金属に代わる高性能合金素材' }
+        p1: { title: '軽量素材', desc: '自動車軽量化のための高強度アルミニウム素材', badge: 'より軽く頑丈に' },
+        p2: { title: '産業用素材', desc: '様々な産業設備および機械構造用素材', badge: '産業の基盤を強固に' },
+        p3: { title: '加工素材', desc: '精密加工性に優れた高品質素材', badge: '精密で完璧な加工' },
+        p4: { title: '電気電子部品素材', desc: '電気伝導性と放熱性に優れた部品素材', badge: '安全で効率的な放熱' },
+        p5: { title: '建築素材', desc: '耐久性と審美性を備えた建築内外装材', badge: '美しく堅牢な建築' },
+        p6: { title: '環境素材', desc: '環境に優しいリサイクル可能な持続可能な素材', badge: '持続可能な未来' },
+        p7: { title: '外装素材', desc: '建物や製品の外観を引き立てる外装材', badge: '際立つプレミアム外観' },
+        p8: { title: '代替素材', desc: '既存の金属に代わる高性能合金素材', badge: '限界を超える新素材' }
       },
       detail_page: {
         model_name: '製品モデル名',

@@ -13,19 +13,69 @@ const Header: React.FC = () => {
   const location = useLocation();
   const { config, language, setLanguage, t } = useSite();
 
+  const [activeRoute, setActiveRoute] = useState(location.pathname);
+
+  useEffect(() => {
+    setActiveRoute(location.pathname);
+  }, [location.pathname]);
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
+
+      let currentActive = location.pathname;
+
+      if (location.pathname.startsWith('/about')) {
+        const sections = [
+          { id: 'intro', path: '/about/intro' },
+          { id: 'history', path: '/about/history' },
+          { id: 'philosophy', path: '/about/philosophy' },
+          { id: 'cert', path: '/about/cert' },
+          { id: 'location', path: '/about/location' }
+        ];
+        
+        for (const sec of sections) {
+          const el = document.getElementById(sec.id);
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            // Using 1/3 viewport height as the trigger line
+            if (rect.top <= window.innerHeight / 3 && rect.bottom >= window.innerHeight / 3) {
+              currentActive = sec.path;
+            }
+          }
+        }
+      } else if (location.pathname === '/') {
+        const sections = [
+          { id: 'philosophy', path: '/about/philosophy' },
+          { id: 'products', path: '/products' },
+        ];
+        for (const sec of sections) {
+          const el = document.getElementById(sec.id);
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            if (rect.top <= window.innerHeight / 3 && rect.bottom >= window.innerHeight / 3) {
+              currentActive = sec.path;
+            }
+          }
+        }
+      }
+      
+      setActiveRoute(currentActive);
     };
-    window.addEventListener('scroll', handleScroll);
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // run once on mount or route change to catch initial position
+    
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [location.pathname]);
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
-  const isPathActive = (path: string) => {
-    if (path === '/' && location.pathname === '/') return true;
-    if (path !== '/' && location.pathname.startsWith(path)) return true;
+  const isParentActive = (itemPath: string) => {
+    if (itemPath === '/' && activeRoute === '/') return true;
+    if (itemPath.startsWith('/about') && activeRoute.startsWith('/about')) return true;
+    if (itemPath.startsWith('/products') && activeRoute.startsWith('/products')) return true;
+    if (itemPath !== '/' && activeRoute.startsWith(itemPath)) return true;
     return false;
   };
 
@@ -89,8 +139,8 @@ const Header: React.FC = () => {
                     to={item.path}
                     className={`text-sm font-medium transition-all duration-200 flex items-center gap-1.5
                       ${!isTransparent 
-                        ? (isPathActive(item.path) ? `text-[${config.primaryColor}] font-bold` : 'text-gray-600 hover:text-brand-blue') 
-                        : (isPathActive(item.path) ? 'text-white font-bold' : 'text-white/80 hover:text-white')
+                        ? (isParentActive(item.path) ? `text-[${config.primaryColor}] font-bold` : 'text-gray-600 hover:text-brand-blue') 
+                        : (isParentActive(item.path) ? 'text-white font-bold' : 'text-white/80 hover:text-white')
                       }`}
                   >
                     {getNavLabel(item.label)}
@@ -126,8 +176,8 @@ const Header: React.FC = () => {
                                   ? 'py-2.5 px-2 text-center' 
                                   : 'py-2 px-5 min-w-[100px] text-center'}
                                 ${isTransparent
-                                  ? 'text-white/90 hover:bg-white/20 hover:text-white hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]' 
-                                  : 'text-gray-700 hover:bg-white/80 hover:text-brand-blue hover:shadow-sm' 
+                                  ? (activeRoute === sub.path ? 'bg-white/30 text-white shadow-[0_0_15px_rgba(255,255,255,0.2)]' : 'text-white/90 hover:bg-white/20 hover:text-white hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]')
+                                  : (activeRoute === sub.path ? 'bg-brand-blue text-white shadow-md' : 'text-gray-700 hover:bg-white/80 hover:text-brand-blue hover:shadow-sm')
                                 }
                               `}
                             >
@@ -141,7 +191,7 @@ const Header: React.FC = () => {
                     </div>
                   )}
                   
-                  {isPathActive(item.path) && (
+                  {isParentActive(item.path) && (
                     <span className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 rounded-full ${!isTransparent ? 'bg-brand-blue' : 'bg-white'}`} />
                   )}
                 </div>

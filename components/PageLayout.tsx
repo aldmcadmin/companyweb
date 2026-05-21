@@ -2,17 +2,23 @@ import React from 'react';
 import { ArrowRight } from 'lucide-react';
 
 interface PageLayoutProps {
-  title: string;
+  title: React.ReactNode;
   subtitle: string;
+  badge?: React.ReactNode;
   children?: React.ReactNode;
 }
 
-const PageLayout: React.FC<PageLayoutProps> = ({ title, subtitle, children }) => {
+const PageLayout: React.FC<PageLayoutProps> = ({ title, subtitle, badge, children }) => {
   return (
     <div className="pt-32 pb-24 min-h-screen bg-brand-gray">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Section */}
         <div className="mb-16 animate-slide-up">
+          {badge && (
+            <div className="mb-4">
+              {badge}
+            </div>
+          )}
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
             {title}
           </h1>

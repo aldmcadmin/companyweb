@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, Plus, X, ChevronRight } from 'lucide-react';
+import { ArrowUpRight, Plus, X, ChevronRight, Feather, Factory, Settings, Cpu, Building2, Leaf, Box, Layers } from 'lucide-react';
 import ScrollReveal from './ScrollReveal';
 import { useSite } from '../contexts/SiteContext';
 import { Product } from '../types';
@@ -32,20 +32,26 @@ const ProductSection: React.FC<ProductSectionProps> = ({ hideHeader = false }) =
     const translation = translatedItems ? translatedItems[product.id] : null;
     
     let translatedCategory = product.category;
-    if (product.id === 'p1') translatedCategory = t.nav.light;
-    else if (product.id === 'p2') translatedCategory = t.nav.industry;
-    else if (product.id === 'p3') translatedCategory = t.nav.processing;
-    else if (product.id === 'p4') translatedCategory = t.nav.electronic;
-    else if (product.id === 'p5') translatedCategory = t.nav.construction;
-    else if (product.id === 'p6') translatedCategory = t.nav.environmental;
-    else if (product.id === 'p7') translatedCategory = t.nav.exterior;
-    else if (product.id === 'p8') translatedCategory = t.nav.substitute;
+    let icon = null;
+    let path = 'light';
+    
+    if (product.id === 'p1') { translatedCategory = t.nav.light; icon = <Feather className="w-3.5 h-3.5" />; path = 'light'; }
+    else if (product.id === 'p2') { translatedCategory = t.nav.industry; icon = <Factory className="w-3.5 h-3.5" />; path = 'industry'; }
+    else if (product.id === 'p3') { translatedCategory = t.nav.processing; icon = <Settings className="w-3.5 h-3.5" />; path = 'processing'; }
+    else if (product.id === 'p4') { translatedCategory = t.nav.electronic; icon = <Cpu className="w-3.5 h-3.5" />; path = 'electronic'; }
+    else if (product.id === 'p5') { translatedCategory = t.nav.construction; icon = <Building2 className="w-3.5 h-3.5" />; path = 'construction'; }
+    else if (product.id === 'p6') { translatedCategory = t.nav.environmental; icon = <Leaf className="w-3.5 h-3.5" />; path = 'environmental'; }
+    else if (product.id === 'p7') { translatedCategory = t.nav.exterior; icon = <Box className="w-3.5 h-3.5" />; path = 'exterior'; }
+    else if (product.id === 'p8') { translatedCategory = t.nav.substitute; icon = <Layers className="w-3.5 h-3.5" />; path = 'substitute'; }
 
     return {
       title: translation ? translation.title : product.title,
       description: translation ? translation.desc : product.description,
       imageUrl: product.imageUrl,
-      category: translatedCategory
+      category: translatedCategory,
+      badge: translation ? (translation as any).badge : translatedCategory,
+      icon,
+      path
     };
   };
 
@@ -180,7 +186,7 @@ const ProductSection: React.FC<ProductSectionProps> = ({ hideHeader = false }) =
                 {/* Mobile Overlay Text */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent md:hidden"></div>
                 <div className="absolute bottom-4 left-4 md:hidden text-white">
-                  <p className="text-sm font-bold opacity-80 mb-1">{content.category}</p>
+                  <p className="text-sm font-bold opacity-80 mb-1 flex items-center gap-1.5">{content.icon} {content.category}</p>
                   <h3 className="text-2xl font-bold">{content.title}</h3>
                 </div>
               </div>
@@ -188,8 +194,9 @@ const ProductSection: React.FC<ProductSectionProps> = ({ hideHeader = false }) =
               {/* Modal Content Section */}
               <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col bg-white overflow-y-auto">
                 <div className="hidden md:block">
-                  <span className="inline-block px-3 py-1 bg-blue-50 text-brand-blue text-xs font-bold rounded-full w-fit mb-4 uppercase tracking-wider">
-                    {content.category}
+                  <span className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-brand-blue text-xs font-bold rounded-full w-fit mb-4 tracking-wider">
+                    {content.icon}
+                    {content.badge}
                   </span>
                   <h3 className="text-3xl font-bold text-gray-900 mb-6 leading-tight">
                     {content.title}
@@ -215,14 +222,17 @@ const ProductSection: React.FC<ProductSectionProps> = ({ hideHeader = false }) =
 
                 <div className="mt-auto pt-6 border-t border-gray-100">
                   <Link 
-                    to="/contact"
+                    to={`/products/${content.path}`}
+                    onClick={() => setSelectedProduct(null)}
                     className="flex items-center justify-center w-full py-4 bg-brand-blue text-white font-bold rounded-xl hover:bg-[#051535] transition-all shadow-lg shadow-blue-900/20 hover:shadow-blue-900/30 active:scale-[0.98]"
                   >
                     {t.products.modal.contact_btn} <ChevronRight className="w-5 h-5 ml-1" />
                   </Link>
-                  <p className="text-center text-xs text-gray-400 mt-3">
-                    {t.products.modal.note}
-                  </p>
+                  {t.products.modal.note && (
+                    <p className="text-center text-xs text-gray-400 mt-3">
+                      {t.products.modal.note}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>

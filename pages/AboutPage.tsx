@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useSite } from '../contexts/SiteContext';
 import ScrollReveal from '../components/ScrollReveal';
-import { Phone, MapPin, TrendingUp, ThumbsUp, Lightbulb, UserCheck, Sparkles, Award, Printer, Navigation, Download } from 'lucide-react';
+import { Phone, MapPin, TrendingUp, ThumbsUp, Lightbulb, UserCheck, Sparkles, Award, Printer, Navigation, Download, X } from 'lucide-react';
 import { Language } from '../types';
 
 const AboutPage = () => {
@@ -12,6 +12,7 @@ const AboutPage = () => {
 
   // For location tab
   const [activeTab, setActiveTab] = useState<'daegu' | 'changnyeong'>('daegu');
+  const [selectedCert, setSelectedCert] = useState<{title: string, imageUrl: string} | null>(null);
 
   useEffect(() => {
     // Determine section from pathname (e.g. /about/intro -> 'intro')
@@ -232,7 +233,70 @@ const AboutPage = () => {
         </div>
       </section>
 
-      {/* 2. Philosophy Section (경영이념) */}
+      {/* 2. History Section (회사연혁) */}
+      <section id="history" className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <ScrollReveal>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
+              {t.pages.history.title}
+            </h2>
+            <div className="h-1 w-20 bg-brand-blue mx-auto mt-8 rounded-full"></div>
+          </div>
+        </ScrollReveal>
+
+        <div className="py-8">
+             <div className="flex justify-center mb-20">
+                <ScrollReveal mode="scale">
+                  <div className="w-40 h-40 rounded-full bg-brand-blue text-white flex flex-col items-center justify-center shadow-xl shadow-blue-900/20 border-8 border-white ring-1 ring-gray-100">
+                       <span className="text-xl font-medium opacity-90">Present</span>
+                       <span className="text-lg opacity-80 my-0.5">~</span>
+                       <span className="text-3xl font-bold">2013</span>
+                  </div>
+                </ScrollReveal>
+             </div>
+
+             <div className="space-y-20 relative">
+                <div className="absolute left-[19px] md:left-1/2 top-0 bottom-0 w-[2px] bg-blue-100 -translate-x-1/2"></div>
+                {historyData.map((group, gIdx) => {
+                    const isLeft = gIdx % 2 !== 0; 
+                    return (
+                      <div key={group.year} className="relative">
+                          <ScrollReveal>
+                              <div className="flex items-center mb-8 relative">
+                                  <div className="absolute left-[19px] md:left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-white border-[5px] border-brand-blue z-10 shadow-sm"></div>
+                                  <div className="pl-14 md:pl-0 md:absolute md:left-1/2 md:-translate-x-1/2 md:-top-14 z-10">
+                                      <span className="text-4xl font-bold text-brand-blue bg-brand-gray px-4 inline-block">{group.year}</span>
+                                  </div>
+                              </div>
+                          </ScrollReveal>
+                          <div className={`pl-14 md:pl-0 md:flex ${isLeft ? 'md:flex-row-reverse' : ''} md:gap-0`}>
+                              <div className="hidden md:block md:w-1/2"></div>
+                              <div className={`md:w-1/2 ${isLeft ? 'md:pr-16 md:text-right' : 'md:pl-16 md:text-left'} space-y-5 pb-6`}>
+                                  {group.events.map((event, idx) => (
+                                      <ScrollReveal key={idx} delay={idx * 0.05}>
+                                          <div className={`group flex flex-col md:block hover:bg-white hover:border-gray-200 border border-transparent hover:shadow-sm hover:rounded-xl p-3 -m-3 transition-all duration-300`}>
+                                              <span className="inline-block text-brand-blue/70 font-bold text-sm mb-1 md:mr-2">
+                                                {event.date}
+                                              </span>
+                                              <span className="text-gray-800 font-medium text-lg leading-snug group-hover:text-brand-blue transition-colors">
+                                                {event.desc}
+                                              </span>
+                                          </div>
+                                      </ScrollReveal>
+                                  ))}
+                              </div>
+                          </div>
+                      </div>
+                    );
+                })}
+             </div>
+             <div className="relative h-10">
+                <div className="absolute left-[19px] md:left-1/2 -translate-x-1/2 top-0 w-3 h-3 rounded-full bg-blue-200"></div>
+             </div>
+        </div>
+      </section>
+
+      {/* 3. Philosophy Section (경영이념) */}
       <section id="philosophy" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal>
           <div className="text-center mb-16">
@@ -303,69 +367,6 @@ const AboutPage = () => {
         </div>
       </section>
 
-      {/* 3. History Section (회사연혁) */}
-      <section id="history" className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <ScrollReveal>
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
-              {t.pages.history.title}
-            </h2>
-            <div className="h-1 w-20 bg-brand-blue mx-auto mt-8 rounded-full"></div>
-          </div>
-        </ScrollReveal>
-
-        <div className="py-8">
-             <div className="flex justify-center mb-20">
-                <ScrollReveal mode="scale">
-                  <div className="w-40 h-40 rounded-full bg-brand-blue text-white flex flex-col items-center justify-center shadow-xl shadow-blue-900/20 border-8 border-white ring-1 ring-gray-100">
-                       <span className="text-xl font-medium opacity-90">Present</span>
-                       <span className="text-lg opacity-80 my-0.5">~</span>
-                       <span className="text-3xl font-bold">2013</span>
-                  </div>
-                </ScrollReveal>
-             </div>
-
-             <div className="space-y-20 relative">
-                <div className="absolute left-[19px] md:left-1/2 top-0 bottom-0 w-[2px] bg-blue-100 -translate-x-1/2"></div>
-                {historyData.map((group, gIdx) => {
-                    const isLeft = gIdx % 2 !== 0; 
-                    return (
-                      <div key={group.year} className="relative">
-                          <ScrollReveal>
-                              <div className="flex items-center mb-8 relative">
-                                  <div className="absolute left-[19px] md:left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-white border-[5px] border-brand-blue z-10 shadow-sm"></div>
-                                  <div className="pl-14 md:pl-0 md:absolute md:left-1/2 md:-translate-x-1/2 md:-top-14 z-10">
-                                      <span className="text-4xl font-bold text-brand-blue bg-brand-gray px-4 inline-block">{group.year}</span>
-                                  </div>
-                              </div>
-                          </ScrollReveal>
-                          <div className={`pl-14 md:pl-0 md:flex ${isLeft ? 'md:flex-row-reverse' : ''} md:gap-0`}>
-                              <div className="hidden md:block md:w-1/2"></div>
-                              <div className={`md:w-1/2 ${isLeft ? 'md:pr-16 md:text-right' : 'md:pl-16 md:text-left'} space-y-5 pb-6`}>
-                                  {group.events.map((event, idx) => (
-                                      <ScrollReveal key={idx} delay={idx * 0.05}>
-                                          <div className={`group flex flex-col md:block hover:bg-white hover:border-gray-200 border border-transparent hover:shadow-sm hover:rounded-xl p-3 -m-3 transition-all duration-300`}>
-                                              <span className="inline-block text-brand-blue/70 font-bold text-sm mb-1 md:mr-2">
-                                                {event.date}
-                                              </span>
-                                              <span className="text-gray-800 font-medium text-lg leading-snug group-hover:text-brand-blue transition-colors">
-                                                {event.desc}
-                                              </span>
-                                          </div>
-                                      </ScrollReveal>
-                                  ))}
-                              </div>
-                          </div>
-                      </div>
-                    );
-                })}
-             </div>
-             <div className="relative h-10">
-                <div className="absolute left-[19px] md:left-1/2 -translate-x-1/2 top-0 w-3 h-3 rounded-full bg-blue-200"></div>
-             </div>
-        </div>
-      </section>
-
       {/* 4. Certification Section (인증현황) */}
       <section id="cert" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal>
@@ -381,7 +382,27 @@ const AboutPage = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
                 {certifications.map((cer, idx) => (
                     <div key={cer.id} className="group flex flex-col items-center">
-                        <div className="w-full bg-white border border-gray-100 p-2 md:p-4 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.03)] group-hover:shadow-xl group-hover:-translate-y-2 transition-all duration-300 ease-spring cursor-pointer">
+                        <div 
+                           className="w-full relative bg-white border border-gray-100 p-2 md:p-4 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.03)] group-hover:shadow-xl group-hover:-translate-y-2 transition-all duration-300 ease-spring cursor-pointer"
+                           onClick={() => setSelectedCert(cer)}
+                        >
+                            {/* Download Button */}
+                            <button
+                               onClick={(e) => {
+                                 e.stopPropagation();
+                                 const link = document.createElement('a');
+                                 link.href = cer.imageUrl;
+                                 link.download = `${cer.title}.png`;
+                                 document.body.appendChild(link);
+                                 link.click();
+                                 document.body.removeChild(link);
+                               }}
+                               className="absolute top-4 right-4 z-20 w-8 h-8 md:w-10 md:h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-gray-500 hover:text-brand-blue hover:bg-white shadow-sm border border-gray-100 transition-all opacity-0 group-hover:opacity-100 hover:scale-110"
+                               title="Download"
+                            >
+                               <Download className="w-4 h-4 md:w-5 md:h-5" />
+                            </button>
+
                             <div className="aspect-[3/4] overflow-hidden rounded-lg bg-white relative flex items-center justify-center">
                                 <div className="absolute inset-0 flex items-center justify-center text-gray-300 bg-gray-50 text-xs">
                                     <Award className="w-12 h-12 opacity-20" />
@@ -477,6 +498,56 @@ const AboutPage = () => {
             </div>
         </div>
       </section>
+
+      {/* Certificate Modal */}
+      {selectedCert && (
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+          onClick={() => setSelectedCert(null)}
+        >
+          <div 
+            className="relative max-w-4xl max-h-[90vh] w-full flex flex-col bg-white rounded-2xl shadow-2xl overflow-hidden" 
+            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-100">
+              <h3 className="text-xl md:text-2xl font-bold text-gray-900">{selectedCert.title}</h3>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const link = document.createElement('a');
+                    link.href = selectedCert.imageUrl;
+                    link.download = `${selectedCert.title}.png`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                  }}
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-50 text-brand-blue hover:bg-brand-blue hover:text-white transition-colors"
+                  title="Download"
+                >
+                  <Download className="w-5 h-5" />
+                </button>
+                <button 
+                  onClick={() => setSelectedCert(null)}
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-900 transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+            {/* Image Wrapper */}
+            <div className="relative flex-1 overflow-auto bg-gray-50 p-4 flex items-center justify-center" onClick={() => setSelectedCert(null)}>
+              <img 
+                src={selectedCert.imageUrl} 
+                alt={selectedCert.title} 
+                className="max-w-full max-h-[70vh] object-contain shadow-md rounded border border-gray-200" 
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

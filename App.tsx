@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, useLocation, Link } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Hero from './components/Hero';
@@ -16,8 +16,9 @@ import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AdminDashboard, AdminPosts, AdminSettings, AdminContent } from './pages/Admin';
 import Login from './pages/Login';
+import RndPage from './pages/RndPage';
 import AboutPage from './pages/AboutPage';
-import { Phone, Mail, MapPin, Clock, TrendingUp, ThumbsUp, Lightbulb, UserCheck, Sparkles, Award, Printer, Navigation } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, TrendingUp, ThumbsUp, Lightbulb, UserCheck, Sparkles, Award, Printer, Navigation, Feather, Factory, Settings, Cpu, Building2, Leaf, Box, Layers, ChevronRight } from 'lucide-react';
 import { TRANSLATIONS } from './translations';
 
 // Scroll to top on route change
@@ -72,9 +73,60 @@ const ProductDetailPage = ({ categoryKey }: { categoryKey: keyof typeof TRANSLAT
     const { t } = useSite();
     const categoryName = t.nav[categoryKey];
     
+    // Map categoryKey to product ID to get badge info from translations
+    const keyToIdObj: Record<string, string> = {
+      light: 'p1',
+      industry: 'p2',
+      processing: 'p3',
+      electronic: 'p4',
+      construction: 'p5',
+      environmental: 'p6',
+      exterior: 'p7',
+      substitute: 'p8'
+    };
+    
+    const productId = keyToIdObj[categoryKey] as string;
+    const translatedItems = (t.products as any).items;
+    const translation = translatedItems ? translatedItems[productId] : null;
+    const badgeText = translation ? translation.badge : categoryName;
+    
+    let icon = null;
+    if (categoryKey === 'light') icon = <Feather className="w-3.5 h-3.5" />;
+    else if (categoryKey === 'industry') icon = <Factory className="w-3.5 h-3.5" />;
+    else if (categoryKey === 'processing') icon = <Settings className="w-3.5 h-3.5" />;
+    else if (categoryKey === 'electronic') icon = <Cpu className="w-3.5 h-3.5" />;
+    else if (categoryKey === 'construction') icon = <Building2 className="w-3.5 h-3.5" />;
+    else if (categoryKey === 'environmental') icon = <Leaf className="w-3.5 h-3.5" />;
+    else if (categoryKey === 'exterior') icon = <Box className="w-3.5 h-3.5" />;
+    else if (categoryKey === 'substitute') icon = <Layers className="w-3.5 h-3.5" />;
+
+    const badge = (
+      <span className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-brand-blue text-xs font-bold rounded-full w-fit tracking-wider shadow-sm">
+        {icon}
+        {badgeText}
+      </span>
+    );
+    
     return (
         <PublicLayout>
-          <PageLayout title={`${categoryName}`} subtitle={t.products.desc}>
+          {/* Trendy floating back button */}
+          <div className="fixed right-4 md:right-6 lg:right-8 xl:right-12 top-1/2 -translate-y-1/2 z-50 hidden sm:block">
+            <Link 
+                to="/products" 
+                className="flex items-center gap-2 p-1.5 pr-4 bg-white/90 backdrop-blur-md text-brand-blue font-medium text-xs rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-blue-50 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.16)] transition-all duration-300 group"
+            >
+              <div className="w-8 h-8 flex-shrink-0 rounded-full bg-blue-50 flex items-center justify-center group-hover:bg-brand-blue group-hover:text-white transition-colors duration-300 shadow-sm">
+                <ChevronRight className="w-4 h-4 rotate-180" />
+              </div>
+              <span className="whitespace-nowrap tracking-tight">{t.products.back_to}</span>
+            </Link>
+          </div>
+
+          <PageLayout 
+            title={categoryName} 
+            subtitle={translation ? translation.desc : t.products.desc}
+            badge={badge}
+          >
               <div className="grid md:grid-cols-3 gap-6">
                   {[1, 2, 3, 4, 5, 6].map((i) => (
                       <div key={i} className="group cursor-pointer">
@@ -120,29 +172,6 @@ const ProcessPage = () => {
                           )}
                       </div>
                   ))}
-              </div>
-          </PageLayout>
-        </PublicLayout>
-    );
-};
-
-const RndPage = () => {
-    const { t } = useSite();
-    return (
-        <PublicLayout>
-          <PageLayout title={t.pages.rnd.title} subtitle={t.pages.rnd.subtitle}>
-              <div className="space-y-6 text-center">
-                  <h3 className="text-2xl font-bold">{t.rnd.title}</h3>
-                  <p className="text-gray-600 max-w-2xl mx-auto">
-                      {t.rnd.desc}
-                  </p>
-                  <div className="grid md:grid-cols-3 gap-6 mt-12">
-                       {t.rnd.cards.map((card, idx) => (
-                         <div key={idx} className="p-8 bg-gray-50 rounded-2xl">
-                             <h4 className="font-bold text-lg mb-2">{card}</h4>
-                         </div>
-                       ))}
-                  </div>
               </div>
           </PageLayout>
         </PublicLayout>
@@ -256,7 +285,7 @@ const App: React.FC = () => {
             
             {/* Other Routes */}
             <Route path="/process" element={<ProcessPage />} />
-            <Route path="/rnd" element={<RndPage />} />
+            <Route path="/rnd" element={<PublicLayout><RndPage /></PublicLayout>} />
             
             {/* Replaced SupportPage with ContactPage */}
             <Route path="/support" element={<ContactPage />} />
