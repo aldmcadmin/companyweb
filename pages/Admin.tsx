@@ -143,6 +143,66 @@ export const AdminContent: React.FC = () => {
     }
   };
 
+  const handleContentFileUpload = async (key: string, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setUploading(prev => ({ ...prev, [key]: true }));
+      try {
+        const url = await uploadImageToStorage(file, 'content_files/');
+        updateContent(key, url);
+        alert('파일이 성공적으로 업로드되었습니다.');
+      } catch (error: any) {
+        alert(`업로드 실패: ${error.message}`);
+      } finally {
+        setUploading(prev => ({ ...prev, [key]: false }));
+      }
+    }
+  };
+
+  const FileUploadBlock = ({ label, contentKey, description, accept = "*/*" }: { label: string, contentKey: string, description?: string, accept?: string }) => {
+    const isUploadingThis = uploading[contentKey];
+    return (
+      <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between h-full">
+        <div>
+           <div className="flex justify-between items-start mb-4">
+              <div>
+                 <h4 className="font-bold text-gray-900 flex items-center gap-2"><FileText className="w-5 h-5 text-gray-500" /> {label}</h4>
+                 {description && <p className="text-xs text-gray-500 mt-1">{description}</p>}
+              </div>
+           </div>
+           
+           <div className="space-y-3">
+              <div className="relative p-6 bg-gray-50 rounded-lg border border-gray-200 text-center transition-colors hover:bg-gray-100 flex flex-col items-center justify-center">
+                 {isUploadingThis ? (
+                    <div className="flex flex-col items-center justify-center text-brand-blue py-2">
+                       <Loader2 className="w-6 h-6 animate-spin mb-2" />
+                       <span className="text-xs font-medium">업로드 중...</span>
+                    </div>
+                 ) : content[contentKey] ? (
+                    <div className="flex flex-col items-center text-brand-blue py-2">
+                       <Download className="w-8 h-8 mb-2" />
+                       <span className="text-sm font-bold truncate max-w-[200px]">파일 등록됨</span>
+                    </div>
+                 ) : (
+                    <div className="flex flex-col items-center text-gray-400 py-2">
+                       <Upload className="w-8 h-8 mb-2" />
+                       <span className="text-xs font-medium">여기를 클릭하여 파일 업로드</span>
+                    </div>
+                 )}
+                 <input type="file" accept={accept} className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => handleContentFileUpload(contentKey, e)} disabled={isUploadingThis} />
+              </div>
+           </div>
+        </div>
+        <div className="flex justify-between items-center mt-4">
+            <span className="text-[10px] text-gray-400 font-mono truncate max-w-[150px]">{content[contentKey] ? "..." + content[contentKey].slice(-15) : "미등록"}</span>
+            {content[contentKey] && (
+               <button onClick={() => updateContent(contentKey, '')} className="text-xs text-red-500 font-bold hover:text-red-700">파일 삭제</button>
+            )}
+        </div>
+      </div>
+    );
+  };
+
   const ImageUploadBlock = ({ label, contentKey, description }: { label: string, contentKey: string, description?: string }) => {
     const isUploadingThis = uploading[contentKey];
     return (
@@ -438,6 +498,18 @@ export const AdminContent: React.FC = () => {
                          label="공장 사진 2 (창녕)" 
                          contentKey="intro_img_2" 
                          description="회사개요 페이지 우측/하단에 위치하는 두 번째 사진입니다."
+                      />
+                      <FileUploadBlock
+                         label="대구공장 사업자등록증"
+                         contentKey="daegu_biz_reg_pdf"
+                         description="회사개요 사업장 안내에 표시되는 대구공장 사업자등록증 파일(.pdf, .jpg 등)"
+                         accept=".pdf,image/*"
+                      />
+                      <FileUploadBlock
+                         label="창녕공장 사업자등록증"
+                         contentKey="changnyeong_biz_reg_pdf"
+                         description="회사개요 사업장 안내에 표시되는 창녕공장 사업자등록증 파일(.pdf, .jpg 등)"
+                         accept=".pdf,image/*"
                       />
                    </div>
                 </div>

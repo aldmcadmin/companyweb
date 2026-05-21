@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useSite } from '../contexts/SiteContext';
 import ScrollReveal from '../components/ScrollReveal';
-import { Phone, MapPin, TrendingUp, ThumbsUp, Lightbulb, UserCheck, Sparkles, Award, Printer, Navigation } from 'lucide-react';
+import { Phone, MapPin, TrendingUp, ThumbsUp, Lightbulb, UserCheck, Sparkles, Award, Printer, Navigation, Download } from 'lucide-react';
 import { Language } from '../types';
 
 const AboutPage = () => {
@@ -99,11 +99,11 @@ const AboutPage = () => {
         <div className="space-y-16">
           <ScrollReveal>
             <div className="text-center max-w-3xl mx-auto space-y-6 mb-12">
-              <h3 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight">
-                {isDefaultLang ? content['intro_main_title_1'] : (language === 'ENG' ? 'Global Leader in' : 'Global Leader in')} <br/>
-                <span className="text-brand-blue">{isDefaultLang ? content['intro_main_title_2'] : (language === 'ENG' ? 'Aluminum Extrusion' : 'Aluminum Extrusion')}</span>
+              <h3 className="text-3xl md:text-5xl font-bold text-gray-900 leading-tight">
+                {isDefaultLang ? content['intro_main_title_1'] : (language === 'ENG' ? 'Global Leader' : 'Global Leader')} <br/>
+                <span className="text-brand-blue">{isDefaultLang ? content['intro_main_title_2'] : (language === 'ENG' ? 'In Aluminum Extrusion' : 'In Aluminum Extrusion')}</span>
               </h3>
-              <p className="text-gray-600 leading-relaxed text-lg break-keep">
+              <p className="text-gray-600 leading-relaxed text-lg break-keep whitespace-pre-wrap">
                 {isDefaultLang ? content['intro_desc'] : t.pages.intro.subtitle}
               </p>
             </div>
@@ -136,7 +136,7 @@ const AboutPage = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-8">
                       <div className="text-white transform transition-transform duration-300 group-hover:-translate-y-2">
                         <h4 className="text-2xl font-bold mb-2">{t.footer.changnyeong}</h4>
-                         <p className="text-white/80 text-sm font-medium">{language === 'KOR' ? '대규모 물류 센터 및 제2 생산 거점\n스마트 팩토리 시스템 구축' : (language === 'ENG' ? 'Large-scale Logistics & 2nd Factory' : '大規模物流センターおよび第2生産拠点')}</p>
+                         <p className="text-white/80 text-sm font-medium">{language === 'KOR' ? '대규모 물류 센터 및 제 2 생산 거점\n스마트 팩토리 시스템 구축' : (language === 'ENG' ? 'Large-scale Logistics & 2nd Factory' : '大規模物流センターおよび第2生産拠点')}</p>
                       </div>
                   </div>
                 </div>
@@ -170,15 +170,37 @@ const AboutPage = () => {
                   <div className="flex flex-col md:flex-row md:items-start border-b gap-4 border-gray-200 pb-6">
                       <div className="w-40 font-bold text-gray-500 shrink-0 mb-4 md:mb-0 pt-1">{language === 'KOR' ? '사업장 안내' : (language === 'ENG' ? 'Locations' : '事業所案内')}</div>
                       <div className="flex-1 space-y-4">
-                        <div className="bg-gray-50 p-5 rounded-2xl border border-gray-100 hover:shadow-md transition-shadow">
-                            <span className="font-bold block text-brand-blue mb-2">{t.footer.daegu}</span>
-                            <p className="text-gray-700 text-sm mb-2">{t.footer.address_daegu}</p>
-                            <p className="text-xs text-gray-500">T. 053-611-6061 | F. 053-611-6066</p>
+                        <div className="bg-gray-50 p-5 rounded-2xl border border-gray-100 hover:shadow-md transition-shadow flex justify-between items-center group">
+                            <div>
+                              <span className="font-bold block text-brand-blue mb-2">{t.footer.daegu}</span>
+                              <p className="text-gray-700 text-sm mb-2">{t.footer.address_daegu}</p>
+                              <p className="text-xs text-gray-500 mb-1">T. 053-611-6061 | F. 053-611-6066</p>
+                              <p className="text-xs text-gray-500 font-medium">사업자등록번호: 514-81-85389</p>
+                            </div>
+                            {content['daegu_biz_reg_pdf'] && (
+                              <a href={content['daegu_biz_reg_pdf']} target="_blank" rel="noreferrer" download className="flex flex-col items-center gap-1.5 p-3 rounded-xl hover:bg-gray-200/50 transition-colors cursor-pointer text-gray-500 hover:text-brand-blue" title="사업자등록증 다운로드">
+                                 <div className="p-2 bg-white shadow-sm border border-gray-200 rounded-full group-hover:scale-110 transition-transform">
+                                   <Download className="w-5 h-5" />
+                                 </div>
+                                 <span className="text-[10px] font-bold">사업자등록증</span>
+                              </a>
+                            )}
                         </div>
-                        <div className="bg-gray-50 p-5 rounded-2xl border border-gray-100 hover:shadow-md transition-shadow">
-                            <span className="font-bold block text-brand-blue mb-2">{t.footer.changnyeong}</span>
-                            <p className="text-gray-700 text-sm mb-2">{t.footer.address_changnyeong}</p>
-                            <p className="text-xs text-gray-500">T. 055-533-0013 | F. 055-533-0225</p>
+                        <div className="bg-gray-50 p-5 rounded-2xl border border-gray-100 hover:shadow-md transition-shadow flex justify-between items-center group">
+                            <div>
+                              <span className="font-bold block text-brand-blue mb-2">{t.footer.changnyeong}</span>
+                              <p className="text-gray-700 text-sm mb-2">{t.footer.address_changnyeong}</p>
+                              <p className="text-xs text-gray-500 mb-1">T. 055-533-0013 | F. 055-533-0225</p>
+                              <p className="text-xs text-gray-500 font-medium">사업자등록번호: 806-85-00405</p>
+                            </div>
+                            {content['changnyeong_biz_reg_pdf'] && (
+                              <a href={content['changnyeong_biz_reg_pdf']} target="_blank" rel="noreferrer" download className="flex flex-col items-center gap-1.5 p-3 rounded-xl hover:bg-gray-200/50 transition-colors cursor-pointer text-gray-500 hover:text-brand-blue" title="사업자등록증 다운로드">
+                                 <div className="p-2 bg-white shadow-sm border border-gray-200 rounded-full group-hover:scale-110 transition-transform">
+                                   <Download className="w-5 h-5" />
+                                 </div>
+                                 <span className="text-[10px] font-bold">사업자등록증</span>
+                              </a>
+                            )}
                         </div>
                       </div>
                   </div>

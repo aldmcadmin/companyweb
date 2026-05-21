@@ -83,11 +83,13 @@ const DEFAULT_CONTENT: ContentMap = {
   'home_hero_desc': '대우경금속은 차별화된 기술력과 서비스로 알루미늄 압출 산업을 선도합니다.\n고객 맞춤형 설계부터 완벽한 납기까지, 우리는 기준을 만듭니다.',
   'home_hero_bg': 'https://plus.unsplash.com/premium_photo-1672423154405-5fd922c11af2?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   'home_hero_badge': 'Aluminum Extrusion Total Solution',
-  'intro_main_title_1': 'Global Leader in',
-  'intro_main_title_2': 'Aluminum Extrusion',
-  'intro_desc': '대우경금속은 고객 맞춤형 설계, 생산, 피막, 기계가공 및 적기적소의 납기까지 Total 서비스를 제공합니다. 최첨단 설비와 축적된 기술력을 바탕으로 다양한 산업 분야의 핵심 소재를 공급하고 있습니다.',
+  'intro_main_title_1': 'Global Leader',
+  'intro_main_title_2': 'In Aluminum Extrusion',
+  'intro_desc': '대우경금속은 고객 맞춤형 금형설계, 정밀압출, 도장/아노다이징(피막), 정밀절단, 기계가공 및 적기적소의 납기까지 알루미늄 압출을 중심으로 올인원 솔루션을 제공합니다.\n최첨단 설비와 축적된 기술력을 바탕으로 다양한 산업 분야의 핵심 소재를 공급하고 있습니다.',
   'intro_img_1': 'https://firebasestorage.googleapis.com/v0/b/company-homepage-28347.firebasestorage.app/o/%EB%8C%80%EA%B5%AC%EA%B3%B5%EC%9E%A5.JPG?alt=media&token=530a1c33-4075-4f33-a6e2-cf01939f5b8b',
   'intro_img_2': 'https://firebasestorage.googleapis.com/v0/b/company-homepage-28347.firebasestorage.app/o/%EC%B0%BD%EB%85%95%EA%B3%B5%EC%9E%A5.png?alt=media&token=124af372-5d38-4717-a191-546d04907f48',
+  'daegu_biz_reg_pdf': '',
+  'changnyeong_biz_reg_pdf': '',
   'philosophy_img_main': 'https://firebasestorage.googleapis.com/v0/b/company-homepage-28347.firebasestorage.app/o/site-assets%2F1769752363492_%EA%B8%88%ED%98%95.jpg?alt=media&token=d93ff708-ffe1-4a7a-ab7e-0469a2b71f61'
 };
 
@@ -135,6 +137,11 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 data['home_hero_desc'] === '대우경금속은 차별화된 기술력과 서비스로 알루미늄 압출 산업을 선도합니다. 고객 맞춤형 설계부터 완벽한 납기까지, 우리는 기준을 만듭니다.'
              ) {
                  data['home_hero_desc'] = '대우경금속은 차별화된 기술력과 서비스로 알루미늄 압출 산업을 선도합니다.\n고객 맞춤형 설계부터 완벽한 납기까지, 우리는 기준을 만듭니다.';
+             }
+             if (data['intro_main_title_1'] === 'Global Leader in') data['intro_main_title_1'] = 'Global Leader';
+             if (data['intro_main_title_2'] === 'Aluminum Extrusion') data['intro_main_title_2'] = 'In Aluminum Extrusion';
+             if (data['intro_desc'] === '대우경금속은 고객 맞춤형 설계, 생산, 피막, 기계가공 및 적기적소의 납기까지 Total 서비스를 제공합니다. 최첨단 설비와 축적된 기술력을 바탕으로 다양한 산업 분야의 핵심 소재를 공급하고 있습니다.' || data['intro_desc'] === '대우경금속은 고객 맞춤형 금형설계, 정밀압출, 도장/아노다이징(피막), 정밀절단, 기계가공 및 적기적소의 납기까지\n알루미늄 압출을 중심으로 올인원 솔루션을 제공합니다.\n최첨단 설비와 축적된 기술력을 바탕으로 다양한 산업 분야의 핵심 소재를 공급하고 있습니다.') {
+                 data['intro_desc'] = '대우경금속은 고객 맞춤형 금형설계, 정밀압출, 도장/아노다이징(피막), 정밀절단, 기계가공 및 적기적소의 납기까지 알루미늄 압출을 중심으로 올인원 솔루션을 제공합니다.\n최첨단 설비와 축적된 기술력을 바탕으로 다양한 산업 분야의 핵심 소재를 공급하고 있습니다.';
              }
           }
           
