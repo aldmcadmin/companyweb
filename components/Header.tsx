@@ -132,7 +132,7 @@ const Header: React.FC = () => {
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center justify-center gap-2">
+            <nav className="hidden md:flex items-center gap-2 absolute left-1/2 -translate-x-1/2 will-change-transform">
               {NAV_ITEMS.map((item) => (
                 <div key={item.path} className="relative group min-w-[90px] px-3 py-2 flex justify-center">
                   <Link 
@@ -145,13 +145,15 @@ const Header: React.FC = () => {
                   >
                     {getNavLabel(item.label)}
                     {item.subItems && (
-                      <ChevronDown className={`w-3 h-3 shrink-0 transition-transform duration-300 group-hover:rotate-180 opacity-60`} />
+                      <span className="w-3 h-3 flex items-center justify-center shrink-0">
+                        <ChevronDown className="w-full h-full opacity-60 transition-transform duration-300 group-hover:rotate-180 transform-gpu" />
+                      </span>
                     )}
                   </Link>
                   
                   {/* Mega Dropdown Menu (Enhanced Glassmorphism) */}
                   {item.subItems && (
-                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 pt-4 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] z-50">
+                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 pt-4 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-opacity transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] will-change-transform z-50">
                       <div className={`
                         backdrop-blur-xl rounded-2xl border overflow-hidden p-1.5
                         transition-colors duration-300 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)]
