@@ -246,7 +246,7 @@ const AboutPage = () => {
         <div className="space-y-24">
           <ScrollReveal>
              <div className="group relative w-full rounded-[2.5rem] overflow-hidden shadow-2xl transition-all duration-500 hover:shadow-[0_20px_60px_-15px_rgba(7,29,73,0.3)]">
-                <div className="absolute inset-0 bg-[conic-gradient(at_bottom_left,_var(--tw-gradient-stops))] from-slate-900 via-[#071D49] to-[#0A265E] animate-pulse"></div>
+                <div className="absolute inset-0 bg-[conic-gradient(at_bottom_left,_var(--tw-gradient-stops))] from-slate-900 via-[#071D49] to-[#0A265E]"></div>
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,#1e3a8a,transparent)] opacity-60 mix-blend-screen"></div>
                 <div className="absolute inset-0 opacity-20" style={{ 
                     backgroundImage: 'radial-gradient(rgba(255,255,255,0.3) 1px, transparent 1px)', 
@@ -255,8 +255,8 @@ const AboutPage = () => {
 
                 <div className="relative z-10 flex flex-col items-center justify-center py-24 px-6 text-center">
                    <div className="relative mb-10">
-                      <div className="absolute inset-0 rounded-full bg-blue-400/20 animate-ping blur-xl"></div>
-                      <div className="absolute inset-0 rounded-full border border-white/20 scale-150 animate-pulse"></div>
+                      <div className="absolute inset-0 rounded-full bg-blue-400/30 blur-xl transition-opacity duration-1000 group-hover:opacity-70"></div>
+                      <div className="absolute inset-0 rounded-full border border-white/10 scale-150 transition-transform duration-700 group-hover:scale-[1.6]"></div>
                       <div className="w-24 h-24 bg-gradient-to-tr from-white/10 to-white/5 backdrop-blur-md rounded-full border border-white/20 flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.1)] group-hover:scale-110 transition-transform duration-500 ease-spring">
                          <TrendingUp className="w-10 h-10 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]" strokeWidth={1.5} />
                       </div>
@@ -265,7 +265,7 @@ const AboutPage = () => {
                      Nonstop <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 via-white to-blue-200 animate-text-shimmer bg-[length:200%_auto]">Jump</span>
                    </h2>
                    <div className="w-16 h-1 bg-gradient-to-r from-transparent via-blue-400 to-transparent mb-8 opacity-50"></div>
-                   <p className="text-lg md:text-2xl text-blue-50/90 max-w-3xl mx-auto leading-relaxed font-light tracking-wide mix-blend-overlay">
+                   <p className="text-lg md:text-2xl text-blue-50/90 max-w-3xl mx-auto leading-relaxed font-light tracking-wide mix-blend-overlay whitespace-pre-line">
                      {t.philosophy.nonstop_desc}
                    </p>
                 </div>

@@ -61,7 +61,7 @@ export const TRANSLATIONS = {
       val3_desc: '효율적인 생산 공정과 물류 시스템으로\n약속된 납기를 준수합니다.',
       stat_label: '연간 생산 능력 (Ton)',
       nonstop_title: '미래에 대한 도전과 도약',
-      nonstop_desc: '"무한점프"라는 뜻으로 미래에 대한 도전과 도약, 당사가 추구하는 핵심 가치입니다.',
+      nonstop_desc: '“무한점프”는 미래를 향한 끊임없는 도전과 도약을 의미하며,\n대우경금속이 추구하는 핵심 가치입니다.',
       core_values_title: 'Core Values',
       cv_1_title: '고객감동',
       cv_1_sub: 'Customer Satisfaction',
