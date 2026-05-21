@@ -177,14 +177,25 @@ const AboutPage = () => {
                               <p className="text-xs text-gray-500 mb-1">T. 053-611-6061 | F. 053-611-6066</p>
                               <p className="text-xs text-gray-500 font-medium">사업자등록번호: 514-81-85389</p>
                             </div>
-                            {content['daegu_biz_reg_pdf'] && (
-                              <a href={content['daegu_biz_reg_pdf']} target="_blank" rel="noreferrer" download className="flex flex-col items-center gap-1.5 p-3 rounded-xl hover:bg-gray-200/50 transition-colors cursor-pointer text-gray-500 hover:text-brand-blue" title="사업자등록증 다운로드">
-                                 <div className="p-2 bg-white shadow-sm border border-gray-200 rounded-full group-hover:scale-110 transition-transform">
-                                   <Download className="w-5 h-5" />
-                                 </div>
-                                 <span className="text-[10px] font-bold">사업자등록증</span>
-                              </a>
-                            )}
+                            <a 
+                               href={content['daegu_biz_reg_pdf'] || '#'} 
+                               onClick={(e) => {
+                                  if (!content['daegu_biz_reg_pdf']) {
+                                      e.preventDefault();
+                                      alert('등록된 사업자등록증 파일이 없습니다. 관리자 페이지에서 먼저 업로드해주세요.');
+                                  }
+                               }}
+                               target={content['daegu_biz_reg_pdf'] ? "_blank" : undefined} 
+                               rel={content['daegu_biz_reg_pdf'] ? "noreferrer" : undefined} 
+                               download={!!content['daegu_biz_reg_pdf']} 
+                               className="flex flex-col items-center gap-1.5 p-3 rounded-xl hover:bg-gray-200/50 transition-colors cursor-pointer text-gray-500 hover:text-brand-blue shrink-0" 
+                               title="사업자등록증 다운로드"
+                            >
+                               <div className="p-2 bg-white shadow-sm border border-gray-200 rounded-full group-hover:scale-110 transition-transform">
+                                 <Download className="w-5 h-5" />
+                               </div>
+                               <span className="text-[10px] font-bold whitespace-nowrap">사업자등록증</span>
+                            </a>
                         </div>
                         <div className="bg-gray-50 p-5 rounded-2xl border border-gray-100 hover:shadow-md transition-shadow flex justify-between items-center group">
                             <div>
@@ -193,14 +204,25 @@ const AboutPage = () => {
                               <p className="text-xs text-gray-500 mb-1">T. 055-533-0013 | F. 055-533-0225</p>
                               <p className="text-xs text-gray-500 font-medium">사업자등록번호: 806-85-00405</p>
                             </div>
-                            {content['changnyeong_biz_reg_pdf'] && (
-                              <a href={content['changnyeong_biz_reg_pdf']} target="_blank" rel="noreferrer" download className="flex flex-col items-center gap-1.5 p-3 rounded-xl hover:bg-gray-200/50 transition-colors cursor-pointer text-gray-500 hover:text-brand-blue" title="사업자등록증 다운로드">
-                                 <div className="p-2 bg-white shadow-sm border border-gray-200 rounded-full group-hover:scale-110 transition-transform">
-                                   <Download className="w-5 h-5" />
-                                 </div>
-                                 <span className="text-[10px] font-bold">사업자등록증</span>
-                              </a>
-                            )}
+                            <a 
+                               href={content['changnyeong_biz_reg_pdf'] || '#'} 
+                               onClick={(e) => {
+                                  if (!content['changnyeong_biz_reg_pdf']) {
+                                      e.preventDefault();
+                                      alert('등록된 사업자등록증 파일이 없습니다. 관리자 페이지에서 먼저 업로드해주세요.');
+                                  }
+                               }}
+                               target={content['changnyeong_biz_reg_pdf'] ? "_blank" : undefined} 
+                               rel={content['changnyeong_biz_reg_pdf'] ? "noreferrer" : undefined} 
+                               download={!!content['changnyeong_biz_reg_pdf']} 
+                               className="flex flex-col items-center gap-1.5 p-3 rounded-xl hover:bg-gray-200/50 transition-colors cursor-pointer text-gray-500 hover:text-brand-blue shrink-0" 
+                               title="사업자등록증 다운로드"
+                            >
+                               <div className="p-2 bg-white shadow-sm border border-gray-200 rounded-full group-hover:scale-110 transition-transform">
+                                 <Download className="w-5 h-5" />
+                               </div>
+                               <span className="text-[10px] font-bold whitespace-nowrap">사업자등록증</span>
+                            </a>
                         </div>
                       </div>
                   </div>
