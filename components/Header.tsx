@@ -88,7 +88,7 @@ const Header: React.FC = () => {
     // Top level
     if (key === '회사소개') return t.nav.about;
     if (key === '제품소개') return t.nav.products;
-    if (key === '생산공정') return t.nav.process;
+    if (key === '공정소개') return t.nav.process;
     if (key === '연구소') return t.nav.rnd;
     if (key === '고객지원') return t.nav.support;
     
@@ -108,6 +108,10 @@ const Header: React.FC = () => {
     if (key === '환경소재') return t.nav.environmental;
     if (key === '외장소재') return t.nav.exterior;
     if (key === '대체소재') return t.nav.substitute;
+    
+    // Sub items (Process)
+    if (key === '생산공정') return t.nav.production;
+    if (key === '품질검사') return t.nav.quality;
 
     return key;
   };

@@ -28,8 +28,12 @@ export const NAV_ITEMS: NavItem[] = [
     ]
   },
   {
-    label: '생산공정',
+    label: '공정소개',
     path: '/process',
+    subItems: [
+      { label: '생산공정', path: '/process' },
+      { label: '품질검사', path: '/quality' },
+    ]
   },
   {
     label: '연구소',

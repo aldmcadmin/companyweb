@@ -16,6 +16,8 @@ import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AdminDashboard, AdminPosts, AdminSettings, AdminContent } from './pages/Admin';
 import Login from './pages/Login';
+import ProcessPage from './pages/Process';
+import QualityPage from './pages/Quality';
 import RndPage from './pages/RndPage';
 import AboutPage from './pages/AboutPage';
 import { Phone, Mail, MapPin, Clock, TrendingUp, ThumbsUp, Lightbulb, UserCheck, Sparkles, Award, Printer, Navigation, Feather, Factory, Settings, Cpu, Building2, Leaf, Box, Layers, ChevronRight } from 'lucide-react';
@@ -145,38 +147,6 @@ const ProductDetailPage = ({ categoryKey }: { categoryKey: keyof typeof TRANSLAT
 };
 
 // Other Sections
-const ProcessPage = () => {
-    const { t, processSteps } = useSite();
-    const sortedSteps = [...processSteps].sort((a, b) => a.order - b.order);
-
-    return (
-        <PublicLayout>
-          <PageLayout title={t.pages.process.title} subtitle={t.pages.process.subtitle}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-                  {sortedSteps.map((step, idx) => (
-                      <div key={step.id} className="group">
-                          <div className="aspect-[4/3] bg-gray-100 rounded-2xl mb-6 overflow-hidden relative shadow-sm group-hover:shadow-xl transition-all duration-500">
-                               <img 
-                                src={step.imageUrl} 
-                                alt={step.title} 
-                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                                referrerPolicy="no-referrer"
-                               />
-                               <div className="absolute top-4 left-4 w-10 h-10 bg-brand-blue text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg">
-                                  {idx + 1}
-                               </div>
-                          </div>
-                          <h3 className="text-xl font-bold text-gray-900 mb-2">{step.title}</h3>
-                          {step.description && (
-                            <p className="text-sm text-gray-500 leading-relaxed">{step.description}</p>
-                          )}
-                      </div>
-                  ))}
-              </div>
-          </PageLayout>
-        </PublicLayout>
-    );
-};
 
 // Improved Contact/Support Page
 const ContactPage = () => {
@@ -285,6 +255,7 @@ const App: React.FC = () => {
             
             {/* Other Routes */}
             <Route path="/process" element={<ProcessPage />} />
+            <Route path="/quality" element={<PublicLayout><QualityPage /></PublicLayout>} />
             <Route path="/rnd" element={<PublicLayout><RndPage /></PublicLayout>} />
             
             {/* Replaced SupportPage with ContactPage */}

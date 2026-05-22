@@ -60,6 +60,14 @@ export interface ProcessStep {
   order: number;
 }
 
+export interface QualityEquipment {
+  id: string;
+  name: string;
+  spec: string;
+  imageUrl: string;
+  description: string;
+}
+
 // Flexible key-value store for page texts and images
 export interface ContentMap {
   [key: string]: string; 

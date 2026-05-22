@@ -6,7 +6,7 @@ export const TRANSLATIONS = {
     nav: {
       about: '회사소개',
       products: '제품소개',
-      process: '생산공정',
+      process: '공정소개',
       rnd: '연구소',
       support: '고객지원',
       contact: '견적문의',
@@ -23,7 +23,9 @@ export const TRANSLATIONS = {
       construction: '건축소재',
       environmental: '환경소재',
       exterior: '외장소재',
-      substitute: '대체소재'
+      substitute: '대체소재',
+      production: '생산공정',
+      quality: '품질검사'
     },
     hero: {
       badge: 'Total Aluminum Solutions',
@@ -228,7 +230,7 @@ export const TRANSLATIONS = {
       philosophy: { title: '경영이념', subtitle: '대우경금속이 추구하는 핵심 가치와 비전입니다.' },
       cert: { title: '인증현황', subtitle: '대우경금속의 품질과 기술력을 입증하는 각종 인증 현황입니다.' },
       location: { title: '오시는 길', subtitle: '대우경금속의 사업장 위치를 안내해 드립니다.' },
-      process: { title: '생산공정', subtitle: '원자재 입고부터 출하까지, 완벽을 기하는 공정 시스템' },
+      process: { title: '공정소개', subtitle: '원자재 입고부터 출하까지 완벽을 추구하는 공정 시스템을 기반으로,\n대우경금속은 고객 맞춤형 설계, 생산, 피막, 기계가공, 적기 납기까지 전 과정을 아우르는 올인원 솔루션을 제공합니다.' },
       rnd: { title: '연구소', subtitle: '미래 소재 기술을 선도하는 R&D 센터' },
       support: { title: '고객지원', subtitle: '궁금하신 점이나 견적 문의를 남겨주세요.' }
     }
@@ -253,7 +255,9 @@ export const TRANSLATIONS = {
       construction: 'Construction',
       environmental: 'Environmental',
       exterior: 'Exterior',
-      substitute: 'Substitute'
+      substitute: 'Substitute',
+      production: 'Production',
+      quality: 'Quality'
     },
     hero: {
       badge: 'Total Aluminum Solutions',
@@ -483,7 +487,9 @@ export const TRANSLATIONS = {
       construction: '建築素材',
       environmental: '環境素材',
       exterior: '外装素材',
-      substitute: '代替素材'
+      substitute: '代替素材',
+      production: '生産工程',
+      quality: '品質検査'
     },
     hero: {
       badge: 'Total Aluminum Solutions',

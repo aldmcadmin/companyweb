@@ -16,7 +16,7 @@ const Footer: React.FC = () => {
     // Top level
     if (key === '회사소개') return t.nav.about;
     if (key === '제품소개') return t.nav.products;
-    if (key === '생산공정') return t.nav.process;
+    if (key === '공정소개') return t.nav.process;
     if (key === '연구소') return t.nav.rnd;
     if (key === '고객지원') return t.nav.support;
     

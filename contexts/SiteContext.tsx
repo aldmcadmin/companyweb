@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Post, SiteConfig, Language, Certification, ContentMap, Product, ProcessStep } from '../types';
+import { Post, SiteConfig, Language, Certification, ContentMap, Product, ProcessStep, QualityEquipment } from '../types';
 import { TRANSLATIONS } from '../translations';
 import { db, doc, onSnapshot, setDoc } from '../utils/firebase';
 
@@ -10,6 +10,7 @@ interface SiteContextType {
   products: Product[]; 
   certifications: Certification[];
   processSteps: ProcessStep[];
+  equipments: QualityEquipment[];
   content: ContentMap;
   language: Language;
   t: typeof TRANSLATIONS['KOR'];
@@ -22,6 +23,9 @@ interface SiteContextType {
   updateContent: (key: string, value: string) => void;
   updateProduct: (id: string, updates: Partial<Product>) => void;
   updateProcessStep: (id: string, updates: Partial<ProcessStep>) => void;
+  resetProcessSteps: () => void;
+  updateEquipment: (id: string, updates: Partial<QualityEquipment>) => void;
+  resetEquipments: () => void;
   exportSiteData: () => void;
   importSiteData: (jsonData: string) => boolean;
   isSyncing: boolean;
@@ -67,14 +71,22 @@ const DEFAULT_CERTIFICATIONS: Certification[] = [
 ];
 
 const DEFAULT_PROCESS_STEPS: ProcessStep[] = [
-  { id: 'ps1', title: '용해/주조', order: 1, imageUrl: 'https://picsum.photos/id/101/600/400' },
-  { id: 'ps2', title: '압출', order: 2, imageUrl: 'https://picsum.photos/id/102/600/400' },
-  { id: 'ps3', title: '열처리', order: 3, imageUrl: 'https://picsum.photos/id/103/600/400' },
-  { id: 'ps4', title: '교정', order: 4, imageUrl: 'https://picsum.photos/id/104/600/400' },
-  { id: 'ps5', title: '절단', order: 5, imageUrl: 'https://picsum.photos/id/105/600/400' },
-  { id: 'ps6', title: '피막', order: 6, imageUrl: 'https://picsum.photos/id/106/600/400' },
-  { id: 'ps7', title: '가공', order: 7, imageUrl: 'https://picsum.photos/id/107/600/400' },
-  { id: 'ps8', title: '검사/포장', order: 8, imageUrl: 'https://picsum.photos/id/108/600/400' },
+  { id: 'ps1', title: '금형\n설계 및 제작', order: 1, imageUrl: 'https://images.unsplash.com/photo-1587843336338-95856eb28f09?auto=format&fit=crop&w=1920&q=80', description: '금형 설계 및 제작은 제품 형상과 치수 정밀도를 결정짓는 핵심 공정입니다. 오랜 경험의 전문 인력과 3D 가상 시뮬레이션 압출 해석을 통해 공정을 최적화하며, 고내구성 이온 질화 및 Multi-layer 등 차별화된 표면처리 기술로 압도적인 품질을 구현합니다.' },
+  { id: 'ps2', title: '정밀\n압출', order: 2, imageUrl: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1920&q=80', description: '예열된 빌렛을 수천 톤의 압력으로 금형을 통과시켜 원하는 형상으로 제조합니다. 0.02mm 수준의 초정밀 가공과 고난이도 외관재의 완벽한 압출을 위해 원자재 합금 배합비와 공정 조건을 체계적으로 데이터화하여 품질과 생산성을 극대화합니다.' },
+  { id: 'ps3', title: '정밀\n인발', order: 3, imageUrl: 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&w=1920&q=80', description: '인발 금형 공을 통하여 출구 쪽으로 당김으로써 정밀한 단면 수축을 얻는 공정입니다. 고도화된 정밀 인발 가공 기술을 적용하여 봉재, 파이프 등 다양한 제품의 완성도와 품질을 한 차원 더 높이고 있습니다.' },
+  { id: 'ps4', title: '열처리\n(에이징)', order: 4, imageUrl: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1920&q=80', description: '제품의 잔류 응력을 제거하고 목적하는 기계적 물성을 완벽하게 확보하기 위해 압출 후 인공 시효 경화를 실시합니다. 최적화된 기계적 물성 향상을 목표로 설비를 지속적으로 개선하고 작업 조건을 데이터화하여 엄격하게 관리합니다.' },
+  { id: 'ps5', title: '표면처리\n(피막)', order: 5, imageUrl: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=1920&q=80', description: '알루미늄 부식을 방지하기 위해 산화 피막과 무기염을 이용해 착색하는 아노다이징 공정입니다. 정밀한 약품 배합과 전기 제어로 피막 두께와 경도를 조절하며, 전문 기업과의 전략적 협업으로 신속하고 고품질의 피막 처리를 보장합니다.' },
+  { id: 'ps6', title: '기계\n가공', order: 6, imageUrl: 'https://images.unsplash.com/photo-1611078516801-44670beebde3?auto=format&fit=crop&w=1920&q=80', description: '고객의 주문 사양에 맞추어 알루미늄 압출 형재를 절단, 절삭, 프레스 등 다양한 기계 가공을 거쳐 완성 부품으로 제조합니다. One-stop 제조 시스템을 통해 원가 절감은 물론 신속한 납기와 완벽한 품질 대응이 가능합니다.' },
+  { id: 'ps7', title: '포장 및\n출하', order: 7, imageUrl: 'https://images.unsplash.com/photo-1586528116311-ad8ed7c663c0?auto=format&fit=crop&w=1920&q=80', description: '최종 품질 검사를 통과한 제품만을 선별하여 스크래치 방지를 위한 특수 포장재로 꼼꼼하게 포장합니다. 안전하고 신속한 물류 프로세스를 통해 최상의 품질 상태 그대로 고객에게 직배송 납품을 진행합니다.' }
+];
+
+const DEFAULT_EQUIPMENTS: QualityEquipment[] = [
+  { id: 'qe1', name: '비디오메타(VMS)', spec: 'VMS', imageUrl: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=600&q=80', description: '고해상도 카메라를 이용한 비접촉식 정밀 치수 측정 장비입니다.' },
+  { id: 'qe2', name: '석정반', spec: '석정반', imageUrl: 'https://images.unsplash.com/photo-1616198642750-f8d2cc1f087e?auto=format&fit=crop&w=600&q=80', description: '제품 측정기나 부품 등을 놓기 위한 정밀하게 가공된 평면 작업대입니다.' },
+  { id: 'qe3', name: '만능재료 시험기', spec: 'UTM', imageUrl: 'https://images.unsplash.com/photo-1574676104764-ae327c6f0ee4?auto=format&fit=crop&w=600&q=80', description: '완제품 및 시편의 인장, 압축, 굽힘 강도를 테스트합니다.' },
+  { id: 'qe4', name: '로크웰 경도 시험기', spec: 'Rockwell', imageUrl: 'https://images.unsplash.com/photo-1612803856372-8805ffce1a64?auto=format&fit=crop&w=600&q=80', description: '소재 및 제품 표면의 체계적인 경도 측정을 수행합니다.' },
+  { id: 'qe5', name: '실린더 게이지', spec: '실린더 게이지', imageUrl: 'https://images.unsplash.com/photo-1544724569-5f546fd6f2b6?auto=format&fit=crop&w=600&q=80', description: '원통의 내경을 정밀하게 측정하는 장비입니다.' },
+  { id: 'qe6', name: '성분분석기(FPI5000)', spec: 'FPI5000', imageUrl: 'https://images.unsplash.com/photo-1581092334245-d4fb30c5e7b2?auto=format&fit=crop&w=600&q=80', description: '제품의 합금 성분을 정밀하게 분석하여 소재의 적합성을 검증합니다.' }
 ];
 
 const DEFAULT_CONTENT: ContentMap = {
@@ -112,6 +124,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [products, setProducts] = useState<Product[]>(DEFAULT_PRODUCTS);
   const [certifications, setCertifications] = useState<Certification[]>(DEFAULT_CERTIFICATIONS);
   const [processSteps, setProcessSteps] = useState<ProcessStep[]>(DEFAULT_PROCESS_STEPS);
+  const [equipments, setEquipments] = useState<QualityEquipment[]>(DEFAULT_EQUIPMENTS);
   const [content, setContent] = useState<ContentMap>(DEFAULT_CONTENT);
   
   const [language, setLanguage] = useState<Language>('KOR');
@@ -127,6 +140,10 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (snapshot.exists()) {
           // If document exists in DB, use it (This means Admin has customized it)
           let data = snapshot.data().data;
+          
+          if (!data || (Array.isArray(data) && data.length === 0)) {
+            data = defaultData;
+          }
           
           // Apply user requested overrides automatically if they are still using the old values
           if (docName === 'content') {
@@ -162,6 +179,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const unsubProducts = subscribe('products', setProducts, DEFAULT_PRODUCTS);
     const unsubCerts = subscribe('certifications', setCertifications, DEFAULT_CERTIFICATIONS);
     const unsubProcess = subscribe('processSteps', setProcessSteps, DEFAULT_PROCESS_STEPS);
+    const unsubEquipments = subscribe('equipments', setEquipments, DEFAULT_EQUIPMENTS);
     const unsubContent = subscribe('content', setContent, DEFAULT_CONTENT);
 
     setIsSyncing(false);
@@ -172,6 +190,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       unsubProducts();
       unsubCerts();
       unsubProcess();
+      unsubEquipments();
       unsubContent();
     };
   }, []);
@@ -244,6 +263,19 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
     saveData('processSteps', updated);
   };
 
+  const resetProcessSteps = () => {
+    saveData('processSteps', DEFAULT_PROCESS_STEPS);
+  };
+
+  const updateEquipment = (id: string, updates: Partial<QualityEquipment>) => {
+    const updated = equipments.map(eq => eq.id === id ? { ...eq, ...updates } : eq);
+    saveData('equipments', updated);
+  };
+
+  const resetEquipments = () => {
+    saveData('equipments', DEFAULT_EQUIPMENTS);
+  };
+
   // --- Export/Import ---
   
   const exportSiteData = () => {
@@ -253,6 +285,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       products,
       certifications,
       processSteps,
+      equipments,
       content,
       timestamp: new Date().toISOString()
     };
@@ -278,6 +311,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       saveData('products', data.products || []);
       saveData('certifications', data.certifications || []);
       saveData('processSteps', data.processSteps || []);
+      saveData('equipments', data.equipments || []);
       saveData('content', data.content);
 
       return true;
@@ -294,6 +328,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       products,
       certifications,
       processSteps,
+      equipments,
       content,
       language,
       t: TRANSLATIONS[language],
@@ -306,6 +341,9 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       updateContent,
       updateProduct,
       updateProcessStep,
+      resetProcessSteps,
+      updateEquipment,
+      resetEquipments,
       exportSiteData,
       importSiteData,
       isSyncing

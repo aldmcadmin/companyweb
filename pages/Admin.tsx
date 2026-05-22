@@ -70,8 +70,8 @@ export const AdminDashboard: React.FC = () => {
 
 // --- Content Manager Component (Updated) ---
 export const AdminContent: React.FC = () => {
-  const { certifications, addCertification, deleteCertification, content, updateContent, products, updateProduct, processSteps, updateProcessStep } = useSite();
-  const [activeTab, setActiveTab] = useState<'cert' | 'text' | 'images' | 'products' | 'process'>('products');
+  const { certifications, addCertification, deleteCertification, content, updateContent, products, updateProduct, processSteps, updateProcessStep, resetProcessSteps, equipments, updateEquipment, resetEquipments } = useSite();
+  const [activeTab, setActiveTab] = useState<'cert' | 'text' | 'images' | 'products' | 'process' | 'equipment'>('products');
   const [newCert, setNewCert] = useState({ title: '', imageUrl: '' });
   const [uploading, setUploading] = useState<{[key: string]: boolean}>({});
 
@@ -139,6 +139,22 @@ export const AdminContent: React.FC = () => {
         alert(`업로드 실패: ${error.message}`);
       } finally {
         setUploading(prev => ({ ...prev, [`step_${id}`]: false }));
+      }
+    }
+  };
+
+  const handleEquipmentImageUpload = async (id: string, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setUploading(prev => ({ ...prev, [`eq_${id}`]: true }));
+      try {
+        const url = await uploadImageToStorage(file, 'equipment/');
+        updateEquipment(id, { imageUrl: url });
+        alert('설비 이미지가 성공적으로 업로드되었습니다.');
+      } catch (error: any) {
+        alert(`업로드 실패: ${error.message}`);
+      } finally {
+        setUploading(prev => ({ ...prev, [`eq_${id}`]: false }));
       }
     }
   };
@@ -276,7 +292,13 @@ export const AdminContent: React.FC = () => {
                onClick={() => setActiveTab('process')}
                className={`pb-3 px-4 font-bold text-sm transition-colors whitespace-nowrap ${activeTab === 'process' ? 'text-brand-blue border-b-2 border-brand-blue' : 'text-gray-500 hover:text-gray-700'}`}
              >
-               생산공정 관리
+               공정소개 관리
+             </button>
+             <button 
+               onClick={() => setActiveTab('equipment')}
+               className={`pb-3 px-4 font-bold text-sm transition-colors whitespace-nowrap ${activeTab === 'equipment' ? 'text-brand-blue border-b-2 border-brand-blue' : 'text-gray-500 hover:text-gray-700'}`}
+             >
+               측정설비 관리
              </button>
           </div>
 
@@ -535,9 +557,17 @@ export const AdminContent: React.FC = () => {
                      <Settings className="w-6 h-6" />
                   </div>
                   <div>
-                     <h3 className="font-bold text-emerald-600 text-lg">생산공정 관리</h3>
-                     <p className="text-gray-600 text-sm">생산공정 페이지에 표시되는 각 단계의 이미지와 설명을 관리합니다.</p>
+                     <h3 className="font-bold text-emerald-600 text-lg">공정소개 관리</h3>
+                     <p className="text-gray-600 text-sm">공정소개 페이지에 표시되는 각 단계의 이미지와 설명을 관리합니다.</p>
                   </div>
+                  <button onClick={() => {
+                     if (window.confirm("공정소개 단계를 초기화하시겠습니까? (이 작업은 되돌릴 수 없습니다.)")) {
+                        resetProcessSteps();
+                        alert("초기화되었습니다.");
+                     }
+                  }} className="ml-auto bg-emerald-100 text-emerald-700 px-4 py-2 rounded-lg font-bold text-sm hover:bg-emerald-200">
+                     단계를 기본값으로 초기화
+                  </button>
                </div>
 
                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -571,7 +601,13 @@ export const AdminContent: React.FC = () => {
                               <label className="text-xs font-bold text-gray-400 block mb-1">단계 {step.order}</label>
                               <button onClick={() => updateProcessStep(step.id, { imageUrl: '' })} className="text-xs text-red-500 hover:underline">사진 삭제</button>
                            </div>
-                           <div className="font-bold text-gray-900 text-lg">{step.title}</div>
+                           <textarea 
+                              rows={2}
+                              className="font-bold text-gray-900 text-lg w-full border border-transparent hover:border-gray-200 focus:border-brand-blue outline-none rounded px-1 transition-colors bg-transparent placeholder-gray-400 resize-none break-keep" 
+                              value={step.title}
+                              onChange={(e) => updateProcessStep(step.id, { title: e.target.value })}
+                              placeholder="공정 이름 (예: 빌렛 입고 / 가열)"
+                           />
                            <div>
                               <label className="text-xs font-bold text-gray-400 block mb-1">설명 (선택사항)</label>
                               <textarea 
@@ -587,6 +623,85 @@ export const AdminContent: React.FC = () => {
                   )})}
                </div>
             </div>
+          )}
+
+          {activeTab === 'equipment' && (
+             <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 animate-fade-in">
+                <div className="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
+                   <div>
+                     <h3 className="font-bold text-lg text-gray-900">측정설비 관리</h3>
+                     <p className="text-gray-500 text-sm mt-1">품질검사 페이지에 표시될 측정 설비들의 목록과 이미지를 관리합니다.</p>
+                   </div>
+                   <button 
+                     onClick={() => {
+                        if(window.confirm('모든 설비 내용을 초기 기본값으로 복구하시겠습니까?')) resetEquipments();
+                     }} 
+                     className="px-4 py-2 border border-red-200 text-red-500 rounded-lg text-sm font-bold hover:bg-red-50 transition-colors"
+                   >
+                     초기화 (복원)
+                   </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                   {equipments.map((eq) => {
+                     const isUploadingEq = uploading[`eq_${eq.id}`];
+                     return (
+                      <div key={eq.id} className="bg-gray-50 rounded-xl p-4 border border-gray-200 flex flex-col gap-4 group">
+                         <div className="relative aspect-[4/3] bg-white rounded-lg overflow-hidden border border-gray-200">
+                           {isUploadingEq ? (
+                             <div className="flex flex-col items-center justify-center h-full text-brand-blue">
+                               <Loader2 className="w-6 h-6 animate-spin mb-2" />
+                               <span className="text-xs">업로드 중</span>
+                             </div>
+                           ) : eq.imageUrl ? (
+                             <img src={eq.imageUrl} alt={eq.name} className="w-full h-full object-cover" />
+                           ) : (
+                             <div className="flex items-center justify-center h-full text-gray-400">
+                               <ImageIcon className="w-8 h-8" />
+                             </div>
+                           )}
+                           <label className={`absolute inset-0 bg-black/0 hover:bg-black/40 transition-colors flex items-center justify-center cursor-pointer group-hover:bg-black/40 ${isUploadingEq ? 'pointer-events-none' : ''}`}>
+                              <span className="bg-white/90 text-gray-900 px-3 py-1.5 rounded-lg font-bold text-xs opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2">
+                                 <Upload className="w-3 h-3" /> 사진 변경
+                              </span>
+                              <input type="file" accept="image/*" className="hidden" onChange={(e) => handleEquipmentImageUpload(eq.id, e)} disabled={isUploadingEq} />
+                           </label>
+                           <button onClick={() => updateEquipment(eq.id, { imageUrl: '' })} className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"><X className="w-3 h-3" /></button>
+                         </div>
+                         
+                         <div className="space-y-2 flex-1">
+                            <div>
+                               <label className="text-xs font-bold text-gray-400 block mb-1">설비명</label>
+                               <input 
+                                  type="text" 
+                                  className="w-full text-sm font-bold border border-gray-200 rounded-lg p-2 focus:ring-1 focus:ring-brand-blue outline-none" 
+                                  value={eq.name}
+                                  onChange={(e) => updateEquipment(eq.id, { name: e.target.value })}
+                               />
+                            </div>
+                            <div>
+                               <label className="text-xs font-bold text-gray-400 block mb-1">제조사 / 모델명</label>
+                               <input 
+                                  type="text" 
+                                  className="w-full text-sm border border-gray-200 rounded-lg p-2 focus:ring-1 focus:ring-brand-blue outline-none" 
+                                  value={eq.spec}
+                                  onChange={(e) => updateEquipment(eq.id, { spec: e.target.value })}
+                               />
+                            </div>
+                            <div>
+                               <label className="text-xs font-bold text-gray-400 block mb-1">측정 목적 및 주요 기능</label>
+                               <textarea 
+                                  rows={3}
+                                  className="w-full text-xs text-gray-600 border border-gray-200 rounded-lg p-2 resize-none focus:ring-1 focus:ring-brand-blue outline-none"
+                                  value={eq.description}
+                                  onChange={(e) => updateEquipment(eq.id, { description: e.target.value })}
+                               />
+                            </div>
+                         </div>
+                      </div>
+                   )})}
+                </div>
+             </div>
           )}
        </div>
     </AdminLayout>

@@ -22,7 +22,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({ title, subtitle, badge, childre
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
             {title}
           </h1>
-          <p className="text-xl text-gray-500 max-w-2xl leading-relaxed">
+          <p className="text-lg md:text-xl text-gray-500 max-w-4xl leading-relaxed whitespace-pre-line break-keep">
             {subtitle}
           </p>
           <div className="h-1 w-20 bg-brand-blue mt-8 rounded-full"></div>
