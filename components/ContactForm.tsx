@@ -63,9 +63,16 @@ const ContactForm: React.FC = () => {
     setStatus('submitting');
 
     try {
-      const response = await fetch("https://formspree.io/f/mykjkgnj", {
+      const payload = {
+        ...formData,
+        access_key: "f2748f72-08fe-4544-a339-80a19d28395e",
+        subject: `[대우경금속 홈페이지 웹문의] ${formData.company} - ${formData.type}`,
+        from_name: formData.name
+      };
+
+      const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
