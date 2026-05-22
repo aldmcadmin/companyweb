@@ -68,10 +68,10 @@ const ProductSection: React.FC<ProductSectionProps> = ({ hideHeader = false }) =
         {!hideHeader && (
           <div className="flex flex-col items-center text-center mb-8 gap-4">
             <ScrollReveal>
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight">{t.products.title}</h2>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 tracking-tight break-keep">{t.products.title}</h2>
             </ScrollReveal>
             <ScrollReveal delay={0.1} className="w-full">
-              <p className="text-base text-gray-500 font-medium break-keep px-4 max-w-3xl mx-auto">
+              <p className="text-sm sm:text-base text-gray-500 font-medium break-keep px-4 max-w-3xl mx-auto">
                 {t.products.desc}
               </p>
             </ScrollReveal>

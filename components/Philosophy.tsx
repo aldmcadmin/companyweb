@@ -119,12 +119,12 @@ const Philosophy: React.FC = () => {
              </h2>
           </ScrollReveal>
           <ScrollReveal delay={0.1}>
-            <p className="text-5xl md:text-7xl font-bold text-gray-900 tracking-tight leading-tight mb-8 whitespace-pre-line">
+            <p className="text-4xl sm:text-5xl md:text-7xl font-bold text-gray-900 tracking-tight leading-tight mb-8 whitespace-pre-line break-keep">
               {t.philosophy.title}
             </p>
           </ScrollReveal>
           <ScrollReveal delay={0.2}>
-            <p className="max-w-3xl text-2xl text-gray-500 font-medium leading-relaxed whitespace-pre-line break-keep">
+            <p className="max-w-3xl text-xl sm:text-2xl text-gray-500 font-medium leading-relaxed whitespace-pre-line break-keep">
               {t.philosophy.desc}
             </p>
           </ScrollReveal>
@@ -195,13 +195,13 @@ const Philosophy: React.FC = () => {
                     
                     <div className="flex items-baseline justify-center md:justify-start gap-1 mb-6">
                        {/* Reduced size from 10rem to 7xl/8xl for better proportion */}
-                       <span className="text-6xl md:text-8xl font-bold tracking-tighter text-[#071D49] leading-none">
+                       <span className="text-5xl sm:text-6xl md:text-8xl font-bold tracking-tighter text-[#071D49] leading-none">
                          15,000
                        </span>
-                       <span className="text-3xl md:text-5xl font-light text-slate-400 mb-2 md:mb-3">+</span>
+                       <span className="text-3xl sm:text-4xl md:text-5xl font-light text-slate-400 mb-2 md:mb-3">+</span>
                     </div>
                     
-                    <p className="text-lg md:text-xl text-gray-500 leading-relaxed font-medium max-w-lg">
+                    <p className="text-base sm:text-lg md:text-xl text-gray-500 leading-relaxed font-medium max-w-lg break-keep">
                        연간 1.5만 톤 이상의 생산 능력을 통해<br/>
                        고객의 비즈니스 성장을 든든하게 지원합니다.
                     </p>

@@ -14,13 +14,13 @@ const ContactBanner: React.FC = () => {
       
       <div className="max-w-4xl mx-auto px-4 text-center">
         <ScrollReveal>
-          <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-8 tracking-tight whitespace-pre-line">
+          <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold text-gray-900 mb-8 tracking-tight whitespace-pre-line break-keep">
             {t.contact.banner.title}
           </h2>
         </ScrollReveal>
         
         <ScrollReveal delay={0.1}>
-          <p className="text-xl md:text-2xl text-gray-500 mb-12 leading-relaxed font-medium whitespace-pre-line">
+          <p className="text-lg sm:text-xl md:text-2xl text-gray-500 mb-12 leading-relaxed font-medium whitespace-pre-line break-keep">
             {t.contact.banner.desc}
           </p>
         </ScrollReveal>

@@ -65,10 +65,10 @@ const ProcessPage: React.FC = () => {
 
       {/* Intro Section */}
       <section className="h-screen flex flex-col justify-center items-center text-center px-4 relative pt-16">
-        <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold tracking-tight mb-4 md:mb-6 leading-tight break-keep" style={{ wordBreak: 'keep-all' }}>
+        <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight mb-4 md:mb-6 leading-tight break-keep">
           완벽을 향한<br />알루미늄의 여정
         </h1>
-        <p className="text-sm sm:text-base md:text-xl text-gray-400 max-w-2xl font-light break-keep" style={{ wordBreak: 'keep-all' }}>
+        <p className="text-base sm:text-lg md:text-xl text-gray-400 max-w-2xl font-light break-keep">
           수십 년의 노하우와 첨단 기술이 만나는 생산 공정을 한눈에 확인하세요.<br className="hidden md:block" /> 아래로 스크롤하여 여정을 시작합니다.
         </p>
         <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center opacity-70 animate-bounce">
@@ -106,12 +106,7 @@ const ProcessPage: React.FC = () => {
                   
                   {/* Overlay Gradient for Text Readability */}
                   <div 
-                    className="absolute top-0 left-0 w-full h-full -z-10"
-                    style={{
-                      background: typeof window !== 'undefined' && window.innerWidth >= 768
-                        ? 'linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%)'
-                        : 'linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.6) 70%, rgba(0,0,0,0.1) 100%)'
-                    }}
+                    className="absolute top-0 left-0 w-full h-full -z-10 bg-gradient-to-r from-black/90 via-black/50 to-transparent sm:from-black/80 sm:via-black/40"
                   />
 
                   {/* Content */}
@@ -119,7 +114,7 @@ const ProcessPage: React.FC = () => {
                     <span className="inline-block text-xs md:text-xl font-semibold tracking-[0.2em] text-blue-500 mb-3 md:mb-4 border border-blue-500/50 px-3 md:px-4 py-1 rounded-full backdrop-blur-[4px]">
                       STEP {String(index + 1).padStart(2, '0')}
                     </span>
-                    <h2 className="text-3xl sm:text-5xl md:text-[4.5rem] font-extrabold leading-tight mb-4 md:mb-6 tracking-tight text-shadow-lg break-keep" style={{ wordBreak: 'keep-all', textShadow: '0 4px 20px rgba(0,0,0,0.5)' }}>
+                    <h2 className="text-3xl sm:text-5xl md:text-[4.5rem] font-extrabold leading-tight mb-4 md:mb-6 tracking-tight text-shadow-lg break-keep drop-shadow-md">
                       {step.title.split(/\n|\\n/).map((line, i) => (
                         <React.Fragment key={i}>
                           {line}
@@ -131,7 +126,6 @@ const ProcessPage: React.FC = () => {
                       className={`text-sm sm:text-base md:text-xl leading-relaxed text-gray-300 font-light break-keep transition-all duration-800 ease-out ${
                         isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'
                       }`}
-                      style={{ wordBreak: 'keep-all' }}
                     >
                       {step.description || '상세 공정 설명이 없습니다.'}
                     </p>
@@ -145,8 +139,8 @@ const ProcessPage: React.FC = () => {
 
       {/* Outro Section */}
       <section className="h-screen flex flex-col justify-center items-center text-center px-4 bg-gray-900 border-t border-gray-800">
-        <h2 className="text-3xl md:text-5xl font-bold mb-4 md:mb-6 break-keep" style={{ wordBreak: 'keep-all' }}>빈틈없는 품질을 향하여</h2>
-        <p className="text-base md:text-xl text-gray-400 mb-8 md:mb-10 font-light break-keep flex flex-col items-center gap-2" style={{ wordBreak: 'keep-all' }}>
+        <h2 className="text-3xl md:text-5xl font-bold mb-4 md:mb-6 break-keep">빈틈없는 품질을 향하여</h2>
+        <p className="text-base md:text-xl text-gray-400 mb-8 md:mb-10 font-light break-keep flex flex-col items-center gap-2">
           <span>모든 공정은 실시간 데이터로 모니터링되며, 완벽함을 위해 끊임없이 교차 검증됩니다.</span>
           <span>다음 단계인 품질 검사 과정을 확인하세요.</span>
         </p>

@@ -103,7 +103,7 @@ const Hero: React.FC = () => {
         
         {/* Gradient Overlays */}
         {/* 1. Dark overlay for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#071D49]/30 to-[#050505]/60 mix-blend-multiply" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#071D49]/40 to-[#050505]/70 mix-blend-multiply sm:via-[#071D49]/30 sm:to-[#050505]/60" />
         
         {/* 2. Top fade for header */}
         <div className="absolute top-0 left-0 w-full h-40 bg-gradient-to-b from-black/60 to-transparent" />
@@ -122,7 +122,7 @@ const Hero: React.FC = () => {
             </span>
           </div>
           
-          <h1 className="text-4xl md:text-7xl font-bold text-white tracking-tighter leading-[1.1] opacity-0 animate-slow-reveal" style={{ animationDelay: '0.4s' }}>
+          <h1 className="text-3xl md:text-5xl lg:text-7xl font-bold text-white tracking-tighter leading-[1.2] md:leading-[1.1] opacity-0 animate-slow-reveal break-keep" style={{ animationDelay: '0.4s' }}>
             {isDefaultLang ? (content['home_hero_title_prefix'] || t.hero.title_prefix) : t.hero.title_prefix} <br/>
             {/* Metallic Text Effect */}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-100 via-gray-300 to-gray-500 drop-shadow-lg">
@@ -130,7 +130,7 @@ const Hero: React.FC = () => {
             </span>
           </h1>
           
-          <p className="text-lg md:text-2xl text-gray-400 leading-relaxed max-w-3xl opacity-0 animate-slow-reveal whitespace-pre-line break-keep" style={{ animationDelay: '0.7s' }}>
+          <p className="text-base md:text-xl lg:text-2xl text-gray-300 md:text-gray-400 leading-relaxed max-w-3xl opacity-0 animate-slow-reveal whitespace-pre-line break-keep" style={{ animationDelay: '0.7s' }}>
             {isDefaultLang ? (content['home_hero_desc'] || t.hero.desc) : t.hero.desc}
           </p>
           
