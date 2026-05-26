@@ -128,7 +128,16 @@ const Header: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center relative">
             {/* Logo */}
-            <Link to="/" className="flex items-center space-x-2 z-50 group shrink-0">
+            <Link 
+              to="/" 
+              className="flex items-center space-x-2 z-50 group shrink-0"
+              onClick={(e) => {
+                if (location.pathname === '/') {
+                  e.preventDefault();
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+              }}
+            >
                <Logo 
                  color={logoColor} 
                  className="h-10 w-auto md:h-12 transition-colors duration-300"
