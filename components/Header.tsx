@@ -106,7 +106,7 @@ const Header: React.FC = () => {
     <>
       <header 
         className={`fixed top-0 left-0 right-0 z-50 transform-gpu transition-[padding] duration-300 ease-in-out ${
-          !isTransparent ? 'py-3' : 'py-5'
+          !isScrolled ? 'py-5' : 'py-3'
         }`}
       >
         {/* Separated background & blur layer to prevent scroll flicker & compositing artifacts */}
