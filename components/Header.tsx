@@ -44,20 +44,6 @@ const Header: React.FC = () => {
             }
           }
         }
-      } else if (location.pathname === '/') {
-        const sections = [
-          { id: 'philosophy', path: '/about/philosophy' },
-          { id: 'products', path: '/products' },
-        ];
-        for (const sec of sections) {
-          const el = document.getElementById(sec.id);
-          if (el) {
-            const rect = el.getBoundingClientRect();
-            if (rect.top <= window.innerHeight / 3 && rect.bottom >= window.innerHeight / 3) {
-              currentActive = sec.path;
-            }
-          }
-        }
       }
       
       setActiveRoute(currentActive);
