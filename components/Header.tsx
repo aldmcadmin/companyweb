@@ -152,7 +152,7 @@ const Header: React.FC = () => {
                     to={item.path}
                     className={`text-sm transition-colors duration-200 flex items-center gap-1.5 font-medium
                       ${!isTransparent 
-                        ? (isParentActive(item.path) ? 'text-brand-blue' : 'text-gray-600 hover:text-brand-blue') 
+                        ? (isParentActive(item.path) ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900') 
                         : (isParentActive(item.path) ? 'text-white' : 'text-white/80 hover:text-white')
                       }`}
                   >
@@ -192,7 +192,7 @@ const Header: React.FC = () => {
                                   : 'py-2 px-5 min-w-[100px] text-center'}
                                 ${isTransparent
                                   ? (activeRoute === sub.path ? 'bg-white/30 text-white shadow-[0_0_15px_rgba(255,255,255,0.2)]' : 'text-white/90 hover:bg-white/20 hover:text-white hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]')
-                                  : (activeRoute === sub.path ? 'bg-brand-blue text-white shadow-md' : 'text-gray-700 hover:bg-white/80 hover:text-brand-blue hover:shadow-sm')
+                                  : (activeRoute === sub.path ? 'bg-gray-800/90 backdrop-blur-md text-white shadow-md border border-gray-700/50' : 'text-gray-700 hover:bg-black/5 hover:text-gray-900 hover:shadow-sm')
                                 }
                               `}
                             >
@@ -207,7 +207,7 @@ const Header: React.FC = () => {
                   )}
                   
                   {isParentActive(item.path) && (
-                    <span className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 rounded-full ${!isTransparent ? 'bg-brand-blue' : 'bg-white'}`} />
+                    <span className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 rounded-full ${!isTransparent ? 'bg-gray-800' : 'bg-white'}`} />
                   )}
                 </div>
               ))}
@@ -310,7 +310,7 @@ const Header: React.FC = () => {
                       <Link 
                         key={sub.path} 
                         to={sub.path}
-                        className="text-gray-500 hover:text-brand-blue text-lg font-medium"
+                        className="text-gray-500 hover:text-gray-900 text-lg font-medium"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         {getNavLabel(sub.label)}
@@ -324,7 +324,7 @@ const Header: React.FC = () => {
           <div className="mt-8 mb-8">
             <Link 
               to="/contact" 
-              className={`block w-full bg-brand-blue text-white text-center py-4 font-bold text-lg shadow-lg active:scale-95 transition-transform ${config.borderRadius}`}
+              className={`block w-full bg-gray-900 text-white text-center py-4 font-bold text-lg shadow-lg active:scale-95 transition-transform ${config.borderRadius}`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               {t.nav.contact}

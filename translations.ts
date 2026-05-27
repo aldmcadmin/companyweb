@@ -78,6 +78,72 @@ export const TRANSLATIONS = {
     history: {
       groups: [
         {
+          year: '2025',
+          events: [
+            { date: '2025.04', desc: 'SEMES SSQ 자격 인증' }
+          ]
+        },
+        {
+          year: '2024',
+          events: [
+            { date: '2024.03', desc: '특허 1건 등록' }
+          ]
+        },
+        {
+          year: '2023',
+          events: [
+            { date: '2023.07', desc: '뿌리기업 선정' },
+            { date: '2023.01', desc: '창립 10주년' }
+          ]
+        },
+        {
+          year: '2022',
+          events: [
+            { date: '2022.07', desc: '특허 1건 등록' },
+            { date: '2022.04', desc: '특허 1건 등록' },
+            { date: '2022.04', desc: '벤처기업확인기관 벤처기업인증' }
+          ]
+        },
+        {
+          year: '2021',
+          events: [
+            { date: '2021.05', desc: '무인라면조리기 오토분식 1호점 오픈' },
+            { date: '2021.01', desc: '창녕공장 청년친화강소기업 선정' }
+          ]
+        },
+        {
+          year: '2020',
+          events: [
+            { date: '2020.12', desc: '중소기업R&D 우수성과 기업 확인' },
+            { date: '2020.12', desc: '특허 2건 등록' },
+            { date: '2020.09', desc: '특허 1건 등록' },
+            { date: '2020.01', desc: '특허 1건 등록' }
+          ]
+        },
+        {
+          year: '2019',
+          events: [
+            { date: '2019.10', desc: 'IATF 16949 인증' },
+            { date: '2019.08', desc: 'MES 도입' }
+          ]
+        },
+        {
+          year: '2018',
+          events: [
+            { date: '2018.12', desc: '특허 1건 등록' },
+            { date: '2018.06', desc: '대구 스타플러스기업 선정' },
+            { date: '2018.06', desc: '기술보증기금 스타벤처기업 선정' },
+            { date: '2018.03', desc: '기술보증기금 벤처기업 인증' }
+          ]
+        },
+        {
+          year: '2017',
+          events: [
+            { date: '2017.12', desc: '대구 스타기업 100 선정' },
+            { date: '2017.03', desc: '특허 2건 등록' }
+          ]
+        },
+        {
           year: '2016',
           events: [
             { date: '2016.09', desc: 'DNV·GL 인증' },
@@ -310,6 +376,72 @@ export const TRANSLATIONS = {
     history: {
        groups: [
         {
+          year: '2025',
+          events: [
+            { date: '2025.04', desc: 'SEMES SSQ Certification' }
+          ]
+        },
+        {
+          year: '2024',
+          events: [
+            { date: '2024.03', desc: 'Registered 1 Patent' }
+          ]
+        },
+        {
+          year: '2023',
+          events: [
+            { date: '2023.07', desc: 'Selected as Root Enterprise (Ppuri Enterprise)' },
+            { date: '2023.01', desc: '10th Anniversary of Foundation' }
+          ]
+        },
+        {
+          year: '2022',
+          events: [
+            { date: '2022.07', desc: 'Registered 1 Patent' },
+            { date: '2022.04', desc: 'Registered 1 Patent' },
+            { date: '2022.04', desc: 'Venture Enterprise Certification (KOVA)' }
+          ]
+        },
+        {
+          year: '2021',
+          events: [
+            { date: '2021.05', desc: 'Opened Auto-Bunsik 1st store (Unmanned Ramen Cooker)' },
+            { date: '2021.01', desc: 'Changnyeong Factory selected as Youth-Friendly Strong SME' }
+          ]
+        },
+        {
+          year: '2020',
+          events: [
+            { date: '2020.12', desc: 'Recognized as SME R&D Excellent Performance Company' },
+            { date: '2020.12', desc: 'Registered 2 Patents' },
+            { date: '2020.09', desc: 'Registered 1 Patent' },
+            { date: '2020.01', desc: 'Registered 1 Patent' }
+          ]
+        },
+        {
+          year: '2019',
+          events: [
+            { date: '2019.10', desc: 'IATF 16949 Certification' },
+            { date: '2019.08', desc: 'Introduced MES' }
+          ]
+        },
+        {
+          year: '2018',
+          events: [
+            { date: '2018.12', desc: 'Registered 1 Patent' },
+            { date: '2018.06', desc: 'Selected as Daegu Star Plus Enterprise' },
+            { date: '2018.06', desc: 'Selected as KIBO Star Venture Enterprise' },
+            { date: '2018.03', desc: 'KIBO Venture Enterprise Certification' }
+          ]
+        },
+        {
+          year: '2017',
+          events: [
+            { date: '2017.12', desc: 'Selected as Daegu Star Enterprise 100' },
+            { date: '2017.03', desc: 'Registered 2 Patents' }
+          ]
+        },
+        {
           year: '2016',
           events: [
             { date: '2016.09', desc: 'DNV·GL Certification' },
@@ -541,6 +673,72 @@ export const TRANSLATIONS = {
     },
     history: {
        groups: [
+        {
+          year: '2025',
+          events: [
+            { date: '2025.04', desc: 'SEMES SSQ 資格認証' }
+          ]
+        },
+        {
+          year: '2024',
+          events: [
+            { date: '2024.03', desc: '特許1件登録' }
+          ]
+        },
+        {
+          year: '2023',
+          events: [
+            { date: '2023.07', desc: '根幹(ププリ)企業選定' },
+            { date: '2023.01', desc: '創立10周年' }
+          ]
+        },
+        {
+          year: '2022',
+          events: [
+            { date: '2022.07', desc: '特許1件登録' },
+            { date: '2022.04', desc: '特許1件登録' },
+            { date: '2022.04', desc: 'ベンチャー企業確認機関 ベンチャー企業認証' }
+          ]
+        },
+        {
+          year: '2021',
+          events: [
+            { date: '2021.05', desc: '無人ラーメン調理器 オート粉食 1号店オープン' },
+            { date: '2021.01', desc: '昌寧工場 青年親和強小企業選定' }
+          ]
+        },
+        {
+          year: '2020',
+          events: [
+            { date: '2020.12', desc: '中小企業R&D優秀成果企業確認' },
+            { date: '2020.12', desc: '特許2件登録' },
+            { date: '2020.09', desc: '特許1件登録' },
+            { date: '2020.01', desc: '特許1件登録' }
+          ]
+        },
+        {
+          year: '2019',
+          events: [
+            { date: '2019.10', desc: 'IATF 16949 認証' },
+            { date: '2019.08', desc: 'MES導入' }
+          ]
+        },
+        {
+          year: '2018',
+          events: [
+            { date: '2018.12', desc: '特許1件登録' },
+            { date: '2018.06', desc: '大邱スタンプラス企業選定' },
+            { date: '2018.06', desc: '技術保証基金 スターベンチャー企業選定' },
+            { date: '2018.03', desc: '技術保証基金 ベンチャー企業認証' }
+          ]
+        },
+        {
+          year: '2017',
+          events: [
+            { date: '2017.12', desc: '大邱スター企業100選定' },
+            { date: '2017.03', desc: '特許2件登録' }
+          ]
+        },
         {
           year: '2016',
           events: [

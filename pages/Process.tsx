@@ -77,6 +77,45 @@ const ProcessPage: React.FC = () => {
         </div>
       </section>
 
+      {/* Process Overview Section */}
+      <section className="py-24 bg-[#0a0a0a] px-4 md:px-8 border-t border-gray-800">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight">생산 공정 개요도</h2>
+            <p className="text-gray-400 font-light text-sm md:text-base">
+              최고 품질의 알루미늄 제품이 완성되기까지의 전체 공정을 한눈에 확인하세요.
+            </p>
+          </div>
+          
+          <div className="flex flex-wrap justify-center gap-4 md:gap-6">
+            {sortedSteps.map((step, index) => (
+              <div 
+                key={step.id} 
+                className="w-[calc(50%-0.5rem)] md:w-[calc(33.333%-1rem)] lg:w-[calc(25%-1.125rem)] group relative overflow-hidden rounded-xl bg-gray-900 border border-gray-800 hover:border-gray-600 transition-all shrink-0"
+              >
+                <div className="aspect-square w-full overflow-hidden">
+                  <img 
+                    src={step.imageUrl || 'https://via.placeholder.com/400x300'} 
+                    alt={step.title} 
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-500"></div>
+                </div>
+                
+                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent p-4 md:p-5 flex flex-col justify-end">
+                  <span className="bg-gradient-to-r from-sky-300 to-indigo-400 bg-clip-text text-transparent font-mono text-xs md:text-sm tracking-wider font-semibold mb-1 lg:mb-2 block">
+                    STEP {String(index + 1).padStart(2, '0')}
+                  </span>
+                  <h3 className="text-base md:text-lg font-bold text-white leading-snug break-keep drop-shadow-md">
+                    {step.title.replace(/\\n|\n/g, ' ')}
+                  </h3>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Main Scroll-telling Section */}
       {/* Set the parent container height to allow scrolling based on number of steps */}
       <div 
@@ -111,7 +150,7 @@ const ProcessPage: React.FC = () => {
 
                   {/* Content */}
                   <div className="max-w-[90%] md:max-w-[600px] z-10 z-10">
-                    <span className="inline-block text-xs md:text-xl font-semibold tracking-[0.2em] text-blue-500 mb-3 md:mb-4 border border-blue-500/50 px-3 md:px-4 py-1 rounded-full backdrop-blur-[4px]">
+                    <span className="inline-block text-xs md:text-xl font-semibold tracking-[0.2em] bg-gradient-to-r from-sky-300 to-indigo-400 bg-clip-text text-transparent mb-3 md:mb-4 border border-sky-300/50 px-3 md:px-4 py-1 rounded-full backdrop-blur-[4px]">
                       STEP {String(index + 1).padStart(2, '0')}
                     </span>
                     <h2 className="text-3xl sm:text-5xl md:text-[4.5rem] font-extrabold leading-tight mb-4 md:mb-6 tracking-tight text-shadow-lg break-keep drop-shadow-md">
@@ -142,16 +181,25 @@ const ProcessPage: React.FC = () => {
         <h2 className="text-3xl md:text-5xl font-bold mb-4 md:mb-6 break-keep">빈틈없는 품질을 향하여</h2>
         <p className="text-base md:text-xl text-gray-400 mb-8 md:mb-10 font-light break-keep flex flex-col items-center gap-2">
           <span>모든 공정은 실시간 데이터로 모니터링되며, 완벽함을 위해 끊임없이 교차 검증됩니다.</span>
-          <span>다음 단계인 품질 검사 과정을 확인하세요.</span>
+          <span>대우경금속의 체계적인 품질 검사 과정과 데이터 리포트를 확인해 보세요.</span>
         </p>
         
-        <Link 
-          to="/quality"
-          className="inline-flex items-center gap-2 px-6 py-3 md:px-8 md:py-4 bg-brand-blue hover:bg-blue-600 text-white font-semibold rounded-full transition-all transform hover:scale-105 shadow-lg shadow-blue-500/30 text-sm md:text-base group"
-        >
-          품질검사 페이지로 이동
-          <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-        </Link>
+        <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+          <Link 
+            to="/products"
+            className="inline-flex items-center gap-2 px-6 py-3 md:px-8 md:py-4 bg-gray-800 hover:bg-gray-700 border border-gray-700 text-white font-semibold rounded-full transition-all transform hover:scale-105 shadow-lg shadow-black/30 text-sm md:text-base group"
+          >
+            데이터 리포트 확인하기
+            <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </Link>
+          <Link 
+            to="/quality"
+            className="inline-flex items-center gap-2 px-6 py-3 md:px-8 md:py-4 bg-brand-blue hover:bg-blue-600 text-white font-semibold rounded-full transition-all transform hover:scale-105 shadow-lg shadow-blue-500/30 text-sm md:text-base group"
+          >
+            품질검사 페이지로 이동
+            <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
       </section>
 
       <Footer />

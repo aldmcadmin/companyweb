@@ -73,34 +73,31 @@ const Login: React.FC = () => {
              </div>
           </div>
           <h2 className="text-2xl font-bold text-white">관리자 로그인</h2>
-          <p className="text-blue-200 text-sm mt-2">Firebase 계정으로 접속합니다.</p>
         </div>
 
         {/* Form */}
         <div className="p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">이메일 계정</label>
+              <label className="block text-sm font-bold text-gray-700 mb-2">E-mail</label>
               <div className="relative">
                 <input 
                   type="email" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full p-4 pl-12 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition-all"
-                  placeholder="admin@aldmc.co.kr"
                   required
                 />
                 <Mail className="w-5 h-5 text-gray-400 absolute top-1/2 left-4 -translate-y-1/2" />
               </div>
             </div>
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">비밀번호</label>
+              <label className="block text-sm font-bold text-gray-700 mb-2">Password</label>
               <input 
                 type="password" 
                 value={pw}
                 onChange={(e) => setPw(e.target.value)}
                 className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-brand-blue/20 focus:border-brand-blue transition-all"
-                placeholder="••••••••"
                 required
               />
             </div>
@@ -128,11 +125,9 @@ const Login: React.FC = () => {
           </form>
           
           <div className="mt-8 text-center space-y-4">
-             <Logo className="h-6 mx-auto opacity-50" />
-             
              {/* 버전 확인용 라벨: 강제 변경을 위해 v2.4로 업데이트 */}
              <div className="inline-flex items-center gap-1 text-[10px] text-gray-400 bg-gray-100 px-2 py-1 rounded-full">
-                <ShieldCheck className="w-3 h-3" /> System v2.4 (Force Deploy)
+                <ShieldCheck className="w-3 h-3" /> System v2.5
              </div>
           </div>
         </div>
