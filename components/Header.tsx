@@ -119,18 +119,20 @@ const Header: React.FC = () => {
   return (
     <>
       <header 
-        className={`fixed top-0 left-0 right-0 z-50 transform-gpu will-change-[padding] transition-[padding] duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 right-0 z-50 transform-gpu transition-[padding] duration-300 ease-in-out ${
           !isTransparent ? 'py-3' : 'py-5'
         }`}
       >
-        {/* Separated background & blur layer to prevent scroll flicker */}
-        <div 
-          className={`absolute inset-0 transition-[background-color,backdrop-filter,opacity,box-shadow] duration-300 ease-in-out -z-10 ${
-            !isTransparent 
-              ? 'bg-white/80 backdrop-blur-xl shadow-[0_1px_0_rgba(0,0,0,0.05)] opacity-100' 
-              : 'bg-transparent opacity-0'
-          }`} 
-        />
+        {/* Separated background & blur layer to prevent scroll flicker & compositing artifacts */}
+        <div className="absolute inset-0 -z-10 isolate overflow-hidden pointer-events-none">
+          <div 
+            className={`absolute inset-0 backdrop-blur-xl transform-gpu backface-hidden will-change-[opacity,background-color] transition-all duration-300 ease-in-out ${
+              !isTransparent 
+                ? 'bg-white/80 shadow-[0_1px_0_rgba(0,0,0,0.05)] opacity-100' 
+                : 'bg-transparent shadow-none opacity-0'
+            }`} 
+          />
+        </div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center relative">
@@ -173,13 +175,13 @@ const Header: React.FC = () => {
                   
                   {/* Mega Dropdown Menu (Enhanced Glassmorphism) */}
                   {item.subItems && (
-                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 pt-4 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-opacity transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] will-change-transform z-50">
+                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 pt-4 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-opacity transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] will-change-[transform,opacity] z-50">
                       <div className={`
-                        backdrop-blur-xl rounded-2xl border overflow-hidden p-1.5
-                        transition-colors duration-300 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)]
+                        isolate rounded-2xl border overflow-hidden p-1.5
+                        transition-[background-color,border-color,opacity,transform] duration-300 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)]
                         ${isTransparent 
                           ? 'bg-black/30 border-white/10 shadow-black/20' // Dark Glass (High Transparency)
-                          : 'bg-white/60 border-white/40 shadow-gray-200/50' // Light Glass (Frosted)
+                          : 'bg-white/70 border-white/20 shadow-gray-200/50' // Light Glass (Frosted)
                         }
                         ${item.subItems.length > 5 ? 'w-[540px]' : 'w-max'}
                       `}>
@@ -199,7 +201,7 @@ const Header: React.FC = () => {
                                   : 'py-2 px-5 min-w-[100px] text-center'}
                                 ${isTransparent
                                   ? (activeRoute === sub.path ? 'bg-white/30 text-white shadow-[0_0_15px_rgba(255,255,255,0.2)]' : 'text-white/90 hover:bg-white/20 hover:text-white hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]')
-                                  : (activeRoute === sub.path ? 'bg-gray-800/90 backdrop-blur-md text-white shadow-md border border-gray-700/50' : 'text-gray-700 hover:bg-black/5 hover:text-gray-900 hover:shadow-sm')
+                                  : (activeRoute === sub.path ? 'bg-gray-800/95 text-white shadow-md border border-gray-700/50' : 'text-gray-700 hover:bg-black/5 hover:text-gray-900 hover:shadow-sm')
                                 }
                               `}
                             >
@@ -233,7 +235,7 @@ const Header: React.FC = () => {
                     <span>{language}</span>
                  </button>
                  <div className="absolute top-full right-0 pt-2 w-24 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity z-50">
-                    <div className="bg-white/90 backdrop-blur-md rounded-lg shadow-xl border border-gray-100 overflow-hidden py-1">
+                    <div className="bg-white/95 isolate rounded-lg shadow-xl border border-gray-100 overflow-hidden py-1">
                        {['KOR', 'ENG', 'JPN'].map((lang) => (
                           <button 
                             key={lang}
@@ -253,7 +255,7 @@ const Header: React.FC = () => {
                   group relative overflow-hidden flex items-center gap-2 text-sm font-bold px-6 py-2.5 rounded-full transition-all duration-300 ease-spring
                   ${!isTransparent 
                     ? 'text-gray-900 bg-transparent hover:bg-gray-100' 
-                    : 'text-white bg-transparent hover:bg-white/20 hover:backdrop-blur-md'}
+                    : 'text-white bg-transparent hover:bg-white/20'}
                 `}>
                   <span className="relative z-10 flex items-center gap-1">
                     {t.nav.contact}

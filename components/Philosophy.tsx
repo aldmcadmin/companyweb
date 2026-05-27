@@ -202,8 +202,12 @@ const Philosophy: React.FC = () => {
                     </div>
                     
                     <p className="text-base sm:text-lg md:text-xl text-gray-500 leading-relaxed font-medium max-w-lg break-keep">
-                       연간 1.5만 톤 이상의 생산 능력을 통해<br/>
-                       고객의 비즈니스 성장을 든든하게 지원합니다.
+                       {t.philosophy.stat_desc?.split('\n').map((line, i) => (
+                          <React.Fragment key={i}>
+                             {line}
+                             <br/>
+                          </React.Fragment>
+                       )) || '연간 1.5만 톤 이상의 생산 능력을 통해 고객의 비즈니스 성장을 든든하게 지원합니다.'}
                     </p>
                  </div>
 

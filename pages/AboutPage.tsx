@@ -105,7 +105,7 @@ const AboutPage = () => {
                 <span className="text-brand-blue">{isDefaultLang ? content['intro_main_title_2'] : (language === 'ENG' ? 'In Aluminum Extrusion' : 'In Aluminum Extrusion')}</span>
               </h3>
               <p className="text-gray-600 leading-relaxed text-lg break-keep whitespace-pre-wrap">
-                {isDefaultLang ? content['intro_desc'] : t.pages.intro.subtitle}
+                {isDefaultLang ? content['intro_desc'] : (t.pages.intro as any).desc}
               </p>
             </div>
           </ScrollReveal>
@@ -169,33 +169,33 @@ const AboutPage = () => {
                   </div>
 
                   <div className="flex flex-col md:flex-row md:items-start border-b gap-4 border-gray-200 pb-6">
-                      <div className="w-40 font-bold text-gray-500 shrink-0 mb-4 md:mb-0 pt-1">{language === 'KOR' ? '사업장 안내' : (language === 'ENG' ? 'Locations' : '事業所案内')}</div>
+                      <div className="w-40 font-bold text-gray-500 shrink-0 mb-4 md:mb-0 pt-1">{t.footer.locations}</div>
                       <div className="flex-1 space-y-4">
                         <div className="bg-gray-50 p-5 rounded-2xl border border-gray-100 hover:shadow-md transition-shadow flex justify-between items-center group">
                             <div>
                               <span className="font-bold block text-brand-blue mb-2">{t.footer.daegu}</span>
                               <p className="text-gray-700 text-sm mb-2">{t.footer.address_daegu}</p>
                               <p className="text-xs text-gray-500 mb-1">T. 053-611-6061 | F. 053-611-6066</p>
-                              <p className="text-xs text-gray-500 font-medium">사업자등록번호: 514-81-85389</p>
+                              <p className="text-xs text-gray-500 font-medium">{t.footer.biz_reg_no}514-81-85389</p>
                             </div>
                             <a 
                                href={content['daegu_biz_reg_pdf'] || '#'} 
                                onClick={(e) => {
                                   if (!content['daegu_biz_reg_pdf']) {
                                       e.preventDefault();
-                                      alert('등록된 사업자등록증 파일이 없습니다. 관리자 페이지에서 먼저 업로드해주세요.');
+                                      alert(t.footer.biz_reg_alert);
                                   }
                                }}
                                target={content['daegu_biz_reg_pdf'] ? "_blank" : undefined} 
                                rel={content['daegu_biz_reg_pdf'] ? "noreferrer" : undefined} 
                                download={!!content['daegu_biz_reg_pdf']} 
                                className="flex flex-col items-center gap-1.5 p-3 rounded-xl hover:bg-gray-200/50 transition-colors cursor-pointer text-gray-500 hover:text-brand-blue shrink-0" 
-                               title="사업자등록증 다운로드"
+                               title={t.footer.biz_reg_cert}
                             >
                                <div className="p-2 bg-white shadow-sm border border-gray-200 rounded-full group-hover:scale-110 transition-transform">
                                  <Download className="w-5 h-5" />
                                </div>
-                               <span className="text-[10px] font-bold whitespace-nowrap">사업자등록증</span>
+                               <span className="text-[10px] font-bold whitespace-nowrap">{t.footer.biz_reg_cert}</span>
                             </a>
                         </div>
                         <div className="bg-gray-50 p-5 rounded-2xl border border-gray-100 hover:shadow-md transition-shadow flex justify-between items-center group">
@@ -203,26 +203,26 @@ const AboutPage = () => {
                               <span className="font-bold block text-brand-blue mb-2">{t.footer.changnyeong}</span>
                               <p className="text-gray-700 text-sm mb-2">{t.footer.address_changnyeong}</p>
                               <p className="text-xs text-gray-500 mb-1">T. 055-533-0013 | F. 055-533-0225</p>
-                              <p className="text-xs text-gray-500 font-medium">사업자등록번호: 806-85-00405</p>
+                              <p className="text-xs text-gray-500 font-medium">{t.footer.biz_reg_no}806-85-00405</p>
                             </div>
                             <a 
                                href={content['changnyeong_biz_reg_pdf'] || '#'} 
                                onClick={(e) => {
                                   if (!content['changnyeong_biz_reg_pdf']) {
                                       e.preventDefault();
-                                      alert('등록된 사업자등록증 파일이 없습니다. 관리자 페이지에서 먼저 업로드해주세요.');
+                                      alert(t.footer.biz_reg_alert);
                                   }
                                }}
                                target={content['changnyeong_biz_reg_pdf'] ? "_blank" : undefined} 
                                rel={content['changnyeong_biz_reg_pdf'] ? "noreferrer" : undefined} 
                                download={!!content['changnyeong_biz_reg_pdf']} 
                                className="flex flex-col items-center gap-1.5 p-3 rounded-xl hover:bg-gray-200/50 transition-colors cursor-pointer text-gray-500 hover:text-brand-blue shrink-0" 
-                               title="사업자등록증 다운로드"
+                               title={t.footer.biz_reg_cert}
                             >
                                <div className="p-2 bg-white shadow-sm border border-gray-200 rounded-full group-hover:scale-110 transition-transform">
                                  <Download className="w-5 h-5" />
                                </div>
-                               <span className="text-[10px] font-bold whitespace-nowrap">사업자등록증</span>
+                               <span className="text-[10px] font-bold whitespace-nowrap">{t.footer.biz_reg_cert}</span>
                             </a>
                         </div>
                       </div>
@@ -380,7 +380,11 @@ const AboutPage = () => {
 
         <ScrollReveal>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
-                {certifications.map((cer, idx) => (
+                {certifications.map((cer, idx) => {
+                    const certItems = (t.pages.cert as any).items;
+                    const translatedTitle = certItems?.[cer.id] || cer.title;
+                    
+                    return (
                     <div key={cer.id} className="group flex flex-col items-center">
                         <div 
                            className="w-full relative bg-white border border-gray-100 p-2 md:p-4 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.03)] group-hover:shadow-xl group-hover:-translate-y-2 transition-all duration-300 ease-spring cursor-pointer"
@@ -392,7 +396,7 @@ const AboutPage = () => {
                                  e.stopPropagation();
                                  const link = document.createElement('a');
                                  link.href = cer.imageUrl;
-                                 link.download = `${cer.title}.png`;
+                                 link.download = `${translatedTitle}.png`;
                                  document.body.appendChild(link);
                                  link.click();
                                  document.body.removeChild(link);
@@ -409,7 +413,7 @@ const AboutPage = () => {
                                 </div>
                                 <img 
                                   src={cer.imageUrl} 
-                                  alt={cer.title} 
+                                  alt={translatedTitle} 
                                   className="relative z-10 w-full h-full object-contain transform transition-transform duration-500 group-hover:scale-105"
                                   onError={(e) => {
                                      e.currentTarget.style.opacity = '0.3';
@@ -418,10 +422,10 @@ const AboutPage = () => {
                             </div>
                         </div>
                         <p className="mt-4 text-center font-bold text-gray-800 text-sm md:text-base group-hover:text-brand-blue transition-colors">
-                            {cer.title}
+                            {translatedTitle}
                         </p>
                     </div>
-                ))}
+                )})}
             </div>
         </ScrollReveal>
       </section>
@@ -511,7 +515,9 @@ const AboutPage = () => {
           >
             {/* Header */}
             <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-100">
-              <h3 className="text-xl md:text-2xl font-bold text-gray-900">{selectedCert.title}</h3>
+              <h3 className="text-xl md:text-2xl font-bold text-gray-900">
+                {(t.pages.cert as any).items?.[selectedCert.id] || selectedCert.title}
+              </h3>
               <div className="flex items-center gap-3">
                 <button
                   onClick={(e) => {

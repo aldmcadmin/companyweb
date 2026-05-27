@@ -28,9 +28,9 @@ export const TRANSLATIONS = {
       quality: '품질검사'
     },
     hero: {
-      badge: 'Total Aluminum Solutions',
+      badge: 'Aluminum Extrusion Total Solution',
       title_prefix: 'The Future of',
-      title_highlight: 'Aluminum Technology',
+      title_highlight: 'Aluminum Extrusion',
       desc: '차별화된 기술력과 서비스로 알루미늄 압출 산업을 선도합니다.\n고객 맞춤형 설계부터 완벽한 납기까지, 우리는 기준을 만듭니다.',
       btn_main: '제품 살펴보기',
       btn_sub: '제품 소개'
@@ -49,6 +49,10 @@ export const TRANSLATIONS = {
       address_changnyeong: '경남 창녕군 대합면 대합산업단지로 22-44',
       email_refusal: '이메일무단수집거부',
       privacy_policy: '개인정보취급방침',
+      biz_reg_no: '사업자등록번호: ',
+      biz_reg_cert: '사업자등록증',
+      biz_reg_alert: '등록된 사업자등록증 파일이 없습니다. 관리자 페이지에서 먼저 업로드해주세요.',
+      locations: '사업장 안내'
     },
     philosophy: {
       label: '경영이념',
@@ -62,6 +66,7 @@ export const TRANSLATIONS = {
       val3_title: '적기 적소 납기',
       val3_desc: '효율적인 생산 공정과 물류 시스템으로\n약속된 납기를 준수합니다.',
       stat_label: '연간 생산 능력 (Ton)',
+      stat_desc: '연간 1.5만 톤 이상의 생산 능력을 통해\n고객의 비즈니스 성장을 든든하게 지원합니다.',
       nonstop_title: '미래에 대한 도전과 도약',
       nonstop_desc: '“무한점프”는 미래를 향한 끊임없는 도전과 도약을 의미하며,\n대우경금속이 추구하는 핵심 가치입니다.',
       core_values_title: 'Core Values',
@@ -176,7 +181,46 @@ export const TRANSLATIONS = {
       ]
     },
     process: {
-      steps: ['용해/주조', '압출', '열처리', '교정', '절단', '피막', '가공', '검사/포장']
+      steps: ['용해/주조', '압출', '열처리', '교정', '절단', '피막', '가공', '검사/포장'],
+      intro_title: '완벽을 향한\n알루미늄의 여정',
+      intro_desc: '수십 년의 노하우와 첨단 기술이 만나는 생산 공정을 한눈에 확인하세요.\n아래로 스크롤하여 여정을 시작합니다.',
+      overview_title: '생산 공정 개요도',
+      overview_desc: '최고 품질의 알루미늄 제품이 완성되기까지의 전체 공정을 한눈에 확인하세요.',
+      outro_title: '빈틈없는 품질을 향하여',
+      outro_desc: '대우경금속의 체계적인 품질 검사 과정과 데이터 리포트를 확인해 보세요.',
+      btn_report: '데이터 리포트 확인하기',
+      btn_quality: '품질검사 페이지로 이동',
+      items: {
+        ps1: { title: '금형\n설계 및 제작', desc: '금형 설계 및 제작은 제품 형상과 치수 정밀도를 결정짓는 핵심 공정입니다. 오랜 경험의 전문 인력과 3D 가상 시뮬레이션 압출 해석을 통해 공정을 최적화하며, 고내구성 이온 질화 및 Multi-layer 등 차별화된 표면처리 기술로 압도적인 품질을 구현합니다.' },
+        ps2: { title: '정밀\n압출', desc: '예열된 빌렛을 수천 톤의 압력으로 금형을 통과시켜 원하는 형상으로 제조합니다. 0.02mm 수준의 초정밀 가공과 고난이도 외관재의 완벽한 압출을 위해 원자재 합금 배합비와 공정 조건을 체계적으로 데이터화하여 품질과 생산성을 극대화합니다.' },
+        ps3: { title: '정밀\n인발', desc: '인발 금형 공을 통하여 출구 쪽으로 당김으로써 정밀한 단면 수축을 얻는 공정입니다. 고도화된 정밀 인발 가공 기술을 적용하여 봉재, 파이프 등 다양한 제품의 완성도와 품질을 한 차원 더 높이고 있습니다.' },
+        ps4: { title: '열처리\n(에이징)', desc: '제품의 잔류 응력을 제거하고 목적하는 기계적 물성을 완벽하게 확보하기 위해 압출 후 인공 시효 경화를 실시합니다. 최적화된 기계적 물성 향상을 목표로 설비를 지속적으로 개선하고 작업 조건을 데이터화하여 엄격하게 관리합니다.' },
+        ps5: { title: '표면처리\n(피막)', desc: '알루미늄 부식을 방지하기 위해 산화 피막과 무기염을 이용해 착색하는 아노다이징 공정입니다. 정밀한 약품 배합과 전기 제어로 피막 두께와 경도를 조절하며, 전문 기업과의 전략적 협업으로 신속하고 고품질의 피막 처리를 보장합니다.' },
+        ps6: { title: '기계\n가공', desc: '고객의 주문 사양에 맞추어 알루미늄 압출 형재를 절단, 절삭, 프레스 등 다양한 기계 가공을 거쳐 완성 부품으로 제조합니다. One-stop 제조 시스템을 통해 원가 절감은 물론 신속한 납기와 완벽한 품질 대응이 가능합니다.' },
+        ps7: { title: '포장 및\n출하', desc: '최종 품질 검사를 통과한 제품만을 선별하여 스크래치 방지를 위한 특수 포장재로 꼼꼼하게 포장합니다. 안전하고 신속한 물류 프로세스를 통해 최상의 품질 상태 그대로 고객에게 직배송 납품을 진행합니다.' }
+      }
+    },
+    quality: {
+      title: '품질검사',
+      subtitle: 'QUALITY ASSURANCE & INSPECTION',
+      intro_title: '타협 없는 품질의 기준',
+      intro_desc: '대우경금속은 고객에게 무결점 제품을 제공하기 위해 최첨단 측정 설비와 철저한 다중 검사 시스템을 구축하고 있습니다. 원소재 입고부터 최종 출하까지 모든 공정을 철저히 감독합니다.',
+      equip_title: '측정설비 보유현황',
+      th_name: '설비명',
+      th_maker: '제조사 / 모델명',
+      th_purpose: '측정 목적 및 주요 기능',
+      calibrated: '정밀 검교정 완료',
+      cert_title: '국제적으로 입증된 품질 관리',
+      cert_desc: 'IATF 16949, ISO 9001 등 대우경금속의 품질 경영 인프라를 증명하는 인증 내역을 확인하세요.',
+      btn_cert: '인증현황 바로가기',
+      items: {
+        qe1: { name: '비디오메타(VMS)', description: '고해상도 카메라를 이용한 비접촉식 정밀 치수 측정 장비입니다.', spec: 'VMS' },
+        qe2: { name: '석정반', description: '제품 측정기나 부품 등을 놓기 위한 정밀하게 가공된 평면 작업대입니다.', spec: '석정반' },
+        qe3: { name: '만능재료 시험기', description: '완제품 및 시편의 인장, 압축, 굽힘 강도를 테스트합니다.', spec: 'UTM' },
+        qe4: { name: '로크웰 경도 시험기', description: '소재 및 제품 표면의 체계적인 경도 측정을 수행합니다.', spec: 'Rockwell' },
+        qe5: { name: '실린더 게이지', description: '원통의 내경을 정밀하게 측정하는 장비입니다.', spec: '실린더 게이지' },
+        qe6: { name: '성분분석기(FPI5000)', description: '제품의 합금 성분을 정밀하게 분석하여 소재의 적합성을 검증합니다.', spec: 'FPI5000' }
+      }
     },
     rnd: {
       title: 'Innovation for Future',
@@ -291,10 +335,27 @@ export const TRANSLATIONS = {
       }
     },
     pages: {
-      intro: { title: '회사개요', subtitle: '대우경금속은 끊임없는 혁신으로 알루미늄 산업의 미래를 창조합니다.' },
+      intro: { 
+        title: '회사개요', 
+        subtitle: '대우경금속은 끊임없는 혁신으로 알루미늄 산업의 미래를 창조합니다.',
+        desc: '대우경금속은 고객 맞춤형 금형설계, 정밀압출, 도장/아노다이징(피막), 정밀절단, 기계가공 및 적기적소의 납기까지 알루미늄 압출을 중심으로 올인원 솔루션을 제공합니다.\n최첨단 설비와 축적된 기술력을 바탕으로 다양한 산업 분야의 핵심 소재를 공급하고 있습니다.'
+      },
       history: { title: '회사연혁', subtitle: '대우경금속이 걸어온 도전과 성장의 역사입니다.' },
       philosophy: { title: '경영이념', subtitle: '대우경금속이 추구하는 핵심 가치와 비전입니다.' },
-      cert: { title: '인증현황', subtitle: '대우경금속의 품질과 기술력을 입증하는 각종 인증 현황입니다.' },
+      cert: { 
+        title: '인증현황', 
+        subtitle: '대우경금속의 품질과 기술력을 입증하는 각종 인증 현황입니다.',
+        items: {
+          c1: 'ISO 14001',
+          c2: 'ISO 9001',
+          c3: '벤처기업확인서',
+          c4: 'KS 제품인증서',
+          c5: '기업부설연구소 인정서',
+          c6: '기술혁신형 중소기업',
+          c7: 'IATF 16949',
+          c8: '상표등록증'
+        }
+      },
       location: { title: '오시는 길', subtitle: '대우경금속의 사업장 위치를 안내해 드립니다.' },
       process: { title: '공정소개', subtitle: '원자재 입고부터 출하까지 완벽을 추구하는 공정 시스템을 기반으로,\n대우경금속은 고객 맞춤형 설계, 생산, 피막, 기계가공, 적기 납기까지 전 과정을 아우르는 올인원 솔루션을 제공합니다.' },
       rnd: { title: '연구소', subtitle: '미래 소재 기술을 선도하는 R&D 센터' },
@@ -326,10 +387,10 @@ export const TRANSLATIONS = {
       quality: 'Quality'
     },
     hero: {
-      badge: 'Total Aluminum Solutions',
+      badge: 'Aluminum Extrusion Total Solution',
       title_prefix: 'The Future of',
-      title_highlight: 'Aluminum Technology',
-      desc: 'Leading the aluminum industry with differentiated technology and service. From custom design to perfect delivery, we set the standard.',
+      title_highlight: 'Aluminum Extrusion',
+      desc: 'Leading the aluminum extrusion industry with differentiated technology and service. From custom design to perfect delivery, we set the standard.',
       btn_main: 'View Products',
       btn_sub: 'View Products'
     },
@@ -340,35 +401,40 @@ export const TRANSLATIONS = {
     },
     footer: {
       lang_select: 'Language',
-      daegu: 'Daegu HQ',
+      daegu: 'Daegu Factory',
       changnyeong: 'Changnyeong Factory',
       rights: '© 2024 DAEWOO METAL Co., Ltd. All Rights Reserved.',
       address_daegu: '46, Dalseong2chadong 3-ro, Guji-myeon, Dalseong-gun, Daegu',
       address_changnyeong: '22-44, Daehapsan-eopdanji-ro, Daehap-myeon, Changnyeong-gun, Gyeongnam',
       email_refusal: 'No Unauthorized Email Collection',
       privacy_policy: 'Privacy Policy',
+      biz_reg_no: 'Business Registration No.: ',
+      biz_reg_cert: 'Biz Reg Cert',
+      biz_reg_alert: 'No business registration certificate file has been registered. Please upload it in the admin page first.',
+      locations: 'Locations'
     },
     philosophy: {
       label: 'Management Philosophy',
       title: 'A Trusted Partner \nGrowing with Customers',
-      desc: 'Daewoo Light Metal is not just a manufacturer. \nWe are a Total Service Provider for your business success.',
-      card_title: 'Over 30 Years of Know-how\nGuarantees Best Quality',
-      val1_title: 'Customized Design',
-      val1_desc: 'Beyond simple manufacturing, we analyze customer needs to propose optimal designs.',
+      desc: 'Daewoo Light Metal is not just an aluminum extrusion manufacturer. \nWe are a Total Solution Provider for your business success.',
+      card_title: 'Over 10 Years of Know-how\nGuarantees Best Quality',
+      val1_title: 'Customized Extrusion Design',
+      val1_desc: 'Beyond simple extrusion, we analyze customer needs to propose optimal extrusion mold designs.',
       val2_title: 'Perfect Quality Control',
       val2_desc: 'We operate a strict quality control system across all processes including anodizing and machining.',
       val3_title: 'On-time Delivery',
       val3_desc: 'We strictly observe delivery deadlines with efficient production and logistics systems.',
       stat_label: 'Annual Capacity (Ton)',
-      nonstop_title: 'Challenge & Leap for the Future',
-      nonstop_desc: 'Meaning "Nonstop Jump", it represents our core value of constant challenge and leap towards the future.',
+      stat_desc: 'We strongly support our customers\' business growth\nwith an annual production capacity of over 15,000 tons.',
+      nonstop_title: 'Challenge & Leap to the Future',
+      nonstop_desc: 'Meaning "Infinite Jump", it represents Daewoo Light Metal\'s core value of constant challenge and leap towards the future.',
       core_values_title: 'Core Values',
       cv_1_title: 'Customer Satisfaction',
       cv_1_sub: 'Customer Satisfaction',
-      cv_1_desc: 'We provide emotion beyond satisfaction. \nCustomer success is our success.',
+      cv_1_desc: 'We provide emotion beyond simple satisfaction. \nCustomer success is our success.',
       cv_2_title: 'Innovation',
       cv_2_sub: 'Innovation',
-      cv_2_desc: 'We practice innovative management creating new value \nwith a challenging spirit that never settles.',
+      cv_2_desc: 'We practice innovative management creating new value \nwith a challenging spirit that never settles for the status quo.',
       cv_3_title: 'Talent First',
       cv_3_sub: 'Talent First',
       cv_3_desc: 'People are the future. Through talent development, \nthe company and individuals grow together.'
@@ -474,7 +540,46 @@ export const TRANSLATIONS = {
       ]
     },
     process: {
-      steps: ['Melting/Casting', 'Extrusion', 'Heat Treatment', 'Straightening', 'Cutting', 'Anodizing', 'Machining', 'Inspection/Packing']
+      steps: ['Melting/Casting', 'Extrusion', 'Heat Treatment', 'Straightening', 'Cutting', 'Anodizing', 'Machining', 'Inspection/Packing'],
+      intro_title: 'The Journey of Aluminum\nTowards Perfection',
+      intro_desc: 'Discover the production process where decades of know-how meet cutting-edge technology at a glance.\nScroll down to begin the journey.',
+      overview_title: 'Production Process Overview',
+      overview_desc: 'Discover the entire process of how our high-quality aluminum products are made at a glance.',
+      outro_title: 'Towards Flawless Quality',
+      outro_desc: 'Check out Daewoo Light Metal\'s systematic quality inspection process and data reports.',
+      btn_report: 'View Data Report',
+      btn_quality: 'Go to Quality Inspection',
+      items: {
+        ps1: { title: 'Mold\nDesign & Mfg', desc: 'Mold design and manufacturing is the core process that determines product shape and dimensional accuracy. We optimize the process through 3D virtual simulation extrusion analysis and implement overwhelming quality with differentiated surface treatment technologies.' },
+        ps2: { title: 'Precision\nExtrusion', desc: 'Preheated billets are passed through the mold with thousands of tons of pressure. For ultra-precision machining at the 0.02mm level, we systematically analyze alloy mixing ratios and process conditions to maximize quality and productivity.' },
+        ps3: { title: 'Precision\nDrawing', desc: 'A process of obtaining precise cross-sectional shrinkage by pulling through a drawing die. By applying advanced precision drawing technology, we are raising the completeness and quality of various products to the next level.' },
+        ps4: { title: 'Heat Treatment\n(Aging)', desc: 'Artificial aging hardening is performed after extrusion to remove residual stress and secure the desired mechanical properties. We strictly manage by continuously improving equipment and optimizing working conditions.' },
+        ps5: { title: 'Surface\nTreatment', desc: 'An anodizing process that colors using oxide film and inorganic salts to prevent aluminum corrosion. We guarantee rapid, high-quality surface treatment through precision chemical mixing and electrical control.' },
+        ps6: { title: 'Machining', desc: 'We manufacture completed parts through various machining processes such as cutting, milling, and pressing according to customer specifications. Our one-stop manufacturing system enables cost reduction and swift delivery.' },
+        ps7: { title: 'Packaging\n& Shipment', desc: 'Only products that have passed the final quality inspection are carefully packed with special packaging materials to prevent scratches. We ensure direct delivery in pristine condition through a safe logistics process.' }
+      }
+    },
+    quality: {
+      title: 'Quality Inspection',
+      subtitle: 'QUALITY ASSURANCE & INSPECTION',
+      intro_title: 'Standard of Uncompromising Quality',
+      intro_desc: 'Daewoo Light Metal has established state-of-the-art measurement equipment and a thorough multi-inspection system to provide flawless products to our customers. We strictly supervise all processes from raw material warehousing to final shipment.',
+      equip_title: 'Measurement Equipment Status',
+      th_name: 'Equipment Name',
+      th_maker: 'Manufacturer / Model',
+      th_purpose: 'Purpose & Key Functions',
+      calibrated: 'Precision Calibration Completed',
+      cert_title: 'Internationally Proven Quality Management',
+      cert_desc: 'Check the certification details that prove Daewoo Light Metal\'s quality management infrastructure, such as IATF 16949 and ISO 9001.',
+      btn_cert: 'Go to Certifications',
+      items: {
+        qe1: { name: 'Video Measuring System (VMS)', description: 'Non-contact precision dimension measuring equipment using a high-resolution camera.', spec: 'VMS' },
+        qe2: { name: 'Surface Plate', description: 'A precisely machined flat workbench for placing products or measuring instruments.', spec: 'Surface Plate' },
+        qe3: { name: 'Universal Testing Machine', description: 'Tests the tensile, compression, and bending strength of finished products and specimens.', spec: 'UTM' },
+        qe4: { name: 'Rockwell Hardness Tester', description: 'Performs systematic hardness measurement on the surface of materials and products.', spec: 'Rockwell' },
+        qe5: { name: 'Cylinder Gauge', description: 'Equipment that precisely measures the inner diameter of cylinders.', spec: 'Cylinder Gauge' },
+        qe6: { name: 'Spectrometer (FPI5000)', description: 'Verifies material suitability by precisely analyzing the alloy composition of products.', spec: 'FPI5000' }
+      }
     },
     rnd: {
       title: 'Innovation for Future',
@@ -589,12 +694,29 @@ export const TRANSLATIONS = {
       }
     },
     pages: {
-      intro: { title: 'Company Overview', subtitle: 'Daewoo Light Metal creates the future of the aluminum industry with constant innovation.' },
+      intro: { 
+        title: 'Company Overview', 
+        subtitle: 'Daewoo Light Metal creates the future of the aluminum industry with constant innovation.',
+        desc: 'Daewoo Light Metal provides an all-in-one solution centered on aluminum extrusion, from customized mold design, precision extrusion, painting/anodizing, precision cutting, and machining, to timely delivery.\nBased on cutting-edge facilities and accumulated technology, we supply core materials for various industries.'
+      },
       history: { title: 'History', subtitle: 'The history of challenge and growth of Daewoo Light Metal.' },
       philosophy: { title: 'Philosophy', subtitle: 'Core values and vision pursued by Daewoo Light Metal.' },
-      cert: { title: 'Certifications', subtitle: 'Various certifications proving our quality and technology.' },
+      cert: { 
+        title: 'Certifications', 
+        subtitle: 'Various certifications proving our quality and technology.',
+        items: {
+          c1: 'ISO 14001',
+          c2: 'ISO 9001',
+          c3: 'Venture Company Certificate',
+          c4: 'KS Product Certificate',
+          c5: 'Corporate R&D Center Certificate',
+          c6: 'INNO-BIZ Certificate',
+          c7: 'IATF 16949',
+          c8: 'Trademark Registration Certificate'
+        }
+      },
       location: { title: 'Location', subtitle: 'Guide to our business locations.' },
-      process: { title: 'Process', subtitle: 'Perfect process system from raw material to shipment' },
+      process: { title: 'Process', subtitle: 'Based on a process system that pursues perfection from raw material warehousing to shipment,\nDaewoo Light Metal provides an all-in-one solution that encompasses the entire process from customized design, production, anodizing, machining, and timely delivery.' },
       rnd: { title: 'R&D', subtitle: 'R&D Center leading future material technology' },
       support: { title: 'Support', subtitle: 'Please leave any questions or quote inquiries.' }
     }
@@ -624,10 +746,10 @@ export const TRANSLATIONS = {
       quality: '品質検査'
     },
     hero: {
-      badge: 'Total Aluminum Solutions',
+      badge: 'Aluminum Extrusion Total Solution',
       title_prefix: 'The Future of',
-      title_highlight: 'Aluminum Technology',
-      desc: '差別化された技術力とサービスでアルミニウム産業をリードします。顧客に合わせた設計から完璧な納期まで、私たちが基準を作ります。',
+      title_highlight: 'Aluminum Extrusion',
+      desc: '差別化された技術力とサービスでアルミニウム押出産業をリードします。顧客に合わせた設計から完璧な納期まで、私たちが基準を作ります。',
       btn_main: '製品を見る',
       btn_sub: '製品紹介'
     },
@@ -638,35 +760,40 @@ export const TRANSLATIONS = {
     },
     footer: {
       lang_select: '言語設定',
-      daegu: '大邱本社/第1工場',
-      changnyeong: '昌寧第2工場',
+      daegu: '大邱工場',
+      changnyeong: '昌寧工場',
       rights: '© 2024 DAEWOO METAL Co., Ltd. All Rights Reserved.',
       address_daegu: '大邱広域市 達城郡 求智面 達城2次東3路 46',
       address_changnyeong: '慶南 昌寧郡 大合面 大合産業団地路 22-44',
       email_refusal: 'メールアドレス無断収集拒否',
       privacy_policy: '個人情報処理方針',
+      biz_reg_no: '事業者登録番号: ',
+      biz_reg_cert: '事業者登録証',
+      biz_reg_alert: '登録された事業者登録証ファイルがありません。管理者ページで先にアップロードしてください。',
+      locations: '事業所案内'
     },
     philosophy: {
-      label: 'Management Philosophy',
+      label: '経営理念',
       title: '顧客と共に成長する\n信頼されるパートナー',
-      desc: '大宇軽金属は単なるアルミニウムメーカーではありません。\n顧客のビジネス成功のためのTotal Service Providerです。',
-      card_title: '30年以上のノウハウで\n最高の品質を保証します。',
+      desc: '大宇軽金属は単なるアルミニウム押出メーカーではありません。\n顧客のビジネス成功のためのアルミニウム押出トータルソリューション企業です。',
+      card_title: '10年以上のノウハウで\n最高の品質を保証します。',
       val1_title: '顧客カスタマイズ設計',
-      val1_desc: '単なる製造を超え、顧客の要求事項を正確に把握し、最適な設計を提案します。',
+      val1_desc: '単なる押出を超え、顧客の要求事項を正確に把握し、\n最適な押出金型設計を提案します。',
       val2_title: '完璧な品質管理',
-      val2_desc: '皮膜、機械加工など全工程にわたる厳格な品質管理システムを運営しています。',
-      val3_title: '適期適所の納期',
-      val3_desc: '効率的な生産工程と物流システムで約束された納期を遵守します。',
+      val2_desc: 'アルマイト処理、機械加工など全工程にわたる\n厳格な品質管理システムを運営しています。',
+      val3_title: '確実な納期遵守',
+      val3_desc: '効率的な生産工程と物流システムで\nお約束した納期を遵守します。',
       stat_label: '年間生産能力 (Ton)',
+      stat_desc: '年間1.5万トン以上の生産能力を通じ、\nお客様のビジネス成長を力強くサポートします。',
       nonstop_title: '未来への挑戦と飛躍',
-      nonstop_desc: '「無限ジャンプ」という意味で、未来への挑戦と飛躍、当社が追求する核心価値です。',
+      nonstop_desc: '「無限ジャンプ」は未来への絶え間ない挑戦と飛躍を意味し、\n大宇軽金属が追求する核心価値です。',
       core_values_title: 'Core Values',
       cv_1_title: '顧客感動',
       cv_1_sub: 'Customer Satisfaction',
-      cv_1_desc: '単純な満足を超えて感動をお届けします。\n顧客の成功がすなわち私たちの成功です。',
+      cv_1_desc: '単なる満足を超えて感動をお届けします。\n顧客の成功がすなわち私たちの成功です。',
       cv_2_title: '革新',
       cv_2_sub: 'Innovation',
-      cv_2_desc: '現実に安住しない挑戦精神で\n新しい価値を創出する革新経営を実践します。',
+      cv_2_desc: '現状に安住しない挑戦精神で\n新しい価値を創出する革新経営を実践します。',
       cv_3_title: '人材第一主義',
       cv_3_sub: 'Talent First',
       cv_3_desc: '人が未来です。人材育成により\n企業と個人が共に成長します。'
@@ -772,11 +899,50 @@ export const TRANSLATIONS = {
       ]
     },
     process: {
-      steps: ['溶解/鋳造', '押出', '熱処理', '矯正', '切断', '皮膜', '加工', '検査/梱包']
+      steps: ['溶解/鋳造', '押出', '熱処理', '矯正', '切断', 'アルマイト処理', '加工', '検査/梱包'],
+      intro_title: '完璧に向けた\nアルミニウムの旅',
+      intro_desc: '数十年のノウハウと先端技術が融合する生産工程を一目でご確認ください。\n下にスクロールして旅を始めます。',
+      overview_title: '生産工程概要',
+      overview_desc: '最高品質のアルミニウム製品が完成するまでの全工程を一目でご確認ください。',
+      outro_title: '妥協なき品質へ',
+      outro_desc: '大宇軽金属の体系的な品質検査プロセスとデータレポートをご確認ください。',
+      btn_report: 'データレポートを見る',
+      btn_quality: '品質検査ページへ移動',
+      items: {
+        ps1: { title: '金型\n設計および製作', desc: '金型の設計および製作は、製品の形状と寸法精度を決定づける中核工程です。経験豊富な専門スタッフと3D仮想シミュレーション押出解析を活用して工程を最適化し、高い耐久性を誇るイオン窒化などの差別化された表面処理技術で圧倒的な品質を実現します。' },
+        ps2: { title: '精密\n押出', desc: '予熱されたビレットに数千トンの圧力をかけ、金型を通過させて目的の形状に製造します。0.02mmレベルの超精密加工と高難易度外装材の完璧な押出を実現するため、原材料の合金配合比と工程条件を体系的にデータ化し、品質と生産性を極大化しています。' },
+        ps3: { title: '精密\n引抜', desc: 'ダイ（金型）を通して材料を引き抜くことにより、精密な断面収縮を得る工程です。高度な精密引抜加工技術を適用し、棒材やパイプなど多様な製品の完成度と品質をさらに高めています。' },
+        ps4: { title: '熱処理\n(エージング)', desc: '製品の残留応力を除去し、目的の機械的物性を完全に確保するため、押出後に人工時効硬化を行います。最適化された機械的物性の向上を目標に、設備の継続的な改善と作業条件のデータ化を通じて厳格に管理しています。' },
+        ps5: { title: '表面処理\n(アルマイト)', desc: 'アルミニウムの腐食を防ぐため、酸化被膜と無機塩類を用いて着色する陽極酸化（アルマイト）工程です。精密な薬品配合と電気制御により被膜の厚さと硬度を調整し、迅速で高品質な表面処理を保証します。' },
+        ps6: { title: '機械\n加工', desc: '顧客の注文仕様に合わせて、アルミニウム押出形材を切断、切削、プレスなど多様な機械加工を施し、完成部品として製造します。ワンストップの製造システムにより、コスト削減はもちろん、迅速な納期と完璧な品質対応が可能です。' },
+        ps7: { title: '梱包および\n出荷', desc: '最終品質検査に合格した製品のみを選別し、傷を防ぐ特殊な梱包材で丁寧に梱包します。安全かつ迅速な物流プロセスを通じて、最高の品質状態のまま顧客への直接配送を実施しています。' }
+      }
+    },
+    quality: {
+      title: '品質検査',
+      subtitle: 'QUALITY ASSURANCE & INSPECTION',
+      intro_title: '妥協なき品質の基準',
+      intro_desc: '大宇軽金属は、お客様に無欠点の製品を提供するため、最先端の測定設備と徹底した多重検査システムを構築しています。原材料の入庫から最終出荷まで、すべての工程を徹底的に監督します。',
+      equip_title: '測定設備の保有状況',
+      th_name: '設備名',
+      th_maker: 'メーカー / モデル名',
+      th_purpose: '測定目的および主な機能',
+      calibrated: '精密校正完了',
+      cert_title: '国際的に証明された品質管理',
+      cert_desc: 'IATF 16949、ISO 9001など、大宇軽金属の品質マネジメントインフラを証明する認証履歴をご確認ください。',
+      btn_cert: '認証現況を見る',
+      items: {
+        qe1: { name: '画像測定機(VMS)', description: '高解像度カメラを利用した非接触式の精密寸法測定装置です。', spec: 'VMS' },
+        qe2: { name: '定盤', description: '製品や測定器などを置くための、精密に加工された平面作業台です。', spec: '定盤' },
+        qe3: { name: '万能材料試験機', description: '完成品および試験片の引張、圧縮、曲げ強度をテストします。', spec: 'UTM' },
+        qe4: { name: 'ロックウェル硬さ試験機', description: '素材および製品の表面の体系的な硬さ測定を行います。', spec: 'Rockwell' },
+        qe5: { name: 'シリンダーゲージ', description: '円筒の内径を精密に測定する装置です。', spec: 'シリンダーゲージ' },
+        qe6: { name: '成分分析機(FPI5000)', description: '製品の合金成分を精密に分析し、素材の適合性を検証します。', spec: 'FPI5000' }
+      }
     },
     rnd: {
       title: 'Innovation for Future',
-      desc: '大宇軽金属は、顧客適合型の設計、生産、被膜、機械加工からタイムリーな納期まで、お客様にトータルサービスを提供しています。',
+      desc: '大宇軽金属は、顧客適合型の設計、生産、アルマイト処理、機械加工からタイムリーな納期対応まで、お客様にトータルサービスを提供しています。',
       overview: {
         title: '概要',
         content: '大宇軽金属の技術研究所は2013年に設立され、優秀な研究人員と最新の設備をもとに、素材開発、新製品開発、工程改善など、急変する市場に対応するために絶えず努力しています。また、優秀な人的資源の確保を通じて自社競争力を確保しており、産・学・研の協力を通じた共同開発プロジェクトや研究開発の外部インフラ構築を通じて、より良い製品開発とサービスでお客様のニーズにお応えしています。'
@@ -858,17 +1024,17 @@ export const TRANSLATIONS = {
         subtitle: '詳細な内容を残していただければ、正確な相談が可能です。',
         labels: {
           company: '会社名',
-          name: '担当者名',
+          name: 'ご担当者名',
           phone: '連絡先',
           email: 'メールアドレス',
-          type: 'お問い合わせタイプ',
+          type: 'お問い合わせ種別',
           message: 'お問い合わせ内容',
           agreement: '[必須] 個人情報の収集および利用に同意します。'
         },
         options: {
-          inquiry: '見積もりのお問い合わせ',
+          inquiry: 'お見積り',
           tech: '技術相談',
-          recruit: '採用のお問い合わせ',
+          recruit: '採用',
           etc: 'その他'
         },
         placeholders: {
@@ -887,12 +1053,29 @@ export const TRANSLATIONS = {
       }
     },
     pages: {
-      intro: { title: '会社概要', subtitle: '大宇軽金属は絶え間ない革新でアルミニウム産業の未来を創造します。' },
+      intro: { 
+        title: '会社概要', 
+        subtitle: '大宇軽金属は絶え間ない革新でアルミニウム産業の未来を創造します。',
+        desc: '大宇軽金属は、顧客に合わせた金型設計、精密押出、塗装/アルマイト処理、精密切断、機械加工から、適時適所の納期まで、アルミニウム押出を中心としたオールインワンソリューションを提供します。\n最先端の設備と蓄積された技術力を基盤に、多様な産業分野の核心素材を供給しています。'
+      },
       history: { title: '会社沿革', subtitle: '大宇軽金属が歩んできた挑戦と成長の歴史です。' },
       philosophy: { title: '経営理念', subtitle: '大宇軽金属が追求する核心価値とビジョンです。' },
-      cert: { title: '認証現況', subtitle: '大宇軽金属の品質と技術力を証明する各種認証現況です。' },
+      cert: { 
+        title: '認証現況', 
+        subtitle: '大宇軽金属の品質と技術力を証明する各種認証現況です。',
+        items: {
+          c1: 'ISO 14001',
+          c2: 'ISO 9001',
+          c3: 'ベンチャー企業確認書',
+          c4: 'KS製品認証書',
+          c5: '企業附設研究所認定書',
+          c6: '技術革新中小企業(INNO-BIZ)',
+          c7: 'IATF 16949',
+          c8: '商標登録証'
+        }
+      },
       location: { title: 'アクセス', subtitle: '大宇軽金属の事業所の位置をご案内します。' },
-      process: { title: '生産工程', subtitle: '原材料の入庫から出荷まで、完璧を期す工程システム' },
+      process: { title: '生産工程', subtitle: '原材料の入庫から出荷まで完璧を追求する工程システムを基盤に、\n大宇軽金属は顧客に合わせた設計、生産、アルマイト処理、機械加工、納期遵守まで、全過程を網羅するオールインワンソリューションを提供します。' },
       rnd: { title: '研究所', subtitle: '未来素材技術をリードするR&Dセンター' },
       support: { title: '顧客サポート', subtitle: 'ご不明な点や見積もりのお問い合わせを残してください。' }
     }

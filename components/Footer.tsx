@@ -36,6 +36,10 @@ const Footer: React.FC = () => {
     if (key === '환경소재') return t.nav.environmental;
     if (key === '외장소재') return t.nav.exterior;
     if (key === '대체소재') return t.nav.substitute;
+    
+    // Sub items (Process)
+    if (key === '생산공정') return t.nav.production;
+    if (key === '품질검사') return t.nav.quality;
 
     return key;
   };
