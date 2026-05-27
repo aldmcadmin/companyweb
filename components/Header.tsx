@@ -119,12 +119,19 @@ const Header: React.FC = () => {
   return (
     <>
       <header 
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          !isTransparent 
-            ? 'bg-white/70 backdrop-blur-xl border-b border-white/20 py-3 shadow-sm' 
-            : 'bg-transparent py-5'
+        className={`fixed top-0 left-0 right-0 z-50 transform-gpu will-change-[padding] transition-[padding] duration-300 ease-in-out ${
+          !isTransparent ? 'py-3' : 'py-5'
         }`}
       >
+        {/* Separated background & blur layer to prevent scroll flicker */}
+        <div 
+          className={`absolute inset-0 transition-[background-color,backdrop-filter,opacity,box-shadow] duration-300 ease-in-out -z-10 ${
+            !isTransparent 
+              ? 'bg-white/80 backdrop-blur-xl shadow-[0_1px_0_rgba(0,0,0,0.05)] opacity-100' 
+              : 'bg-transparent opacity-0'
+          }`} 
+        />
+        
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center relative">
             {/* Logo */}
