@@ -7,6 +7,8 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstati
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 // @ts-ignore
 import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+// @ts-ignore
+import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app-check.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDKWWaI4hiFx1LGaPyrIkILo0yG0WhZCTY",
@@ -18,6 +20,26 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+
+// Firebase App Check 초기화 (무단 다운로드 및 트래픽 남용 방지)
+// 실제 운영 환경에서는 reCAPTCHA v3 Site Key를 발급받아 아래에 입력하고, Firebase 콘솔에서 App Check를 활성화해야 합니다.
+if (typeof window !== 'undefined') {
+  try {
+    // 로컬 개발 환경용 디버그 토큰 활성화 옵션
+    if (window.location.hostname === 'localhost' || window.location.hostname.includes('run.app')) {
+      // @ts-ignore
+      self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+    }
+    
+    initializeAppCheck(app, {
+      provider: new ReCaptchaV3Provider('Y6LfYkwAtAAAAAJF8Au4-HO0LjvD4XmpNmp8B39NoEY_HERE'), // TODO: 실제 발급받은 reCAPTCHA v3 키로 교체 필요
+      isTokenAutoRefreshEnabled: true
+    });
+  } catch (error) {
+    console.warn("App Check 초기화 실패:", error);
+  }
+}
+
 export const storage = getStorage(app);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
