@@ -38,7 +38,7 @@ const DEFAULT_CONFIG: SiteConfig = {
   borderRadius: 'rounded-full', 
   seoKeywords: '알루미늄, 압출, 경량소재, 자동차부품',
   contactEmail: 'info@aldmc.co.kr',
-  logoUrl: 'https://firebasestorage.googleapis.com/v0/b/company-homepage-28347.firebasestorage.app/o/DMC%20%EC%8B%9C%EA%B7%B8%EB%8B%88%EC%B2%98(%EC%83%81%ED%95%98)%20ENG%20white.png?alt=media&token=95cc47a9-e985-4013-9239-67bc60786d4e'
+  logoUrl: 'https://firebasestorage.googleapis.com/v0/b/aldmc-e447e.firebasestorage.app/o/DMC%20%EC%8B%9C%EA%B7%B8%EB%8B%88%EC%B2%98(%EC%83%81%ED%95%98)%20KOR%20white.png?alt=media'
 };
 
 const DEFAULT_POSTS: Post[] = [

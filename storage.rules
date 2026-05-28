@@ -1,0 +1,26 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Firestore의 admins 컬렉션을 참조하여 관리자 여부 확인
+    function isApprovedAdmin() {
+      return request.auth != null && 
+             firestore.exists(/databases/(default)/documents/admins/$(request.auth.uid));
+    }
+
+    // 버킷 내의 모든 파일
+    match /{allPaths=**} {
+      allow read: if true; // 누구나 읽기/다운로드 가능
+      
+      allow create, update: if isApprovedAdmin() 
+                   && request.resource != null
+                   && request.resource.size < 10 * 1024 * 1024 // 10MB 용량 제한
+                   && (
+                     request.resource.contentType.matches('image/.*')
+                     || request.resource.contentType == 'application/pdf'
+                   ); // 이미지 및 PDF만 업로드 가능
+                   
+      allow delete: if isApprovedAdmin(); // 관리자는 삭제 가능
+    }
+  }
+}

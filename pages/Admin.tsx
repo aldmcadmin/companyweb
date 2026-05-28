@@ -22,16 +22,15 @@ export const AdminDashboard: React.FC = () => {
     <AdminLayout>
       <div className="space-y-8">
         {/* Important Notice */}
-        <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-6 flex items-start gap-4">
-            <div className="p-2 bg-yellow-100 rounded-full text-yellow-600">
+        <div className="bg-brand-blue/5 border border-brand-blue/20 rounded-2xl p-6 flex items-start gap-4">
+            <div className="p-2 bg-brand-blue/10 rounded-full text-brand-blue">
                <AlertTriangle className="w-6 h-6" />
             </div>
             <div>
-               <h3 className="text-yellow-800 font-bold text-lg mb-1">관리자 주의사항 (데이터 동기화 안내)</h3>
-               <p className="text-yellow-700 text-sm leading-relaxed">
-                  이제 이미지를 업로드하면 <strong>Firebase 서버</strong>에 저장되어 어디서든 이미지가 보입니다.<br/>
-                  다만, 텍스트 변경사항이나 설정값은 여전히 <strong>현재 브라우저</strong>에만 저장되므로, 
-                  다른 PC로 설정을 옮기려면 <strong>[사이트 설정] &gt; [데이터 백업 및 복원]</strong> 기능을 이용하세요.
+               <h3 className="text-brand-blue font-bold text-lg mb-1">데이터 동기화 (Firebase 연동 완료)</h3>
+               <p className="text-gray-600 text-sm leading-relaxed">
+                  모든 사이트의 텍스트, 이미지 및 브랜드 설정(로고 등)이 클라우드(Firebase)에 실시간으로 안전하게 저장됩니다.<br/>
+                  좌측의 <strong>[사이트 설정]</strong> 메뉴에서 <strong>로고 이미지</strong>를 바로 업로드하고 변경하실 수 있습니다.
                </p>
             </div>
         </div>
@@ -931,31 +930,6 @@ export const AdminSettings: React.FC = () => {
       <div className="grid lg:grid-cols-3 gap-8">
         {/* Settings Form */}
         <div className="lg:col-span-2 space-y-6">
-           {/* Backup & Restore (New Feature for Cross-Device Support) */}
-           <div className="bg-gradient-to-br from-indigo-50 to-white rounded-2xl p-6 shadow-sm border border-indigo-100">
-              <div className="flex items-center gap-3 mb-4">
-                 <div className="p-2 bg-indigo-100 rounded-lg"><RefreshCcw className="w-5 h-5 text-indigo-700" /></div>
-                 <div>
-                    <h3 className="text-lg font-bold text-gray-900">데이터 백업 및 복원 (Data Sync)</h3>
-                    <p className="text-xs text-indigo-500">다른 PC나 모바일로 설정을 옮기려면 이 기능을 사용하세요.</p>
-                 </div>
-              </div>
-              
-              <div className="flex gap-4 items-center">
-                 <button 
-                   onClick={handleExport}
-                   className="flex-1 flex items-center justify-center gap-2 py-3 bg-white border border-indigo-200 text-indigo-700 font-bold rounded-xl hover:bg-indigo-50 transition-colors shadow-sm"
-                 >
-                    <Download className="w-4 h-4" /> 백업 데이터 내보내기
-                 </button>
-                 
-                 <label className="flex-1 cursor-pointer flex items-center justify-center gap-2 py-3 bg-indigo-600 border border-transparent text-white font-bold rounded-xl hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200">
-                    <Upload className="w-4 h-4" /> 백업 데이터 불러오기
-                    <input type="file" accept=".json" onChange={handleImport} className="hidden" />
-                 </label>
-              </div>
-           </div>
-
            {/* General Settings */}
            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
               <div className="flex items-center gap-3 mb-6">

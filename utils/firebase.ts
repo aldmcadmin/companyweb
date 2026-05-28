@@ -35,10 +35,15 @@ export { doc, onSnapshot, setDoc };
  */
 export const uploadImageToStorage = async (file: File, pathPrefix: string = 'images/'): Promise<string> => {
   try {
-    // Create a safe filename (timestamp + sanitized original name)
-    const sanitizedName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
-    const fileName = `${Date.now()}_${sanitizedName}`;
-    const fullPath = `${pathPrefix}${fileName}`;
+    // Generate a secure random filename to prevent collisions and guessing
+    const fileExtension = file.name.split('.').pop()?.toLowerCase();
+    const isCryptoSupported = typeof crypto !== 'undefined' && crypto.randomUUID;
+    const randomUuid = isCryptoSupported ? crypto.randomUUID() : Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    const fileName = `${Date.now()}_${randomUuid}.${fileExtension}`;
+    
+    // Ensure all uploads go to the 'public' directory to match security rules
+    const cleanPrefix = pathPrefix.startsWith('/') ? pathPrefix.slice(1) : pathPrefix;
+    const fullPath = `public/${cleanPrefix}${fileName}`;
     
     const storageRef = ref(storage, fullPath);
     
