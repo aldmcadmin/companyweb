@@ -1,0 +1,18 @@
+name: Sync to Cloudflare Repo
+
+on:
+  push:
+    branches: [main] # AI Studio에서 main 브랜치로 push할 때 작동
+
+jobs:
+  git-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push to Cloudflare Watch Repo
+        run: |
+          git push --force https://${{ secrets.SYNCTOKEN }}@github.com/aldmcadmin/companyweb.git main:main
