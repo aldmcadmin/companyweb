@@ -16,4 +16,4 @@ jobs:
 
       - name: Push to Cloudflare Watch Repo
         run: |
-          git push --force https://aldmcadmin:${{ secrets.SYNCTOKEN }}@github.com/aldmcadmin/companyweb.git main:main
+          git push --force https://x-access-token:${{ secrets.SYNCTOKEN }}@github.com/aldmcadmin/companyweb.git main:main
