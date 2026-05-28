@@ -12,7 +12,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Push to Cloudflare Watch Repo
         run: |
-          git push --force https://${{ secrets.SYNCTOKEN }}@github.com/aldmcadmin/companyweb.git main:main
+          git push --force https://aldmcadmin:${{ secrets.SYNCTOKEN }}@github.com/aldmcadmin/companyweb.git main:main
