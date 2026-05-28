@@ -1,0 +1,1231 @@
+components/Button.tsx:2:import React from 'react';
+components/Button.tsx:3:import { useSite } from '../contexts/SiteContext';
+components/Button.tsx:5:interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+components/Button.tsx:6:  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
+components/Button.tsx:7:  size?: 'sm' | 'md' | 'lg';
+components/Button.tsx:8:  fullWidth?: boolean;
+components/Button.tsx:9:  rounded?: string; // Optional override
+components/Button.tsx:12:const Button: React.FC<ButtonProps> = ({ 
+components/Button.tsx:14:  variant = 'primary', 
+components/Button.tsx:15:  size = 'md', 
+components/Button.tsx:17:  className = '',
+components/Button.tsx:20:}) => {
+components/Button.tsx:22:  const radiusClass = rounded || config.borderRadius || 'rounded-full';
+components/Button.tsx:24:  const baseStyles = `inline-flex items-center justify-center font-medium transition-all duration-200 ease-spring ${radiusClass} active:scale-95 disabled:opacity-50 disabled:pointer-events-none`;
+components/Button.tsx:39:  const widthClass = fullWidth ? "w-full" : "";
+components/Button.tsx:42:    <button 
+components/Button.tsx:43:      className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${widthClass} ${className}`}
+components/Button.tsx:45:    >
+components/Button.tsx:47:    </button>
+components/ProtectedRoute.tsx:2:import React from 'react';
+components/ProtectedRoute.tsx:3:import { Navigate, useLocation } from 'react-router-dom';
+components/ProtectedRoute.tsx:4:import { useAuth } from '../contexts/AuthContext';
+components/ProtectedRoute.tsx:10:const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
+components/ProtectedRoute.tsx:18:  if (!isAuthenticated) {
+components/ProtectedRoute.tsx:20:    return <Navigate to="/login" state={{ from: location }} replace />;
+components/ProtectedRoute.tsx:23:  return <>{children}</>;
+components/ProductSection.tsx:2:import React, { useState, useEffect } from 'react';
+components/ProductSection.tsx:3:import { Link } from 'react-router-dom';
+components/ProductSection.tsx:4:import { ArrowUpRight, Plus, X, ChevronRight, Feather, Factory, Settings, Cpu, Building2, Leaf, Box, Layers } from 'lucide-react';
+components/ProductSection.tsx:5:import ScrollReveal from './ScrollReveal';
+components/ProductSection.tsx:6:import { useSite } from '../contexts/SiteContext';
+components/ProductSection.tsx:7:import { Product } from '../types';
+components/ProductSection.tsx:10:  hideHeader?: boolean;
+components/ProductSection.tsx:13:const ProductSection: React.FC<ProductSectionProps> = ({ hideHeader = false }) => {
+components/ProductSection.tsx:15:  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+components/ProductSection.tsx:18:  useEffect(() => {
+components/ProductSection.tsx:20:      document.body.style.overflow = 'hidden';
+components/ProductSection.tsx:22:      document.body.style.overflow = 'unset';
+components/ProductSection.tsx:24:    return () => { document.body.style.overflow = 'unset'; };
+components/ProductSection.tsx:25:  }, [selectedProduct]);
+components/ProductSection.tsx:29:  const getProductContent = (product: Product) => {
+components/ProductSection.tsx:30:    // Check if the current translation object has 'items' and if the product ID exists in it
+components/ProductSection.tsx:32:    const translation = translatedItems ? translatedItems[product.id] : null;
+components/ProductSection.tsx:36:    let path = 'light';
+components/ProductSection.tsx:38:    if (product.id === 'p1') { translatedCategory = t.nav.light; icon = <Feather className="w-3.5 h-3.5" />; path = 'light'; }
+components/ProductSection.tsx:39:    else if (product.id === 'p2') { translatedCategory = t.nav.industry; icon = <Factory className="w-3.5 h-3.5" />; path = 'industry'; }
+components/ProductSection.tsx:40:    else if (product.id === 'p3') { translatedCategory = t.nav.processing; icon = <Settings className="w-3.5 h-3.5" />; path = 'processing'; }
+components/ProductSection.tsx:41:    else if (product.id === 'p4') { translatedCategory = t.nav.electronic; icon = <Cpu className="w-3.5 h-3.5" />; path = 'electronic'; }
+components/ProductSection.tsx:42:    else if (product.id === 'p5') { translatedCategory = t.nav.construction; icon = <Building2 className="w-3.5 h-3.5" />; path = 'construction'; }
+components/ProductSection.tsx:43:    else if (product.id === 'p6') { translatedCategory = t.nav.environmental; icon = <Leaf className="w-3.5 h-3.5" />; path = 'environmental'; }
+components/ProductSection.tsx:44:    else if (product.id === 'p7') { translatedCategory = t.nav.exterior; icon = <Box className="w-3.5 h-3.5" />; path = 'exterior'; }
+components/ProductSection.tsx:45:    else if (product.id === 'p8') { translatedCategory = t.nav.substitute; icon = <Layers className="w-3.5 h-3.5" />; path = 'substitute'; }
+components/ProductSection.tsx:48:      title: translation ? translation.title : product.title,
+components/ProductSection.tsx:49:      description: translation ? translation.desc : product.description,
+components/ProductSection.tsx:52:      badge: translation ? (translation as any).badge : translatedCategory,
+components/ProductSection.tsx:59:    <section id="products" className="py-32 bg-[#F5F5F7] relative">
+components/ProductSection.tsx:60:      {/* 
+components/ProductSection.tsx:64:      */}
+components/ProductSection.tsx:65:      <div className="absolute top-0 left-0 w-full h-40 bg-gradient-to-b from-white to-[#F5F5F7] pointer-events-none"></div>
+components/ProductSection.tsx:67:      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+components/ProductSection.tsx:68:        {!hideHeader && (
+components/ProductSection.tsx:69:          <div className="flex flex-col items-center text-center mb-8 gap-4">
+components/ProductSection.tsx:70:            <ScrollReveal>
+components/ProductSection.tsx:71:              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 tracking-tight break-keep">{t.products.title}</h2>
+components/ProductSection.tsx:72:            </ScrollReveal>
+components/ProductSection.tsx:73:            <ScrollReveal delay={0.1} className="w-full">
+components/ProductSection.tsx:74:              <p className="text-sm sm:text-base text-gray-500 font-medium break-keep px-4 max-w-3xl mx-auto">
+components/ProductSection.tsx:76:              </p>
+components/ProductSection.tsx:77:            </ScrollReveal>
+components/ProductSection.tsx:78:            <ScrollReveal delay={0.2} className="text-center w-full flex justify-center">
+components/ProductSection.tsx:79:              <Link to="/products" className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white border border-gray-200 text-gray-900 font-bold hover:bg-gray-50 hover:border-gray-300 hover:shadow-lg transition-all duration-300 shadow-sm group">
+components/ProductSection.tsx:80:                {t.products.view_all} <ArrowUpRight className="w-5 h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+components/ProductSection.tsx:81:              </Link>
+components/ProductSection.tsx:82:            </ScrollReveal>
+components/ProductSection.tsx:83:          </div>
+components/ProductSection.tsx:86:        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+components/ProductSection.tsx:87:          {products.map((product, index) => {
+components/ProductSection.tsx:90:              <ScrollReveal key={product.id} delay={index * 0.1}>
+components/ProductSection.tsx:91:                <div 
+components/ProductSection.tsx:92:                  onClick={() => setSelectedProduct(product)}
+components/ProductSection.tsx:94:                >
+components/ProductSection.tsx:95:                  <div className="bg-white rounded-[2rem] overflow-hidden shadow-[0_2px_10px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] hover:-translate-y-2 transition-all duration-500 ease-spring h-full flex flex-col border border-gray-100/50 relative z-0 hover:z-10">
+components/ProductSection.tsx:97:                    {/* Image Container */}
+components/ProductSection.tsx:98:                    <div className="aspect-[4/3] overflow-hidden bg-gray-100 relative">
+components/ProductSection.tsx:99:                      <img 
+components/ProductSection.tsx:102:                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]"
+components/ProductSection.tsx:103:                      />
+components/ProductSection.tsx:104:                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500"></div>
+components/ProductSection.tsx:106:                      {/* Category Tag - Slides in on hover */}
+components/ProductSection.tsx:107:                      <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-brand-blue uppercase tracking-wider shadow-sm translate-y-[-10px] opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-spring">
+components/ProductSection.tsx:109:                      </div>
+components/ProductSection.tsx:111:                      {/* Overlay Icon */}
+components/ProductSection.tsx:112:                      <div className="absolute bottom-4 right-4 w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 scale-75 group-hover:scale-100 transition-all duration-500 ease-spring">
+components/ProductSection.tsx:113:                          <Plus className="w-5 h-5 text-white" />
+components/ProductSection.tsx:114:                      </div>
+components/ProductSection.tsx:115:                    </div>
+components/ProductSection.tsx:117:                    {/* Text Content */}
+components/ProductSection.tsx:118:                    <div className="p-8 flex-1 flex flex-col relative">
+components/ProductSection.tsx:119:                      <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-brand-blue transition-colors duration-300">
+components/ProductSection.tsx:121:                      </h3>
+components/ProductSection.tsx:122:                      <p className="text-gray-500 font-medium leading-relaxed mb-6 line-clamp-3">
+components/ProductSection.tsx:124:                      </p>
+components/ProductSection.tsx:126:                      <div className="mt-auto pt-6 border-t border-gray-100 flex items-center justify-between text-sm font-bold text-brand-blue">
+components/ProductSection.tsx:127:                        <span>{t.products.detail_btn}</span>
+components/ProductSection.tsx:128:                        <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center group-hover:bg-brand-blue group-hover:text-white transition-colors duration-300">
+components/ProductSection.tsx:129:                          <ArrowUpRight className="w-4 h-4 group-hover:rotate-45 transition-transform duration-500 ease-spring" />
+components/ProductSection.tsx:130:                        </div>
+components/ProductSection.tsx:131:                      </div>
+components/ProductSection.tsx:132:                    </div>
+components/ProductSection.tsx:133:                  </div>
+components/ProductSection.tsx:134:                </div>
+components/ProductSection.tsx:135:              </ScrollReveal>
+components/ProductSection.tsx:138:        </div>
+components/ProductSection.tsx:140:        <ScrollReveal delay={0.4}>
+components/ProductSection.tsx:141:          <div className="mt-12 text-center md:hidden">
+components/ProductSection.tsx:142:             <Link to="/products" className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white border border-gray-200 text-gray-900 font-bold shadow-sm active:scale-95 transition-transform">
+components/ProductSection.tsx:143:              {t.products.view_all} <ArrowUpRight className="w-5 h-5" />
+components/ProductSection.tsx:144:            </Link>
+components/ProductSection.tsx:145:          </div>
+components/ProductSection.tsx:146:        </ScrollReveal>
+components/ProductSection.tsx:147:      </div>
+components/ProductSection.tsx:149:      {/* 
+components/ProductSection.tsx:151:        Transitions from Gray (#F5F5F7) to White (next section background)
+components/ProductSection.tsx:153:      */}
+components/ProductSection.tsx:154:      <div className="absolute bottom-0 left-0 w-full h-48 pointer-events-none z-10">
+components/ProductSection.tsx:155:        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/60 to-transparent" />
+components/ProductSection.tsx:156:        <div className="absolute bottom-0 left-0 w-full h-16 backdrop-blur-[1px] mask-image-gradient-to-t" style={{ maskImage: 'linear-gradient(to top, black, transparent)' }} />
+components/ProductSection.tsx:157:      </div>
+components/ProductSection.tsx:159:      {/* Product Detail Modal */}
+components/ProductSection.tsx:160:      {selectedProduct && (() => {
+components/ProductSection.tsx:163:          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+components/ProductSection.tsx:164:            <div 
+components/ProductSection.tsx:166:              onClick={() => setSelectedProduct(null)}
+components/ProductSection.tsx:167:            ></div>
+components/ProductSection.tsx:169:            <div className="relative bg-white rounded-[2.5rem] shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col md:flex-row overflow-hidden animate-scale-up">
+components/ProductSection.tsx:171:              {/* Close Button */}
+components/ProductSection.tsx:172:              <button 
+components/ProductSection.tsx:173:                onClick={() => setSelectedProduct(null)}
+components/ProductSection.tsx:175:              >
+components/ProductSection.tsx:176:                <X className="w-5 h-5" />
+components/ProductSection.tsx:177:              </button>
+components/ProductSection.tsx:179:              {/* Modal Image Section */}
+components/ProductSection.tsx:180:              <div className="w-full md:w-1/2 aspect-video md:aspect-auto relative bg-gray-100">
+components/ProductSection.tsx:181:                <img 
+components/ProductSection.tsx:185:                />
+components/ProductSection.tsx:186:                {/* Mobile Overlay Text */}
+components/ProductSection.tsx:187:                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent md:hidden"></div>
+components/ProductSection.tsx:188:                <div className="absolute bottom-4 left-4 md:hidden text-white">
+components/ProductSection.tsx:189:                  <p className="text-sm font-bold opacity-80 mb-1 flex items-center gap-1.5">{content.icon} {content.category}</p>
+components/ProductSection.tsx:190:                  <h3 className="text-2xl font-bold">{content.title}</h3>
+components/ProductSection.tsx:191:                </div>
+components/ProductSection.tsx:192:              </div>
+components/ProductSection.tsx:194:              {/* Modal Content Section */}
+components/ProductSection.tsx:195:              <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col bg-white overflow-y-auto">
+components/ProductSection.tsx:196:                <div className="hidden md:block">
+components/ProductSection.tsx:197:                  <span className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-brand-blue text-xs font-bold rounded-full w-fit mb-4 tracking-wider">
+components/ProductSection.tsx:200:                  </span>
+components/ProductSection.tsx:201:                  <h3 className="text-3xl font-bold text-gray-900 mb-6 leading-tight">
+components/ProductSection.tsx:203:                  </h3>
+components/ProductSection.tsx:204:                </div>
+components/ProductSection.tsx:206:                <div className="prose prose-lg text-gray-600 leading-relaxed mb-8 flex-grow">
+components/ProductSection.tsx:207:                  <p className="whitespace-pre-wrap">{content.description}</p>
+components/ProductSection.tsx:209:                  <div className="mt-8 space-y-4">
+components/ProductSection.tsx:210:                      <div className="bg-gray-50 rounded-2xl p-5 border border-gray-100">
+components/ProductSection.tsx:211:                        <h4 className="font-bold text-gray-900 mb-2 flex items-center gap-2">
+components/ProductSection.tsx:212:                            <Plus className="w-4 h-4 text-brand-blue" /> {t.products.modal.feature_title}
+components/ProductSection.tsx:213:                        </h4>
+components/ProductSection.tsx:214:                        <ul className="text-sm space-y-2 text-gray-500">
+components/ProductSection.tsx:215:                            {t.products.modal.features.map((feature, i) => (
+components/ProductSection.tsx:216:                              <li key={i}>• {feature}</li>
+components/ProductSection.tsx:218:                        </ul>
+components/ProductSection.tsx:219:                      </div>
+components/ProductSection.tsx:220:                  </div>
+components/ProductSection.tsx:221:                </div>
+components/ProductSection.tsx:223:                <div className="mt-auto pt-6 border-t border-gray-100">
+components/ProductSection.tsx:224:                  <Link 
+components/ProductSection.tsx:225:                    to={`/products/${content.path}`}
+components/ProductSection.tsx:226:                    onClick={() => setSelectedProduct(null)}
+components/ProductSection.tsx:227:                    className="flex items-center justify-center w-full py-4 bg-brand-blue text-white font-bold rounded-xl hover:bg-[#051535] transition-all shadow-lg shadow-blue-900/20 hover:shadow-blue-900/30 active:scale-[0.98]"
+components/ProductSection.tsx:228:                  >
+components/ProductSection.tsx:229:                    {t.products.modal.contact_btn} <ChevronRight className="w-5 h-5 ml-1" />
+components/ProductSection.tsx:230:                  </Link>
+components/ProductSection.tsx:231:                  {t.products.modal.note && (
+components/ProductSection.tsx:232:                    <p className="text-center text-xs text-gray-400 mt-3">
+components/ProductSection.tsx:234:                    </p>
+components/ProductSection.tsx:236:                </div>
+components/ProductSection.tsx:237:              </div>
+components/ProductSection.tsx:238:            </div>
+components/ProductSection.tsx:239:          </div>
+components/ProductSection.tsx:242:    </section>
+components/LegalModal.tsx:2:import React, { useEffect, useState } from 'react';
+components/LegalModal.tsx:3:import { X } from 'lucide-react';
+components/LegalModal.tsx:7:  onClose: () => void;
+components/LegalModal.tsx:12:const LegalModal: React.FC<LegalModalProps> = ({ isOpen, onClose, title, content }) => {
+components/LegalModal.tsx:13:  const [isVisible, setIsVisible] = useState(false);
+components/LegalModal.tsx:15:  useEffect(() => {
+components/LegalModal.tsx:18:      document.body.style.overflow = 'hidden';
+components/LegalModal.tsx:20:      const timer = setTimeout(() => setIsVisible(false), 300);
+components/LegalModal.tsx:21:      document.body.style.overflow = 'unset';
+components/LegalModal.tsx:22:      return () => clearTimeout(timer);
+components/LegalModal.tsx:24:  }, [isOpen]);
+components/LegalModal.tsx:26:  if (!isVisible && !isOpen) return null;
+components/LegalModal.tsx:29:    <div className={`fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
+components/LegalModal.tsx:30:      <div 
+components/LegalModal.tsx:33:      ></div>
+components/LegalModal.tsx:35:      <div 
+components/LegalModal.tsx:36:        className={`relative bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[85vh] flex flex-col overflow-hidden transform transition-all duration-300 ${isOpen ? 'scale-100 translate-y-0' : 'scale-95 translate-y-4'}`}
+components/LegalModal.tsx:37:      >
+components/LegalModal.tsx:38:        <div className="flex justify-between items-center px-6 py-4 border-b border-gray-100">
+components/LegalModal.tsx:39:          <h3 className="text-lg font-bold text-gray-900">{title}</h3>
+components/LegalModal.tsx:40:          <button 
+components/LegalModal.tsx:43:          >
+components/LegalModal.tsx:44:            <X className="w-5 h-5" />
+components/LegalModal.tsx:45:          </button>
+components/LegalModal.tsx:46:        </div>
+components/LegalModal.tsx:48:        <div className="flex-1 overflow-y-auto p-6 md:p-8">
+components/LegalModal.tsx:49:          <div 
+components/LegalModal.tsx:52:          />
+components/LegalModal.tsx:53:        </div>
+components/LegalModal.tsx:55:        <div className="px-6 py-4 border-t border-gray-100 bg-gray-50 flex justify-end">
+components/LegalModal.tsx:56:          <button 
+components/LegalModal.tsx:59:          >
+components/LegalModal.tsx:60:            확인
+components/LegalModal.tsx:61:          </button>
+components/LegalModal.tsx:62:        </div>
+components/LegalModal.tsx:63:      </div>
+components/LegalModal.tsx:64:    </div>
+components/Philosophy.tsx:2:import React, { useEffect, useRef, useState } from 'react';
+components/Philosophy.tsx:3:import { Target, ShieldCheck, Zap } from 'lucide-react';
+components/Philosophy.tsx:4:import ScrollReveal from './ScrollReveal';
+components/Philosophy.tsx:5:import { useSite } from '../contexts/SiteContext';
+components/Philosophy.tsx:8:const StatGraph = () => {
+components/Philosophy.tsx:9:  const [isVisible, setIsVisible] = useState(false);
+components/Philosophy.tsx:10:  const containerRef = useRef<HTMLDivElement>(null);
+components/Philosophy.tsx:12:  useEffect(() => {
+components/Philosophy.tsx:14:      ([entry]) => {
+components/Philosophy.tsx:17:          setTimeout(() => setIsVisible(true), 200);
+components/Philosophy.tsx:21:      { threshold: 0.5 } // Wait until 50% is visible
+components/Philosophy.tsx:28:    return () => observer.disconnect();
+components/Philosophy.tsx:29:  }, []);
+components/Philosophy.tsx:32:    <div ref={containerRef} className="flex-1 w-full md:max-w-xl h-40 md:h-56 relative flex items-end">
+components/Philosophy.tsx:33:      <svg className="w-full h-full overflow-visible" viewBox="0 0 400 150" preserveAspectRatio="none">
+components/Philosophy.tsx:34:        <defs>
+components/Philosophy.tsx:35:          <linearGradient id="strokeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+components/Philosophy.tsx:36:            {/* Toned down gradient: Transparent Slate to Soft Slate Blue */}
+components/Philosophy.tsx:37:            <stop offset="0%" stopColor="#94A3B8" stopOpacity="0" />
+components/Philosophy.tsx:38:            <stop offset="40%" stopColor="#64748B" stopOpacity="0.6" />
+components/Philosophy.tsx:39:            <stop offset="100%" stopColor="#475569" stopOpacity="0.8" />
+components/Philosophy.tsx:40:          </linearGradient>
+components/Philosophy.tsx:41:          {/* Subtler Glow Filter */}
+components/Philosophy.tsx:42:          <filter id="glowLine" height="200%" width="200%" x="-50%" y="-50%">
+components/Philosophy.tsx:43:            <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+components/Philosophy.tsx:44:            <feMerge>
+components/Philosophy.tsx:45:              <feMergeNode in="coloredBlur" />
+components/Philosophy.tsx:46:              <feMergeNode in="SourceGraphic" />
+components/Philosophy.tsx:47:            </feMerge>
+components/Philosophy.tsx:48:          </filter>
+components/Philosophy.tsx:49:        </defs>
+components/Philosophy.tsx:51:        {/* The Curve Line - Thinner stroke (3px) */}
+components/Philosophy.tsx:52:        <path
+components/Philosophy.tsx:55:          stroke="url(#strokeGradient)"
+components/Philosophy.tsx:58:          filter="url(#glowLine)"
+components/Philosophy.tsx:61:            strokeDashoffset: isVisible ? 0 : 1000,
+components/Philosophy.tsx:62:            transition: 'stroke-dashoffset 2.5s cubic-bezier(0.22, 1, 0.36, 1)',
+components/Philosophy.tsx:64:        />
+components/Philosophy.tsx:66:        {/* End Point Dot - Smaller and muted color */}
+components/Philosophy.tsx:67:        <circle 
+components/Philosophy.tsx:71:          fill="#475569" 
+components/Philosophy.tsx:74:          className={`shadow-sm transition-all duration-700 delay-[2200ms] ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-0'}`} 
+components/Philosophy.tsx:75:        />
+components/Philosophy.tsx:77:        {/* Animated Area Fill (Optional subtle fill) */}
+components/Philosophy.tsx:78:        <path
+components/Philosophy.tsx:80:           fill="url(#strokeGradient)"
+components/Philosophy.tsx:81:           className={`transition-opacity duration-[3000ms] delay-500 ${isVisible ? 'opacity-5' : 'opacity-0'}`}
+components/Philosophy.tsx:82:        />
+components/Philosophy.tsx:83:      </svg>
+components/Philosophy.tsx:84:    </div>
+components/Philosophy.tsx:88:const Philosophy: React.FC = () => {
+components/Philosophy.tsx:91:  const values = [
+components/Philosophy.tsx:93:      icon: <Target className="w-7 h-7" />,
+components/Philosophy.tsx:98:      icon: <ShieldCheck className="w-7 h-7" />,
+components/Philosophy.tsx:103:      icon: <Zap className="w-7 h-7" />,
+components/Philosophy.tsx:107:  ];
+components/Philosophy.tsx:110:    <section id="philosophy" className="py-32 bg-white overflow-hidden relative">
+components/Philosophy.tsx:111:      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+components/Philosophy.tsx:113:        {/* Header Section */}
+components/Philosophy.tsx:114:        <div className="mb-24 lg:mb-32">
+components/Philosophy.tsx:115:          <ScrollReveal>
+components/Philosophy.tsx:116:             <h2 className="text-2xl md:text-3xl font-bold text-brand-blue mb-6 flex items-center gap-3">
+components/Philosophy.tsx:117:               <span className="w-10 h-[2px] bg-brand-blue inline-block"></span>
+components/Philosophy.tsx:119:             </h2>
+components/Philosophy.tsx:120:          </ScrollReveal>
+components/Philosophy.tsx:121:          <ScrollReveal delay={0.1}>
+components/Philosophy.tsx:122:            <p className="text-4xl sm:text-5xl md:text-7xl font-bold text-gray-900 tracking-tight leading-tight mb-8 whitespace-pre-line break-keep">
+components/Philosophy.tsx:124:            </p>
+components/Philosophy.tsx:125:          </ScrollReveal>
+components/Philosophy.tsx:126:          <ScrollReveal delay={0.2}>
+components/Philosophy.tsx:127:            <p className="max-w-3xl text-xl sm:text-2xl text-gray-500 font-medium leading-relaxed whitespace-pre-line break-keep">
+components/Philosophy.tsx:129:            </p>
+components/Philosophy.tsx:130:          </ScrollReveal>
+components/Philosophy.tsx:131:        </div>
+components/Philosophy.tsx:133:        {/* Content Section: Image & Values */}
+components/Philosophy.tsx:134:        <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 mb-32">
+components/Philosophy.tsx:136:          {/* Left: Image Card */}
+components/Philosophy.tsx:137:          <div className="lg:w-1/2 relative">
+components/Philosophy.tsx:138:             <ScrollReveal mode="scale" className="sticky top-32">
+components/Philosophy.tsx:139:                <div className="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl relative group transform transition-transform duration-700 hover:scale-[1.02]">
+components/Philosophy.tsx:140:                  <img 
+components/Philosophy.tsx:141:                    src={content['philosophy_img_main']} 
+components/Philosophy.tsx:144:                  />
+components/Philosophy.tsx:145:                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-500"></div>
+components/Philosophy.tsx:147:                  <div className="absolute bottom-8 left-8 right-8">
+components/Philosophy.tsx:148:                     <div className="bg-white/90 backdrop-blur-lg p-8 rounded-3xl shadow-lg border border-white/20 transform transition-transform duration-500 group-hover:-translate-y-2">
+components/Philosophy.tsx:149:                        <span className="text-brand-blue font-bold tracking-wide text-sm uppercase mb-2 block">Since 2013</span>
+components/Philosophy.tsx:150:                        <p className="text-gray-900 font-bold text-2xl whitespace-pre-line">
+components/Philosophy.tsx:152:                        </p>
+components/Philosophy.tsx:153:                     </div>
+components/Philosophy.tsx:154:                  </div>
+components/Philosophy.tsx:155:                </div>
+components/Philosophy.tsx:156:             </ScrollReveal>
+components/Philosophy.tsx:157:          </div>
+components/Philosophy.tsx:159:          {/* Right: Values List */}
+components/Philosophy.tsx:160:          <div className="lg:w-1/2 flex flex-col justify-center space-y-6">
+components/Philosophy.tsx:161:            {values.map((item, index) => (
+components/Philosophy.tsx:162:              <ScrollReveal key={index} delay={index * 0.15}>
+components/Philosophy.tsx:163:                <div className="group flex gap-8 items-start p-8 rounded-3xl transition-all duration-500 ease-spring hover:bg-gray-50 hover:shadow-lg hover:-translate-y-1 cursor-default border border-transparent hover:border-gray-100">
+components/Philosophy.tsx:164:                  <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-[#071D49]/5 flex items-center justify-center shadow-sm text-brand-blue transform transition-all duration-500 ease-spring group-hover:scale-110 group-hover:bg-brand-blue group-hover:text-white">
+components/Philosophy.tsx:166:                  </div>
+components/Philosophy.tsx:167:                  <div>
+components/Philosophy.tsx:168:                    <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-brand-blue transition-colors">
+components/Philosophy.tsx:170:                    </h3>
+components/Philosophy.tsx:171:                    <p className="text-base text-gray-500 leading-relaxed font-medium group-hover:text-gray-600 transition-colors break-keep whitespace-pre-line">
+components/Philosophy.tsx:173:                    </p>
+components/Philosophy.tsx:174:                  </div>
+components/Philosophy.tsx:175:                </div>
+components/Philosophy.tsx:176:              </ScrollReveal>
+components/Philosophy.tsx:178:          </div>
+components/Philosophy.tsx:179:        </div>
+components/Philosophy.tsx:181:        {/* 
+components/Philosophy.tsx:184:        */}
+components/Philosophy.tsx:185:        <ScrollReveal width="full" delay={0.2}>
+components/Philosophy.tsx:186:           <div className="relative pt-16 border-t border-gray-100">
+components/Philosophy.tsx:187:              <div className="flex flex-col md:flex-row items-center md:items-end justify-between gap-12 md:gap-24">
+components/Philosophy.tsx:189:                 {/* Text Content - Typography Size Reduced & Balanced */}
+components/Philosophy.tsx:190:                 <div className="relative z-10 text-center md:text-left">
+components/Philosophy.tsx:191:                    <div className="flex items-center justify-center md:justify-start gap-3 mb-4">
+components/Philosophy.tsx:192:                       <span className="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+components/Philosophy.tsx:193:                       <span className="text-sm font-bold uppercase tracking-[0.2em] text-slate-500">{t.philosophy.stat_label}</span>
+components/Philosophy.tsx:194:                    </div>
+components/Philosophy.tsx:196:                    <div className="flex items-baseline justify-center md:justify-start gap-1 mb-6">
+components/Philosophy.tsx:197:                       {/* Reduced size from 10rem to 7xl/8xl for better proportion */}
+components/Philosophy.tsx:198:                       <span className="text-5xl sm:text-6xl md:text-8xl font-bold tracking-tighter text-[#071D49] leading-none">
+components/Philosophy.tsx:200:                       </span>
+components/Philosophy.tsx:201:                       <span className="text-3xl sm:text-4xl md:text-5xl font-light text-slate-400 mb-2 md:mb-3">+</span>
+components/Philosophy.tsx:202:                    </div>
+components/Philosophy.tsx:204:                    <p className="text-base sm:text-lg md:text-xl text-gray-500 leading-relaxed font-medium max-w-lg break-keep">
+components/Philosophy.tsx:205:                       {t.philosophy.stat_desc?.split('\n').map((line, i) => (
+components/Philosophy.tsx:206:                          <React.Fragment key={i}>
+components/Philosophy.tsx:208:                             <br/>
+components/Philosophy.tsx:209:                          </React.Fragment>
+components/Philosophy.tsx:210:                       )) || '연간 1.5만 톤 이상의 생산 능력을 통해 고객의 비즈니스 성장을 든든하게 지원합니다.'}
+components/Philosophy.tsx:211:                    </p>
+components/Philosophy.tsx:212:                 </div>
+components/Philosophy.tsx:214:                 {/* Animated Graph Component - Floating seamlessly */}
+components/Philosophy.tsx:215:                 <StatGraph />
+components/Philosophy.tsx:216:              </div>
+components/Philosophy.tsx:217:           </div>
+components/Philosophy.tsx:218:        </ScrollReveal>
+components/Philosophy.tsx:220:      </div>
+components/Philosophy.tsx:221:    </section>
+components/PromoVideo.tsx:2:import React, { useState } from 'react';
+components/PromoVideo.tsx:3:import { Play, X } from 'lucide-react';
+components/PromoVideo.tsx:4:import ScrollReveal from './ScrollReveal';
+components/PromoVideo.tsx:6:const PromoVideo: React.FC = () => {
+components/PromoVideo.tsx:7:  const [isOpen, setIsOpen] = useState(false);
+components/PromoVideo.tsx:15:    <>
+components/PromoVideo.tsx:16:      <section className="relative h-[500px] md:h-[700px] w-full overflow-hidden bg-black group cursor-pointer" onClick={() => setIsOpen(true)}>
+components/PromoVideo.tsx:18:        {/* Background Video (Muted, Autoplay, No Controls) */}
+components/PromoVideo.tsx:19:        {/* Used youtube-nocookie.com and correct referrerPolicy */}
+components/PromoVideo.tsx:20:        <div className="absolute inset-0 w-full h-full pointer-events-none opacity-60">
+components/PromoVideo.tsx:21:           <iframe
+components/PromoVideo.tsx:22:             className="w-full h-[140%] -mt-[20%] scale-[1.5] md:scale-[1.3]" 
+components/PromoVideo.tsx:23:             src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&controls=0&start=${startParam}&si=${siParam}&playsinline=1&rel=0`}
+components/PromoVideo.tsx:28:             style={{ pointerEvents: 'none' }}
+components/PromoVideo.tsx:29:           ></iframe>
+components/PromoVideo.tsx:30:        </div>
+components/PromoVideo.tsx:32:        {/* Dark Overlay for text readability */}
+components/PromoVideo.tsx:33:        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors duration-500"></div>
+components/PromoVideo.tsx:35:        {/* Center Content */}
+components/PromoVideo.tsx:36:        <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-10 px-4">
+components/PromoVideo.tsx:37:           <ScrollReveal>
+components/PromoVideo.tsx:38:             <span className="inline-block px-3 py-1 border border-white/30 rounded-full text-white/90 text-xs font-bold tracking-[0.2em] mb-6 backdrop-blur-md uppercase shadow-lg">
+components/PromoVideo.tsx:40:             </span>
+components/PromoVideo.tsx:41:           </ScrollReveal>
+components/PromoVideo.tsx:43:           <ScrollReveal delay={0.1}>
+components/PromoVideo.tsx:44:             <h2 className="text-4xl md:text-7xl font-bold text-white mb-10 tracking-tight drop-shadow-2xl">
+components/PromoVideo.tsx:46:             </h2>
+components/PromoVideo.tsx:47:           </ScrollReveal>
+components/PromoVideo.tsx:49:           <ScrollReveal delay={0.2} className="w-full flex justify-center">
+components/PromoVideo.tsx:50:              <button
+components/PromoVideo.tsx:51:                className="relative w-24 h-24 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 group-hover:scale-110 group-hover:bg-white group-hover:text-black text-white transition-all duration-500 ease-spring shadow-[0_0_40px_rgba(255,255,255,0.1)] group-hover:shadow-[0_0_60px_rgba(255,255,255,0.4)]"
+components/PromoVideo.tsx:52:              >
+components/PromoVideo.tsx:53:                 <Play className="w-10 h-10 ml-1 fill-current" />
+components/PromoVideo.tsx:55:                 {/* Ripple Effect Ring */}
+components/PromoVideo.tsx:56:                 <div className="absolute inset-0 rounded-full border border-white/40 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite] opacity-75"></div>
+components/PromoVideo.tsx:57:              </button>
+components/PromoVideo.tsx:58:           </ScrollReveal>
+components/PromoVideo.tsx:59:        </div>
+components/PromoVideo.tsx:60:      </section>
+components/PromoVideo.tsx:62:      {/* Fullscreen Video Modal */}
+components/PromoVideo.tsx:63:      {isOpen && (
+components/PromoVideo.tsx:64:        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-xl animate-fade-in p-4 sm:p-10">
+components/PromoVideo.tsx:65:           {/* Close Button */}
+components/PromoVideo.tsx:66:           <button
+components/PromoVideo.tsx:67:             onClick={(e) => { e.stopPropagation(); setIsOpen(false); }}
+components/PromoVideo.tsx:69:           >
+components/PromoVideo.tsx:70:             <X className="w-12 h-12" />
+components/PromoVideo.tsx:71:           </button>
+components/PromoVideo.tsx:73:           {/* Video Container */}
+components/PromoVideo.tsx:74:           <div className="w-full max-w-7xl aspect-video rounded-3xl overflow-hidden shadow-2xl relative border border-white/10 bg-black animate-scale-up">
+components/PromoVideo.tsx:75:              <iframe
+components/PromoVideo.tsx:76:                width="100%"
+components/PromoVideo.tsx:77:                height="100%"
+components/PromoVideo.tsx:78:                src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&start=${startParam}&si=${siParam}&rel=0`}
+components/PromoVideo.tsx:84:              ></iframe>
+components/PromoVideo.tsx:85:           </div>
+components/PromoVideo.tsx:86:        </div>
+components/PromoVideo.tsx:88:    </>
+components/Hero.tsx:2:import React, { useEffect, useState, useRef } from 'react';
+components/Hero.tsx:3:import Button from './Button';
+components/Hero.tsx:4:import { ArrowDown, ChevronDown } from 'lucide-react';
+components/Hero.tsx:5:import { useSite } from '../contexts/SiteContext';
+components/Hero.tsx:7:const Hero: React.FC = () => {
+components/Hero.tsx:8:  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+components/Hero.tsx:11:  const bgRef = useRef<HTMLDivElement>(null);
+components/Hero.tsx:12:  const contentRef = useRef<HTMLDivElement>(null);
+components/Hero.tsx:13:  const scrollIndicatorRef = useRef<HTMLDivElement>(null);
+components/Hero.tsx:14:  const containerRef = useRef<HTMLDivElement>(null);
+components/Hero.tsx:18:  useEffect(() => {
+components/Hero.tsx:21:    const handleScroll = () => {
+components/Hero.tsx:22:      if (!ticking) {
+components/Hero.tsx:23:        window.requestAnimationFrame(() => {
+components/Hero.tsx:30:            bgRef.current.style.transform = `translate3d(${mousePos.x * -20}px, ${scrollY * 0.5 + mousePos.y * -20}px, 0) scale(1.05)`;
+components/Hero.tsx:36:            const translateY = scrollY * 0.4;
+components/Hero.tsx:40:            contentRef.current.style.transform = `translate3d(0, ${translateY}px, 0) scale(${scale})`;
+components/Hero.tsx:41:            contentRef.current.style.opacity = `${opacity}`;
+components/Hero.tsx:44:            contentRef.current.style.filter = `blur(${scrollY / 50}px)`;
+components/Hero.tsx:50:            scrollIndicatorRef.current.style.opacity = `${opacity}`;
+components/Hero.tsx:51:            scrollIndicatorRef.current.style.transform = `translate3d(-50%, ${scrollY * 0.8}px, 0)`;
+components/Hero.tsx:60:    const handleMouseMove = (e: MouseEvent) => {
+components/Hero.tsx:62:       const x = (e.clientX / window.innerWidth) * 2 - 1;
+components/Hero.tsx:63:       const y = (e.clientY / window.innerHeight) * 2 - 1;
+components/Hero.tsx:67:    window.addEventListener('scroll', handleScroll, { passive: true });
+components/Hero.tsx:68:    window.addEventListener('mousemove', handleMouseMove);
+components/Hero.tsx:70:    return () => {
+components/Hero.tsx:71:      window.removeEventListener('scroll', handleScroll);
+components/Hero.tsx:72:      window.removeEventListener('mousemove', handleMouseMove);
+components/Hero.tsx:74:  }, [mousePos]); 
+components/Hero.tsx:76:  const scrollToContent = () => {
+components/Hero.tsx:78:    const productsSection = document.getElementById('products');
+components/Hero.tsx:80:      productsSection.scrollIntoView({ behavior: 'smooth' });
+components/Hero.tsx:84:  const isDefaultLang = language === 'KOR';
+components/Hero.tsx:87:    <div ref={containerRef} className="relative h-screen w-full overflow-hidden bg-[#111111]">
+components/Hero.tsx:88:      {/* 
+components/Hero.tsx:91:      */}
+components/Hero.tsx:92:      <div 
+components/Hero.tsx:94:        className="absolute inset-[-5%] w-[110%] h-[120%] will-change-transform"
+components/Hero.tsx:95:      >
+components/Hero.tsx:96:        <div className="w-full h-full">
+components/Hero.tsx:97:            <img 
+components/Hero.tsx:98:            src={content['home_hero_bg']} 
+components/Hero.tsx:100:            className="w-full h-full object-cover filter grayscale brightness-[0.4] contrast-125" 
+components/Hero.tsx:101:            />
+components/Hero.tsx:102:        </div>
+components/Hero.tsx:104:        {/* Gradient Overlays */}
+components/Hero.tsx:105:        {/* 1. Dark overlay for text readability */}
+components/Hero.tsx:106:        <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#071D49]/40 to-[#050505]/70 mix-blend-multiply sm:via-[#071D49]/30 sm:to-[#050505]/60" />
+components/Hero.tsx:108:        {/* 2. Top fade for header */}
+components/Hero.tsx:109:        <div className="absolute top-0 left-0 w-full h-40 bg-gradient-to-b from-black/60 to-transparent" />
+components/Hero.tsx:110:      </div>
+components/Hero.tsx:112:      {/* Content */}
+components/Hero.tsx:113:      <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
+components/Hero.tsx:114:        <div 
+components/Hero.tsx:117:        >
+components/Hero.tsx:118:          {/* Badge */}
+components/Hero.tsx:119:          <div className="opacity-0 animate-slow-reveal" style={{ animationDelay: '0.2s' }}>
+components/Hero.tsx:120:            <span className="inline-block px-4 py-1.5 rounded-full border border-white/20 text-white/90 text-sm font-medium backdrop-blur-md bg-white/5 shadow-[0_0_15px_rgba(255,255,255,0.05)]">
+components/Hero.tsx:121:              {isDefaultLang ? (content['home_hero_badge'] || t.hero.badge) : t.hero.badge}
+components/Hero.tsx:122:            </span>
+components/Hero.tsx:123:          </div>
+components/Hero.tsx:125:          <h1 className="text-3xl md:text-5xl lg:text-7xl font-bold text-white tracking-tighter leading-[1.2] md:leading-[1.1] opacity-0 animate-slow-reveal break-keep" style={{ animationDelay: '0.4s' }}>
+components/Hero.tsx:126:            {isDefaultLang ? (content['home_hero_title_prefix'] || t.hero.title_prefix) : t.hero.title_prefix} <br/>
+components/Hero.tsx:127:            {/* Metallic Text Effect */}
+components/Hero.tsx:128:            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-100 via-gray-300 to-gray-500 drop-shadow-lg">
+components/Hero.tsx:129:              {isDefaultLang ? (content['home_hero_title_highlight'] || t.hero.title_highlight) : t.hero.title_highlight}
+components/Hero.tsx:130:            </span>
+components/Hero.tsx:131:          </h1>
+components/Hero.tsx:133:          <p className="text-base md:text-xl lg:text-2xl text-gray-300 md:text-gray-400 leading-relaxed max-w-3xl opacity-0 animate-slow-reveal whitespace-pre-line break-keep" style={{ animationDelay: '0.7s' }}>
+components/Hero.tsx:134:            {isDefaultLang ? (content['home_hero_desc'] || t.hero.desc) : t.hero.desc}
+components/Hero.tsx:135:          </p>
+components/Hero.tsx:137:          <div className="flex flex-col sm:flex-row gap-4 pt-6 opacity-0 animate-slow-reveal" style={{ animationDelay: '1s' }}>
+components/Hero.tsx:138:            <Button 
+components/Hero.tsx:141:              className="group bg-white !text-[#071D49] hover:bg-gray-200 border-none px-8 py-4 text-lg font-bold shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)]"
+components/Hero.tsx:142:            >
+components/Hero.tsx:144:              <ArrowDown className="ml-2 w-5 h-5 group-hover:translate-y-1 transition-transform duration-300" />
+components/Hero.tsx:145:            </Button>
+components/Hero.tsx:146:          </div>
+components/Hero.tsx:147:        </div>
+components/Hero.tsx:148:      </div>
+components/Hero.tsx:150:      {/* 
+components/Hero.tsx:152:        Technique: Tall gradient with variable opacity + Backdrop Blur
+components/Hero.tsx:155:      */}
+components/Hero.tsx:156:      <div className="absolute bottom-0 left-0 w-full h-48 z-10 pointer-events-none">
+components/Hero.tsx:157:        {/* Layer 1: Soft fade to white (matches next section color) */}
+components/Hero.tsx:158:        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent" />
+components/Hero.tsx:160:        {/* Layer 2: Subtle blur at the very bottom to dissolve image grain */}
+components/Hero.tsx:161:        <div className="absolute bottom-0 left-0 w-full h-24 backdrop-blur-[2px] mask-image-gradient-to-t" style={{ maskImage: 'linear-gradient(to top, black, transparent)' }} />
+components/Hero.tsx:162:      </div>
+components/Hero.tsx:164:      {/* Scroll Indicator */}
+components/Hero.tsx:165:      <div 
+components/Hero.tsx:169:      >
+components/Hero.tsx:170:        <ChevronDown className="w-10 h-10 text-white animate-soft-blink" strokeWidth={1.5} />
+components/Hero.tsx:171:      </div>
+components/Hero.tsx:172:    </div>
+components/Header.tsx:2:import React, { useState, useEffect } from 'react';
+components/Header.tsx:3:import { NAV_ITEMS } from '../constants'; 
+components/Header.tsx:4:import { Menu, X, ChevronDown, Globe, ArrowRight } from 'lucide-react';
+components/Header.tsx:5:import { Link, useLocation } from 'react-router-dom';
+components/Header.tsx:6:import Logo from './Logo';
+components/Header.tsx:7:import { useSite } from '../contexts/SiteContext';
+components/Header.tsx:8:import { Language } from '../types';
+components/Header.tsx:10:const Header: React.FC = () => {
+components/Header.tsx:11:  const [isScrolled, setIsScrolled] = useState(false);
+components/Header.tsx:12:  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+components/Header.tsx:16:  const [activeRoute, setActiveRoute] = useState(location.pathname);
+components/Header.tsx:18:  useEffect(() => {
+components/Header.tsx:20:  }, [location.pathname]);
+components/Header.tsx:22:  useEffect(() => {
+components/Header.tsx:23:    const handleScroll = () => {
+components/Header.tsx:24:      setIsScrolled(window.scrollY > 20);
+components/Header.tsx:28:      if (location.pathname.startsWith('/about')) {
+components/Header.tsx:29:        const sections = [
+components/Header.tsx:30:          { id: 'intro', path: '/about/intro' },
+components/Header.tsx:31:          { id: 'history', path: '/about/history' },
+components/Header.tsx:32:          { id: 'philosophy', path: '/about/philosophy' },
+components/Header.tsx:33:          { id: 'cert', path: '/about/cert' },
+components/Header.tsx:34:          { id: 'location', path: '/about/location' }
+components/Header.tsx:35:        ];
+components/Header.tsx:42:            if (rect.top <= window.innerHeight / 3 && rect.bottom >= window.innerHeight / 3) {
+components/Header.tsx:47:      } else if (location.pathname === '/') {
+components/Header.tsx:48:        const sections = [
+components/Header.tsx:49:          { id: 'philosophy', path: '/about/philosophy' },
+components/Header.tsx:50:          { id: 'products', path: '/products' },
+components/Header.tsx:51:        ];
+components/Header.tsx:56:            if (rect.top <= window.innerHeight / 3 && rect.bottom >= window.innerHeight / 3) {
+components/Header.tsx:66:    window.addEventListener('scroll', handleScroll, { passive: true });
+components/Header.tsx:69:    return () => window.removeEventListener('scroll', handleScroll);
+components/Header.tsx:70:  }, [location.pathname]);
+components/Header.tsx:72:  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+components/Header.tsx:74:  const isParentActive = (itemPath: string) => {
+components/Header.tsx:75:    if (itemPath === '/' && activeRoute === '/') return true;
+components/Header.tsx:76:    if (itemPath.startsWith('/about') && activeRoute.startsWith('/about')) return true;
+components/Header.tsx:77:    if (itemPath.startsWith('/products') && activeRoute.startsWith('/products')) return true;
+components/Header.tsx:78:    if (itemPath !== '/' && activeRoute.startsWith(itemPath)) return true;
+components/Header.tsx:82:  const isHome = location.pathname === '/';
+components/Header.tsx:83:  const isTransparent = isHome && !isScrolled && !isMobileMenuOpen;
+components/Header.tsx:84:  const logoColor = isTransparent ? 'white' : config.primaryColor;
+components/Header.tsx:87:  const getNavLabel = (key: string) => {
+components/Header.tsx:89:    if (key === '회사소개') return t.nav.about;
+components/Header.tsx:90:    if (key === '제품소개') return t.nav.products;
+components/Header.tsx:91:    if (key === '공정소개') return t.nav.process;
+components/Header.tsx:92:    if (key === '연구소') return t.nav.rnd;
+components/Header.tsx:93:    if (key === '고객지원') return t.nav.support;
+components/Header.tsx:96:    if (key === '회사개요') return t.nav.intro;
+components/Header.tsx:97:    if (key === '회사연혁') return t.nav.history;
+components/Header.tsx:98:    if (key === '경영이념') return t.nav.philosophy;
+components/Header.tsx:99:    if (key === '인증현황') return t.nav.cert;
+components/Header.tsx:100:    if (key === '오시는 길') return t.nav.location;
+components/Header.tsx:103:    if (key === '경량소재') return t.nav.light;
+components/Header.tsx:104:    if (key === '산업용소재') return t.nav.industry;
+components/Header.tsx:105:    if (key === '가공소재') return t.nav.processing;
+components/Header.tsx:106:    if (key === '전기전자부품소재') return t.nav.electronic;
+components/Header.tsx:107:    if (key === '건축소재') return t.nav.construction;
+components/Header.tsx:108:    if (key === '환경소재') return t.nav.environmental;
+components/Header.tsx:109:    if (key === '외장소재') return t.nav.exterior;
+components/Header.tsx:110:    if (key === '대체소재') return t.nav.substitute;
+components/Header.tsx:113:    if (key === '생산공정') return t.nav.production;
+components/Header.tsx:114:    if (key === '품질검사') return t.nav.quality;
+components/Header.tsx:120:    <>
+components/Header.tsx:121:      <header 
+components/Header.tsx:122:        className={`fixed top-0 left-0 right-0 z-50 transform-gpu will-change-[padding] transition-[padding] duration-300 ease-in-out ${
+components/Header.tsx:123:          !isTransparent ? 'py-3' : 'py-5'
+components/Header.tsx:124:        }`}
+components/Header.tsx:125:      >
+components/Header.tsx:126:        {/* Separated background & blur layer to prevent scroll flicker */}
+components/Header.tsx:127:        <div 
+components/Header.tsx:128:          className={`absolute inset-0 transition-[background-color,backdrop-filter,opacity,box-shadow] duration-300 ease-in-out -z-10 ${
+components/Header.tsx:129:            !isTransparent 
+components/Header.tsx:130:              ? 'bg-white/80 backdrop-blur-xl shadow-[0_1px_0_rgba(0,0,0,0.05)] opacity-100' 
+components/Header.tsx:131:              : 'bg-transparent opacity-0'
+components/Header.tsx:132:          }`} 
+components/Header.tsx:133:        />
+components/Header.tsx:135:        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+components/Header.tsx:136:          <div className="flex justify-between items-center relative">
+components/Header.tsx:137:            {/* Logo */}
+components/Header.tsx:138:            <Link 
+components/Header.tsx:141:              onClick={(e) => {
+components/Header.tsx:142:                if (location.pathname === '/') {
+components/Header.tsx:144:                  window.scrollTo({ top: 0, behavior: 'smooth' });
+components/Header.tsx:147:            >
+components/Header.tsx:148:               <Logo 
+components/Header.tsx:151:               />
+components/Header.tsx:152:            </Link>
+components/Header.tsx:154:            {/* Desktop Navigation */}
+components/Header.tsx:155:            <nav className="hidden md:flex items-center gap-2 absolute left-1/2 -translate-x-1/2 will-change-transform">
+components/Header.tsx:156:              {NAV_ITEMS.map((item) => (
+components/Header.tsx:157:                <div key={item.path} className="relative group min-w-[90px] px-3 py-2 flex justify-center">
+components/Header.tsx:158:                  <Link 
+components/Header.tsx:160:                    className={`text-sm transition-colors duration-200 flex items-center gap-1.5 font-medium
+components/Header.tsx:161:                      ${!isTransparent 
+components/Header.tsx:162:                        ? (isParentActive(item.path) ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900') 
+components/Header.tsx:163:                        : (isParentActive(item.path) ? 'text-white' : 'text-white/80 hover:text-white')
+components/Header.tsx:164:                      }`}
+components/Header.tsx:165:                  >
+components/Header.tsx:167:                    {item.subItems && (
+components/Header.tsx:168:                      <span className="w-3 h-3 flex items-center justify-center shrink-0">
+components/Header.tsx:169:                        <ChevronDown className="w-full h-full opacity-60 transition-transform duration-300 group-hover:rotate-180 transform-gpu" />
+components/Header.tsx:170:                      </span>
+components/Header.tsx:172:                  </Link>
+components/Header.tsx:174:                  {/* Mega Dropdown Menu (Enhanced Glassmorphism) */}
+components/Header.tsx:175:                  {item.subItems && (
+components/Header.tsx:176:                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 pt-4 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-opacity transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] will-change-transform z-50">
+components/Header.tsx:177:                      <div className={`
+components/Header.tsx:179:                        transition-colors duration-300 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)]
+components/Header.tsx:180:                        ${isTransparent 
+components/Header.tsx:181:                          ? 'bg-black/30 border-white/10 shadow-black/20' // Dark Glass (High Transparency)
+components/Header.tsx:182:                          : 'bg-white/60 border-white/40 shadow-gray-200/50' // Light Glass (Frosted)
+components/Header.tsx:184:                        ${item.subItems.length > 5 ? 'w-[540px]' : 'w-max'}
+components/Header.tsx:185:                      `}>
+components/Header.tsx:186:                        <div className={`
+components/Header.tsx:187:                          ${item.subItems.length > 5 
+components/Header.tsx:188:                            ? 'grid grid-cols-4 gap-1' 
+components/Header.tsx:189:                            : 'flex flex-row gap-1'}
+components/Header.tsx:190:                        `}>
+components/Header.tsx:191:                          {item.subItems.map((sub) => (
+components/Header.tsx:192:                            <Link 
+components/Header.tsx:195:                              className={`
+components/Header.tsx:197:                                ${item.subItems!.length > 5 
+components/Header.tsx:198:                                  ? 'py-2.5 px-2 text-center' 
+components/Header.tsx:199:                                  : 'py-2 px-5 min-w-[100px] text-center'}
+components/Header.tsx:200:                                ${isTransparent
+components/Header.tsx:201:                                  ? (activeRoute === sub.path ? 'bg-white/30 text-white shadow-[0_0_15px_rgba(255,255,255,0.2)]' : 'text-white/90 hover:bg-white/20 hover:text-white hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]')
+components/Header.tsx:202:                                  : (activeRoute === sub.path ? 'bg-gray-800/90 backdrop-blur-md text-white shadow-md border border-gray-700/50' : 'text-gray-700 hover:bg-black/5 hover:text-gray-900 hover:shadow-sm')
+components/Header.tsx:204:                              `}
+components/Header.tsx:205:                            >
+components/Header.tsx:206:                              <span className="block text-[13px] font-medium leading-tight">
+components/Header.tsx:208:                              </span>
+components/Header.tsx:209:                            </Link>
+components/Header.tsx:211:                        </div>
+components/Header.tsx:212:                      </div>
+components/Header.tsx:213:                    </div>
+components/Header.tsx:216:                  {isParentActive(item.path) && (
+components/Header.tsx:217:                    <span className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 rounded-full ${!isTransparent ? 'bg-gray-800' : 'bg-white'}`} />
+components/Header.tsx:219:                </div>
+components/Header.tsx:221:            </nav>
+components/Header.tsx:223:            {/* Right Actions: Lang Switcher & CTA */}
+components/Header.tsx:224:            <div className="hidden md:flex items-center gap-2">
+components/Header.tsx:225:              {/* Language Switcher */}
+components/Header.tsx:226:              <div className="relative group">
+components/Header.tsx:227:                 <button className={`flex items-center gap-1 text-xs font-bold px-3 py-2 rounded-full transition-all ${
+components/Header.tsx:228:                   !isTransparent 
+components/Header.tsx:229:                    ? 'text-gray-500 hover:bg-gray-100 hover:text-gray-900' 
+components/Header.tsx:230:                    : 'text-white/80 hover:bg-white/10 hover:text-white'
+components/Header.tsx:231:                 }`}>
+components/Header.tsx:232:                    <Globe className="w-3.5 h-3.5" />
+components/Header.tsx:233:                    <span>{language}</span>
+components/Header.tsx:234:                 </button>
+components/Header.tsx:235:                 <div className="absolute top-full right-0 pt-2 w-24 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity z-50">
+components/Header.tsx:236:                    <div className="bg-white/90 backdrop-blur-md rounded-lg shadow-xl border border-gray-100 overflow-hidden py-1">
+components/Header.tsx:237:                       {['KOR', 'ENG', 'JPN'].map((lang) => (
+components/Header.tsx:238:                          <button 
+components/Header.tsx:240:                            onClick={() => setLanguage(lang as Language)}
+components/Header.tsx:241:                            className={`w-full text-left px-4 py-2 text-xs font-medium hover:bg-gray-50 ${language === lang ? 'text-brand-blue bg-blue-50' : 'text-gray-600'}`}
+components/Header.tsx:242:                          >
+components/Header.tsx:244:                          </button>
+components/Header.tsx:246:                    </div>
+components/Header.tsx:247:                 </div>
+components/Header.tsx:248:              </div>
+components/Header.tsx:250:              {/* Enhanced CTA Button - Minimal Ghost Style to Hover Fill */}
+components/Header.tsx:251:              <Link to="/contact">
+components/Header.tsx:252:                <button className={`
+components/Header.tsx:254:                  ${!isTransparent 
+components/Header.tsx:255:                    ? 'text-gray-900 bg-transparent hover:bg-gray-100' 
+components/Header.tsx:256:                    : 'text-white bg-transparent hover:bg-white/20 hover:backdrop-blur-md'}
+components/Header.tsx:257:                `}>
+components/Header.tsx:258:                  <span className="relative z-10 flex items-center gap-1">
+components/Header.tsx:260:                    {/* Arrow Animation */}
+components/Header.tsx:261:                    <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.5} />
+components/Header.tsx:262:                  </span>
+components/Header.tsx:263:                </button>
+components/Header.tsx:264:              </Link>
+components/Header.tsx:265:            </div>
+components/Header.tsx:267:            {/* Mobile Menu Button */}
+components/Header.tsx:268:            <div className="md:hidden flex items-center gap-3">
+components/Header.tsx:269:               <button 
+components/Header.tsx:272:               >
+components/Header.tsx:273:                 {isMobileMenuOpen ? (
+components/Header.tsx:274:                   <X className="h-6 w-6 text-gray-900" />
+components/Header.tsx:276:                   <Menu className={`h-6 w-6 ${!isTransparent ? 'text-gray-900' : 'text-white'}`} />
+components/Header.tsx:278:               </button>
+components/Header.tsx:279:            </div>
+components/Header.tsx:280:          </div>
+components/Header.tsx:281:        </div>
+components/Header.tsx:282:      </header>
+components/Header.tsx:284:      {/* Mobile Menu Overlay */}
+components/Header.tsx:285:      <div 
+components/Header.tsx:286:        className={`fixed inset-0 bg-white z-40 transform transition-transform duration-300 ease-in-out md:hidden ${
+components/Header.tsx:287:          isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+components/Header.tsx:288:        }`}
+components/Header.tsx:289:      >
+components/Header.tsx:290:        <div className="pt-28 px-6 h-full overflow-y-auto pb-10">
+components/Header.tsx:291:          <div className="flex justify-end items-center mb-6">
+components/Header.tsx:292:             <div className="flex bg-gray-100 rounded-lg p-1">
+components/Header.tsx:293:               {['KOR', 'ENG', 'JPN'].map((lang) => (
+components/Header.tsx:294:                  <button 
+components/Header.tsx:296:                    onClick={() => setLanguage(lang as Language)}
+components/Header.tsx:297:                    className={`px-3 py-1 text-xs font-bold rounded ${language === lang ? 'bg-white shadow-sm text-brand-blue' : 'text-gray-500'}`}
+components/Header.tsx:298:                  >
+components/Header.tsx:300:                  </button>
+components/Header.tsx:302:             </div>
+components/Header.tsx:303:          </div>
+components/Header.tsx:304:          <nav className="flex flex-col space-y-8">
+components/Header.tsx:305:            {NAV_ITEMS.map((item) => (
+components/Header.tsx:306:              <div key={item.label} className="border-b border-gray-100 pb-6 last:border-0">
+components/Header.tsx:307:                <Link 
+components/Header.tsx:310:                  onClick={() => setIsMobileMenuOpen(false)}
+components/Header.tsx:311:                >
+components/Header.tsx:313:                </Link>
+components/Header.tsx:314:                {item.subItems && (
+components/Header.tsx:315:                  <div className="pl-4 flex flex-col space-y-3 border-l-2 border-gray-100">
+components/Header.tsx:316:                    {item.subItems.map((sub) => (
+components/Header.tsx:317:                      <Link 
+components/Header.tsx:321:                        onClick={() => setIsMobileMenuOpen(false)}
+components/Header.tsx:322:                      >
+components/Header.tsx:324:                      </Link>
+components/Header.tsx:326:                  </div>
+components/Header.tsx:328:              </div>
+components/Header.tsx:330:          </nav>
+components/Header.tsx:331:          <div className="mt-8 mb-8">
+components/Header.tsx:332:            <Link 
+components/Header.tsx:334:              className={`block w-full bg-gray-900 text-white text-center py-4 font-bold text-lg shadow-lg active:scale-95 transition-transform ${config.borderRadius}`}
+components/Header.tsx:335:              onClick={() => setIsMobileMenuOpen(false)}
+components/Header.tsx:336:            >
+components/Header.tsx:338:            </Link>
+components/Header.tsx:339:          </div>
+components/Header.tsx:340:        </div>
+components/Header.tsx:341:      </div>
+components/Header.tsx:342:    </>
+components/Logo.tsx:2:import React from 'react';
+components/Logo.tsx:3:import { useSite } from '../contexts/SiteContext';
+components/Logo.tsx:6:  color?: string; // Hex color or 'white'
+components/Logo.tsx:7:  className?: string;
+components/Logo.tsx:10:const Logo: React.FC<LogoProps> = ({ color = '#071D49', className = '' }) => {
+components/Logo.tsx:16:    // This is a heuristic to support the user's specific request without breaking other potential colored uploads
+components/Logo.tsx:17:    const isWhiteSource = config.logoUrl.toLowerCase().includes('white');
+components/Logo.tsx:23:      if (color === 'white') {
+components/Logo.tsx:27:        // We want dark (e.g. #071D49) for white backgrounds (scrolled header, footer).
+components/Logo.tsx:28:        // Since we can't easily colorize white to specific hex with simple filters,
+components/Logo.tsx:31:        style = { filter: 'brightness(0)' }; 
+components/Logo.tsx:35:      style = color === 'white' 
+components/Logo.tsx:36:        ? { filter: 'brightness(0) invert(1) grayscale(1)' } 
+components/Logo.tsx:41:      <img 
+components/Logo.tsx:44:        className={`object-contain ${className}`}
+components/Logo.tsx:46:      />
+components/Logo.tsx:54:    <svg 
+components/Logo.tsx:58:      className={`max-w-full ${className}`}
+components/Logo.tsx:61:    >
+components/Logo.tsx:62:      {/* DMC Symbol Group */}
+components/Logo.tsx:63:      <g stroke={color} strokeWidth="5" strokeLinecap="square">
+components/Logo.tsx:64:        {/* D */}
+components/Logo.tsx:65:        <path d="M10 12H35C48 12 55 20 55 32C55 44 48 52 35 52H10V12Z" />
+components/Logo.tsx:66:        {/* M */}
+components/Logo.tsx:67:        <path d="M75 52V12H88L103 38L118 12H131V52" strokeLinejoin="miter"/>
+components/Logo.tsx:68:        {/* C */}
+components/Logo.tsx:69:        <path d="M151 52H191" />
+components/Logo.tsx:70:        <path d="M191 12H151V52" />
+components/Logo.tsx:71:      </g>
+components/Logo.tsx:73:      {/* Text Group - Moved closer to symbol (x=210) and ensured font sizes fit */}
+components/Logo.tsx:74:      <g fill={color} style={{ fontFamily: '"Noto Sans KR", sans-serif' }}>
+components/Logo.tsx:75:        <text x="210" y="34" fontWeight="800" fontSize="28" letterSpacing="-0.5px">DAEWOO</text>
+components/Logo.tsx:76:        <text x="210" y="54" fontWeight="600" fontSize="13" letterSpacing="0.15em">METAL CO., LTD.</text>
+components/Logo.tsx:77:      </g>
+components/Logo.tsx:78:    </svg>
+components/ScrollReveal.tsx:2:import React, { useEffect, useRef, useState } from 'react';
+components/ScrollReveal.tsx:6:  width?: 'full' | 'auto'; // Container width
+components/ScrollReveal.tsx:7:  delay?: number; // Delay in seconds
+components/ScrollReveal.tsx:8:  mode?: 'fade-up' | 'scale'; // Animation type
+components/ScrollReveal.tsx:9:  className?: string;
+components/ScrollReveal.tsx:10:  viewportThreshold?: number; // Percentage of element visible to trigger
+components/ScrollReveal.tsx:13:const ScrollReveal: React.FC<ScrollRevealProps> = ({ 
+components/ScrollReveal.tsx:15:  width = 'full', 
+components/ScrollReveal.tsx:17:  mode = 'fade-up',
+components/ScrollReveal.tsx:18:  className = '',
+components/ScrollReveal.tsx:20:}) => {
+components/ScrollReveal.tsx:21:  const [isVisible, setIsVisible] = useState(false);
+components/ScrollReveal.tsx:22:  const ref = useRef<HTMLDivElement>(null);
+components/ScrollReveal.tsx:24:  useEffect(() => {
+components/ScrollReveal.tsx:26:      ([entry]) => {
+components/ScrollReveal.tsx:34:        rootMargin: '0px 0px -50px 0px' 
+components/ScrollReveal.tsx:42:    return () => {
+components/ScrollReveal.tsx:47:  }, [viewportThreshold]);
+components/ScrollReveal.tsx:49:  const baseClass = mode === 'fade-up' ? 'reveal-hidden' : 'scale-hidden';
+components/ScrollReveal.tsx:50:  const visibleClass = mode === 'fade-up' ? 'reveal-visible' : 'scale-visible';
+components/ScrollReveal.tsx:51:  const widthClass = width === 'full' ? 'w-full' : 'w-auto inline-block';
+components/ScrollReveal.tsx:54:    <div
+components/ScrollReveal.tsx:56:      className={`${widthClass} ${baseClass} ${isVisible ? visibleClass : ''} ${className}`}
+components/ScrollReveal.tsx:57:      style={{ transitionDelay: `${delay}s` }}
+components/ScrollReveal.tsx:58:    >
+components/ScrollReveal.tsx:60:    </div>
+components/AdminLayout.tsx:2:import React from 'react';
+components/AdminLayout.tsx:3:import { Link, useLocation, useNavigate } from 'react-router-dom';
+components/AdminLayout.tsx:4:import { LayoutDashboard, FileText, Settings, LogOut, Home, User, Layers } from 'lucide-react';
+components/AdminLayout.tsx:5:import { useSite } from '../contexts/SiteContext';
+components/AdminLayout.tsx:6:import { useAuth } from '../contexts/AuthContext';
+components/AdminLayout.tsx:12:const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
+components/AdminLayout.tsx:18:  const handleLogout = () => {
+components/AdminLayout.tsx:20:    navigate('/login');
+components/AdminLayout.tsx:23:  const menuItems = [
+components/AdminLayout.tsx:24:    { label: '대시보드', path: '/admin', icon: <LayoutDashboard className="w-5 h-5" /> },
+components/AdminLayout.tsx:25:    { label: '페이지/콘텐츠 관리', path: '/admin/content', icon: <Layers className="w-5 h-5" /> },
+components/AdminLayout.tsx:26:    { label: '게시글 관리', path: '/admin/posts', icon: <FileText className="w-5 h-5" /> },
+components/AdminLayout.tsx:27:    { label: '사이트 설정', path: '/admin/settings', icon: <Settings className="w-5 h-5" /> },
+components/AdminLayout.tsx:28:  ];
+components/AdminLayout.tsx:31:    <div className="flex h-screen bg-gray-50 font-sans">
+components/AdminLayout.tsx:32:      {/* Sidebar */}
+components/AdminLayout.tsx:33:      <aside className="w-64 bg-[#071D49] text-white flex flex-col shadow-2xl z-20">
+components/AdminLayout.tsx:34:        <div className="p-6 border-b border-white/10">
+components/AdminLayout.tsx:35:          <h1 className="text-xl font-bold tracking-tight">Admin Console</h1>
+components/AdminLayout.tsx:36:          <p className="text-xs text-gray-400 mt-1">{config.siteName}</p>
+components/AdminLayout.tsx:37:        </div>
+components/AdminLayout.tsx:39:        <nav className="flex-1 py-6 px-3 space-y-1">
+components/AdminLayout.tsx:40:          {menuItems.map((item) => {
+components/AdminLayout.tsx:43:              <Link
+components/AdminLayout.tsx:46:                className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+components/AdminLayout.tsx:48:                    ? 'bg-white/10 text-white font-medium shadow-inner' 
+components/AdminLayout.tsx:49:                    : 'text-gray-400 hover:bg-white/5 hover:text-white'
+components/AdminLayout.tsx:50:                }`}
+components/AdminLayout.tsx:51:              >
+components/AdminLayout.tsx:53:                <span>{item.label}</span>
+components/AdminLayout.tsx:54:              </Link>
+components/AdminLayout.tsx:57:        </nav>
+components/AdminLayout.tsx:59:        <div className="p-4 border-t border-white/10">
+components/AdminLayout.tsx:60:          <Link to="/" className="flex items-center space-x-3 px-4 py-3 text-gray-400 hover:text-white transition-colors">
+components/AdminLayout.tsx:61:            <Home className="w-5 h-5" />
+components/AdminLayout.tsx:62:            <span>사이트 바로가기</span>
+components/AdminLayout.tsx:63:          </Link>
+components/AdminLayout.tsx:64:          <button 
+components/AdminLayout.tsx:67:          >
+components/AdminLayout.tsx:68:            <LogOut className="w-5 h-5" />
+components/AdminLayout.tsx:69:            <span>로그아웃</span>
+components/AdminLayout.tsx:70:          </button>
+components/AdminLayout.tsx:71:        </div>
+components/AdminLayout.tsx:72:      </aside>
+components/AdminLayout.tsx:74:      {/* Main Content */}
+components/AdminLayout.tsx:75:      <div className="flex-1 flex flex-col overflow-hidden">
+components/AdminLayout.tsx:76:        {/* Top Header */}
+components/AdminLayout.tsx:77:        <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8 shadow-sm z-10">
+components/AdminLayout.tsx:78:          <h2 className="text-lg font-semibold text-gray-800">
+components/AdminLayout.tsx:79:            {menuItems.find(m => m.path === location.pathname)?.label || 'Dashboard'}
+components/AdminLayout.tsx:80:          </h2>
+components/AdminLayout.tsx:81:          <div className="flex items-center space-x-4">
+components/AdminLayout.tsx:82:             <div className="flex items-center space-x-2">
+components/AdminLayout.tsx:83:                <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600">
+components/AdminLayout.tsx:84:                  <User className="w-4 h-4" />
+components/AdminLayout.tsx:85:                </div>
+components/AdminLayout.tsx:86:                <span className="text-sm font-medium text-gray-700">Administrator</span>
+components/AdminLayout.tsx:87:             </div>
+components/AdminLayout.tsx:88:          </div>
+components/AdminLayout.tsx:89:        </header>
+components/AdminLayout.tsx:91:        {/* Scrollable Area */}
+components/AdminLayout.tsx:92:        <main className="flex-1 overflow-y-auto p-8 no-scrollbar">
+components/AdminLayout.tsx:93:          <div className="max-w-6xl mx-auto animate-fade-in">
+components/AdminLayout.tsx:95:          </div>
+components/AdminLayout.tsx:96:        </main>
+components/AdminLayout.tsx:97:      </div>
+components/AdminLayout.tsx:98:    </div>
+components/ContactForm.tsx:2:import React, { useState } from 'react';
+components/ContactForm.tsx:3:import { Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+components/ContactForm.tsx:4:import Button from './Button';
+components/ContactForm.tsx:5:import { useSite } from '../contexts/SiteContext';
+components/ContactForm.tsx:17:const ContactForm: React.FC = () => {
+components/ContactForm.tsx:19:  const [formData, setFormData] = useState<FormData>({
+components/ContactForm.tsx:20:    company: '',
+components/ContactForm.tsx:21:    name: '',
+components/ContactForm.tsx:22:    phone: '',
+components/ContactForm.tsx:23:    email: '',
+components/ContactForm.tsx:24:    type: '견적문의',
+components/ContactForm.tsx:25:    message: '',
+components/ContactForm.tsx:29:  const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
+components/ContactForm.tsx:30:  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+components/ContactForm.tsx:32:  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+components/ContactForm.tsx:34:    setFormData(prev => ({ ...prev, [name]: value }));
+components/ContactForm.tsx:36:    if (errors[name as keyof FormData]) {
+components/ContactForm.tsx:37:      setErrors(prev => ({ ...prev, [name]: undefined }));
+components/ContactForm.tsx:41:  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+components/ContactForm.tsx:42:    setFormData(prev => ({ ...prev, agreement: e.target.checked }));
+components/ContactForm.tsx:43:    if (errors.agreement) setErrors(prev => ({ ...prev, agreement: undefined }));
+components/ContactForm.tsx:46:  const validate = () => {
+components/ContactForm.tsx:47:    const newErrors: Partial<Record<keyof FormData, string>> = {};
+components/ContactForm.tsx:48:    if (!formData.company) newErrors.company = '회사명을 입력해주세요.';
+components/ContactForm.tsx:49:    if (!formData.name) newErrors.name = '담당자 성함을 입력해주세요.';
+components/ContactForm.tsx:50:    if (!formData.phone) newErrors.phone = '연락처를 입력해주세요.';
+components/ContactForm.tsx:51:    if (!formData.email || !/^\S+@\S+\.\S+$/.test(formData.email)) newErrors.email = '유효한 이메일을 입력해주세요.';
+components/ContactForm.tsx:52:    if (!formData.message) newErrors.message = '문의 내용을 입력해주세요.';
+components/ContactForm.tsx:53:    if (!formData.agreement) newErrors.agreement = '개인정보 수집 및 이용에 동의해주세요.';
+components/ContactForm.tsx:59:  const handleSubmit = async (e: React.FormEvent) => {
+components/ContactForm.tsx:61:    if (!validate()) return;
+components/ContactForm.tsx:63:    setStatus('submitting');
+components/ContactForm.tsx:69:        subject: `[대우경금속 홈페이지 웹문의] ${formData.company} - ${formData.type}`,
+components/ContactForm.tsx:77:            'Accept': 'application/json',
+components/ContactForm.tsx:78:            'Content-Type': 'application/json'
+components/ContactForm.tsx:83:        setStatus('success');
+components/ContactForm.tsx:85:            company: '',
+components/ContactForm.tsx:86:            name: '',
+components/ContactForm.tsx:87:            phone: '',
+components/ContactForm.tsx:88:            email: '',
+components/ContactForm.tsx:89:            type: '견적문의',
+components/ContactForm.tsx:90:            message: '',
+components/ContactForm.tsx:94:        setStatus('error');
+components/ContactForm.tsx:98:      setStatus('error');
+components/ContactForm.tsx:102:  if (status === 'success') {
+components/ContactForm.tsx:104:      <div className="bg-white rounded-3xl p-8 md:p-12 shadow-lg border border-gray-100 text-center animate-fade-in">
+components/ContactForm.tsx:105:        <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6">
+components/ContactForm.tsx:106:          <CheckCircle className="w-10 h-10 text-green-500" />
+components/ContactForm.tsx:107:        </div>
+components/ContactForm.tsx:108:        <h3 className="text-2xl font-bold text-gray-900 mb-2">{t.contact.form.success_title}</h3>
+components/ContactForm.tsx:109:        <p className="text-gray-500 mb-8 leading-relaxed whitespace-pre-line">
+components/ContactForm.tsx:111:        </p>
+components/ContactForm.tsx:112:        <Button onClick={() => setStatus('idle')} variant="outline" className="rounded-full">
+components/ContactForm.tsx:114:        </Button>
+components/ContactForm.tsx:115:      </div>
+components/ContactForm.tsx:120:    <form onSubmit={handleSubmit} className="bg-white rounded-3xl p-8 md:p-10 shadow-xl shadow-gray-200/50 border border-gray-100 relative overflow-hidden">
+components/ContactForm.tsx:121:      <div className="space-y-6">
+components/ContactForm.tsx:122:        {/* Header */}
+components/ContactForm.tsx:123:        <div className="mb-8">
+components/ContactForm.tsx:124:          <h3 className="text-2xl font-bold text-gray-900">{t.contact.form.title}</h3>
+components/ContactForm.tsx:125:          <p className="text-sm text-gray-500 mt-1">{t.contact.form.subtitle}</p>
+components/ContactForm.tsx:126:        </div>
+components/ContactForm.tsx:128:        {/* Form Fields */}
+components/ContactForm.tsx:129:        <div className="grid md:grid-cols-2 gap-6">
+components/ContactForm.tsx:130:          <div className="space-y-1">
+components/ContactForm.tsx:131:            <label className="text-sm font-bold text-gray-700 ml-1">{t.contact.form.labels.company} <span className="text-red-500">*</span></label>
+components/ContactForm.tsx:132:            <input
+components/ContactForm.tsx:138:              className={`w-full p-4 bg-gray-50 border rounded-xl outline-none transition-all focus:bg-white focus:ring-2 ${errors.company ? 'border-red-300 focus:ring-red-200' : 'border-gray-200 focus:ring-brand-blue/20 focus:border-brand-blue'}`}
+components/ContactForm.tsx:139:            />
+components/ContactForm.tsx:140:            {errors.company && <p className="text-xs text-red-500 ml-1 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.company}</p>}
+components/ContactForm.tsx:141:          </div>
+components/ContactForm.tsx:143:          <div className="space-y-1">
+components/ContactForm.tsx:144:            <label className="text-sm font-bold text-gray-700 ml-1">{t.contact.form.labels.name} <span className="text-red-500">*</span></label>
+components/ContactForm.tsx:145:            <input
+components/ContactForm.tsx:151:              className={`w-full p-4 bg-gray-50 border rounded-xl outline-none transition-all focus:bg-white focus:ring-2 ${errors.name ? 'border-red-300 focus:ring-red-200' : 'border-gray-200 focus:ring-brand-blue/20 focus:border-brand-blue'}`}
+components/ContactForm.tsx:152:            />
+components/ContactForm.tsx:153:            {errors.name && <p className="text-xs text-red-500 ml-1 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.name}</p>}
+components/ContactForm.tsx:154:          </div>
+components/ContactForm.tsx:156:          <div className="space-y-1">
+components/ContactForm.tsx:157:            <label className="text-sm font-bold text-gray-700 ml-1">{t.contact.form.labels.phone} <span className="text-red-500">*</span></label>
+components/ContactForm.tsx:158:            <input
+components/ContactForm.tsx:164:              className={`w-full p-4 bg-gray-50 border rounded-xl outline-none transition-all focus:bg-white focus:ring-2 ${errors.phone ? 'border-red-300 focus:ring-red-200' : 'border-gray-200 focus:ring-brand-blue/20 focus:border-brand-blue'}`}
+components/ContactForm.tsx:165:            />
+components/ContactForm.tsx:166:            {errors.phone && <p className="text-xs text-red-500 ml-1 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.phone}</p>}
+components/ContactForm.tsx:167:          </div>
+components/ContactForm.tsx:169:          <div className="space-y-1">
+components/ContactForm.tsx:170:            <label className="text-sm font-bold text-gray-700 ml-1">{t.contact.form.labels.email} <span className="text-red-500">*</span></label>
+components/ContactForm.tsx:171:            <input
+components/ContactForm.tsx:177:              className={`w-full p-4 bg-gray-50 border rounded-xl outline-none transition-all focus:bg-white focus:ring-2 ${errors.email ? 'border-red-300 focus:ring-red-200' : 'border-gray-200 focus:ring-brand-blue/20 focus:border-brand-blue'}`}
+components/ContactForm.tsx:178:            />
+components/ContactForm.tsx:179:            {errors.email && <p className="text-xs text-red-500 ml-1 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.email}</p>}
+components/ContactForm.tsx:180:          </div>
+components/ContactForm.tsx:181:        </div>
+components/ContactForm.tsx:183:        <div className="space-y-1">
+components/ContactForm.tsx:184:          <label className="text-sm font-bold text-gray-700 ml-1">{t.contact.form.labels.type}</label>
+components/ContactForm.tsx:185:          <select
+components/ContactForm.tsx:190:          >
+components/ContactForm.tsx:191:            <option value="견적문의">{t.contact.form.options.inquiry}</option>
+components/ContactForm.tsx:192:            <option value="기술상담">{t.contact.form.options.tech}</option>
+components/ContactForm.tsx:193:            <option value="채용문의">{t.contact.form.options.recruit}</option>
+components/ContactForm.tsx:194:            <option value="기타">{t.contact.form.options.etc}</option>
+components/ContactForm.tsx:195:          </select>
+components/ContactForm.tsx:196:        </div>
+components/ContactForm.tsx:198:        <div className="space-y-1">
+components/ContactForm.tsx:199:          <label className="text-sm font-bold text-gray-700 ml-1">{t.contact.form.labels.message} <span className="text-red-500">*</span></label>
+components/ContactForm.tsx:200:          <textarea
+components/ContactForm.tsx:206:            className={`w-full p-4 bg-gray-50 border rounded-xl outline-none transition-all focus:bg-white focus:ring-2 resize-none ${errors.message ? 'border-red-300 focus:ring-red-200' : 'border-gray-200 focus:ring-brand-blue/20 focus:border-brand-blue'}`}
+components/ContactForm.tsx:207:          />
+components/ContactForm.tsx:208:          {errors.message && <p className="text-xs text-red-500 ml-1 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {errors.message}</p>}
+components/ContactForm.tsx:209:        </div>
+components/ContactForm.tsx:211:        {/* Agreement */}
+components/ContactForm.tsx:212:        <div className="pt-2">
+components/ContactForm.tsx:213:           <label className="flex items-start gap-3 cursor-pointer group">
+components/ContactForm.tsx:214:              <div className="relative flex items-center">
+components/ContactForm.tsx:215:                <input 
+components/ContactForm.tsx:221:                />
+components/ContactForm.tsx:222:                <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 peer-checked:opacity-100">
+components/ContactForm.tsx:223:                   <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
+components/ContactForm.tsx:224:                </div>
+components/ContactForm.tsx:225:              </div>
+components/ContactForm.tsx:226:              <span className={`text-sm ${errors.agreement ? 'text-red-500' : 'text-gray-500 group-hover:text-gray-700'}`}>
+components/ContactForm.tsx:228:              </span>
+components/ContactForm.tsx:229:           </label>
+components/ContactForm.tsx:230:        </div>
+components/ContactForm.tsx:232:        <div className="pt-4">
+components/ContactForm.tsx:233:          <Button 
+components/ContactForm.tsx:236:            disabled={status === 'submitting'}
+components/ContactForm.tsx:238:          >
+components/ContactForm.tsx:239:            {status === 'submitting' ? (
+components/ContactForm.tsx:240:              <span className="flex items-center gap-2">
+components/ContactForm.tsx:241:                <Loader2 className="w-5 h-5 animate-spin" /> {t.contact.form.submitting}
+components/ContactForm.tsx:242:              </span>
+components/ContactForm.tsx:244:              <span className="flex items-center gap-2">
+components/ContactForm.tsx:245:                {t.contact.form.submit} <Send className="w-5 h-5" />
+components/ContactForm.tsx:246:              </span>
+components/ContactForm.tsx:248:          </Button>
+components/ContactForm.tsx:249:          {status === 'error' && (
+components/ContactForm.tsx:250:            <div className="mt-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm text-center flex items-center justify-center gap-2 animate-fade-in">
+components/ContactForm.tsx:251:              <AlertCircle className="w-4 h-4" />
+components/ContactForm.tsx:253:            </div>
+components/ContactForm.tsx:255:        </div>
+components/ContactForm.tsx:256:      </div>
+components/ContactForm.tsx:257:    </form>
+components/PageLayout.tsx:1:import React from 'react';
+components/PageLayout.tsx:2:import { ArrowRight } from 'lucide-react';
+components/PageLayout.tsx:7:  badge?: React.ReactNode;
+components/PageLayout.tsx:8:  children?: React.ReactNode;
+components/PageLayout.tsx:11:const PageLayout: React.FC<PageLayoutProps> = ({ title, subtitle, badge, children }) => {
+components/PageLayout.tsx:13:    <div className="pt-32 pb-24 min-h-screen bg-brand-gray">
+components/PageLayout.tsx:14:      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+components/PageLayout.tsx:15:        {/* Header Section */}
+components/PageLayout.tsx:16:        <div className="mb-16 animate-slide-up">
+components/PageLayout.tsx:17:          {badge && (
+components/PageLayout.tsx:18:            <div className="mb-4">
+components/PageLayout.tsx:20:            </div>
+components/PageLayout.tsx:22:          <h1 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight break-keep">
+components/PageLayout.tsx:24:          </h1>
+components/PageLayout.tsx:25:          <p className="text-lg md:text-xl text-gray-500 max-w-4xl leading-relaxed whitespace-pre-line break-keep">
+components/PageLayout.tsx:27:          </p>
+components/PageLayout.tsx:28:          <div className="h-1 w-20 bg-brand-blue mt-8 rounded-full"></div>
+components/PageLayout.tsx:29:        </div>
+components/PageLayout.tsx:31:        {/* Content Section */}
+components/PageLayout.tsx:32:        <div className="bg-white rounded-[2rem] p-8 md:p-12 shadow-sm border border-gray-100 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+components/PageLayout.tsx:33:          {children ? children : (
+components/PageLayout.tsx:34:            <div className="flex flex-col items-center justify-center py-20 text-center space-y-6">
+components/PageLayout.tsx:35:              <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center">
+components/PageLayout.tsx:36:                 <div className="w-2 h-2 bg-gray-300 rounded-full animate-ping"></div>
+components/PageLayout.tsx:37:              </div>
+components/PageLayout.tsx:38:              <div>
+components/PageLayout.tsx:39:                <h3 className="text-lg font-medium text-gray-900 mb-2">페이지 준비 중입니다</h3>
+components/PageLayout.tsx:40:                <p className="text-gray-500">현재 컨텐츠를 업데이트하고 있습니다.<br/>더 나은 서비스로 찾아뵙겠습니다.</p>
+components/PageLayout.tsx:41:              </div>
+components/PageLayout.tsx:42:            </div>
+components/PageLayout.tsx:44:        </div>
+components/PageLayout.tsx:45:      </div>
+components/PageLayout.tsx:46:    </div>
+components/ContactBanner.tsx:2:import React from 'react';
+components/ContactBanner.tsx:3:import { Link } from 'react-router-dom';
+components/ContactBanner.tsx:4:import ScrollReveal from './ScrollReveal';
+components/ContactBanner.tsx:5:import { useSite } from '../contexts/SiteContext';
+components/ContactBanner.tsx:6:import { ArrowRight } from 'lucide-react';
+components/ContactBanner.tsx:8:const ContactBanner: React.FC = () => {
+components/ContactBanner.tsx:12:    <section className="py-32 bg-white relative overflow-hidden">
+components/ContactBanner.tsx:13:      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-gray-50 to-white -z-10"></div>
+components/ContactBanner.tsx:15:      <div className="max-w-4xl mx-auto px-4 text-center">
+components/ContactBanner.tsx:16:        <ScrollReveal>
+components/ContactBanner.tsx:17:          <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold text-gray-900 mb-8 tracking-tight whitespace-pre-line break-keep">
+components/ContactBanner.tsx:19:          </h2>
+components/ContactBanner.tsx:20:        </ScrollReveal>
+components/ContactBanner.tsx:22:        <ScrollReveal delay={0.1}>
+components/ContactBanner.tsx:23:          <p className="text-lg sm:text-xl md:text-2xl text-gray-500 mb-12 leading-relaxed font-medium whitespace-pre-line break-keep">
+components/ContactBanner.tsx:25:          </p>
+components/ContactBanner.tsx:26:        </ScrollReveal>
+components/ContactBanner.tsx:28:        <ScrollReveal delay={0.2}>
+components/ContactBanner.tsx:29:          <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
+components/ContactBanner.tsx:30:            <Link to="/contact">
+components/ContactBanner.tsx:31:              <button 
+components/ContactBanner.tsx:33:              >
+components/ContactBanner.tsx:34:                <span className="relative z-10 font-bold flex items-center gap-2">
+components/ContactBanner.tsx:36:                  <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
+components/ContactBanner.tsx:37:                </span>
+components/ContactBanner.tsx:39:                {/* Subtle Radial Glow on Hover */}
+components/ContactBanner.tsx:40:                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(0,0,0,0.03)_0%,_transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out pointer-events-none" />
+components/ContactBanner.tsx:41:              </button>
+components/ContactBanner.tsx:42:            </Link>
+components/ContactBanner.tsx:44:            <div className="flex items-center justify-center space-x-3 text-gray-500 bg-transparent px-6 py-3 rounded-full border border-gray-100 hover:border-gray-200 transition-colors">
+components/ContactBanner.tsx:45:              <span className="relative flex h-3 w-3">
+components/ContactBanner.tsx:46:                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+components/ContactBanner.tsx:47:                <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+components/ContactBanner.tsx:48:              </span>
+components/ContactBanner.tsx:49:              <span className="text-sm font-medium transition-colors">{t.contact.banner.hours}</span>
+components/ContactBanner.tsx:50:            </div>
+components/ContactBanner.tsx:51:          </div>
+components/ContactBanner.tsx:52:        </ScrollReveal>
+components/ContactBanner.tsx:53:      </div>
+components/ContactBanner.tsx:54:    </section>
+components/Footer.tsx:2:import React, { useState } from 'react';
+components/Footer.tsx:3:import { NAV_ITEMS, LEGAL_TEXTS } from '../constants';
+components/Footer.tsx:4:import { Link } from 'react-router-dom';
+components/Footer.tsx:5:import { Phone, Mail, Lock } from 'lucide-react';
+components/Footer.tsx:6:import { useSite } from '../contexts/SiteContext';
+components/Footer.tsx:7:import Logo from './Logo';
+components/Footer.tsx:8:import { Language } from '../types';
+components/Footer.tsx:9:import LegalModal from './LegalModal';
+components/Footer.tsx:11:const Footer: React.FC = () => {
+components/Footer.tsx:13:  const [activeModal, setActiveModal] = useState<'email' | 'privacy' | null>(null);
+components/Footer.tsx:15:  const getNavLabel = (key: string) => {
+components/Footer.tsx:17:    if (key === '회사소개') return t.nav.about;
+components/Footer.tsx:18:    if (key === '제품소개') return t.nav.products;
+components/Footer.tsx:19:    if (key === '공정소개') return t.nav.process;
+components/Footer.tsx:20:    if (key === '연구소') return t.nav.rnd;
+components/Footer.tsx:21:    if (key === '고객지원') return t.nav.support;
+components/Footer.tsx:24:    if (key === '회사개요') return t.nav.intro;
+components/Footer.tsx:25:    if (key === '회사연혁') return t.nav.history;
+components/Footer.tsx:26:    if (key === '경영이념') return t.nav.philosophy;
+components/Footer.tsx:27:    if (key === '인증현황') return t.nav.cert;
+components/Footer.tsx:28:    if (key === '오시는 길') return t.nav.location;
+components/Footer.tsx:31:    if (key === '경량소재') return t.nav.light;
+components/Footer.tsx:32:    if (key === '산업용소재') return t.nav.industry;
+components/Footer.tsx:33:    if (key === '가공소재') return t.nav.processing;
+components/Footer.tsx:34:    if (key === '전기전자부품소재') return t.nav.electronic;
+components/Footer.tsx:35:    if (key === '건축소재') return t.nav.construction;
+components/Footer.tsx:36:    if (key === '환경소재') return t.nav.environmental;
+components/Footer.tsx:37:    if (key === '외장소재') return t.nav.exterior;
+components/Footer.tsx:38:    if (key === '대체소재') return t.nav.substitute;
+components/Footer.tsx:41:    if (key === '생산공정') return t.nav.production;
+components/Footer.tsx:42:    if (key === '품질검사') return t.nav.quality;
+components/Footer.tsx:47:  const SubItemLabel = ({ label }: { label: string }) => {
+components/Footer.tsx:48:    return <>{getNavLabel(label)}</>;
+components/Footer.tsx:52:    <>
+components/Footer.tsx:53:      <footer className="bg-white border-t border-gray-200 pt-20 pb-10">
+components/Footer.tsx:54:        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+components/Footer.tsx:56:          {/* Top Section: Links */}
+components/Footer.tsx:57:          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 mb-16">
+components/Footer.tsx:58:            {NAV_ITEMS.map((item) => (
+components/Footer.tsx:59:              <div key={item.label} className="flex flex-col space-y-3">
+components/Footer.tsx:60:                <h3 className="font-semibold text-gray-900">{getNavLabel(item.label)}</h3>
+components/Footer.tsx:61:                <ul className="space-y-2">
+components/Footer.tsx:62:                  {item.subItems ? (
+components/Footer.tsx:63:                    item.subItems.map((sub) => (
+components/Footer.tsx:64:                      <li key={sub.path}>
+components/Footer.tsx:65:                        <Link to={sub.path} className="text-sm text-gray-500 hover:text-brand-blue transition-colors">
+components/Footer.tsx:66:                          <SubItemLabel label={sub.label} />
+components/Footer.tsx:67:                        </Link>
+components/Footer.tsx:68:                      </li>
+components/Footer.tsx:71:                    <li>
+components/Footer.tsx:72:                      <Link to={item.path} className="text-sm text-gray-500 hover:text-brand-blue transition-colors">
+components/Footer.tsx:74:                      </Link>
+components/Footer.tsx:75:                    </li>
+components/Footer.tsx:77:                </ul>
+components/Footer.tsx:78:              </div>
+components/Footer.tsx:80:            <div className="col-span-2 md:col-span-4 lg:col-span-1">
+components/Footer.tsx:81:               <h3 className="font-semibold text-gray-900 mb-4">{t.footer.lang_select}</h3>
+components/Footer.tsx:82:               <div className="flex space-x-2">
+components/Footer.tsx:83:                  {(['KOR', 'ENG', 'JPN'] as Language[]).map((lang) => (
+components/Footer.tsx:84:                    <button 
+components/Footer.tsx:86:                      onClick={() => setLanguage(lang)}
+components/Footer.tsx:87:                      className={`px-3 py-1 rounded text-xs font-medium transition-colors border ${
+components/Footer.tsx:89:                        ? 'bg-gray-800 text-white border-gray-800' 
+components/Footer.tsx:90:                        : 'bg-white border-gray-200 text-gray-400 hover:border-gray-300 hover:text-gray-600'
+components/Footer.tsx:91:                      }`}
+components/Footer.tsx:92:                    >
+components/Footer.tsx:94:                    </button>
+components/Footer.tsx:96:               </div>
+components/Footer.tsx:97:            </div>
+components/Footer.tsx:98:          </div>
+components/Footer.tsx:100:          {/* Divider */}
+components/Footer.tsx:101:          <div className="border-t border-gray-100 my-8"></div>
+components/Footer.tsx:103:          {/* Bottom Section: Info */}
+components/Footer.tsx:104:          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center space-y-6 lg:space-y-0">
+components/Footer.tsx:105:            <div className="space-y-4">
+components/Footer.tsx:106:              <Link to="/">
+components/Footer.tsx:107:                 <Logo color="#071D49" className="h-10 mb-2 w-auto" />
+components/Footer.tsx:108:              </Link>
+components/Footer.tsx:109:              <div className="text-sm text-gray-500 space-y-1">
+components/Footer.tsx:110:                <div className="flex items-start md:items-center gap-2">
+components/Footer.tsx:111:                   <span className="font-medium min-w-[80px] text-gray-700">{t.footer.daegu}</span>
+components/Footer.tsx:112:                   <span>{t.footer.address_daegu}</span>
+components/Footer.tsx:113:                </div>
+components/Footer.tsx:114:                <div className="flex items-start md:items-center gap-2">
+components/Footer.tsx:115:                   <span className="font-medium min-w-[80px] text-gray-700">{t.footer.changnyeong}</span>
+components/Footer.tsx:116:                   <span>{t.footer.address_changnyeong}</span>
+components/Footer.tsx:117:                </div>
+components/Footer.tsx:118:                <div className="flex items-center gap-4 mt-2">
+components/Footer.tsx:119:                   <div className="flex items-center gap-1">
+components/Footer.tsx:120:                      <Phone className="w-3 h-3" /> 053-611-6061
+components/Footer.tsx:121:                   </div>
+components/Footer.tsx:122:                   <div className="flex items-center gap-1">
+components/Footer.tsx:123:                      <Mail className="w-3 h-3" /> {config.contactEmail}
+components/Footer.tsx:124:                   </div>
+components/Footer.tsx:125:                </div>
+components/Footer.tsx:126:              </div>
+components/Footer.tsx:127:            </div>
+components/Footer.tsx:129:            <div className="flex flex-col items-start lg:items-end gap-3 text-xs text-gray-400">
+components/Footer.tsx:130:              <div className="flex items-center gap-3">
+components/Footer.tsx:131:                <button 
+components/Footer.tsx:132:                  onClick={() => setActiveModal('email')}
+components/Footer.tsx:134:                >
+components/Footer.tsx:136:                </button>
+components/Footer.tsx:137:                <span className="w-[1px] h-3 bg-gray-300"></span>
+components/Footer.tsx:138:                <button 
+components/Footer.tsx:139:                  onClick={() => setActiveModal('privacy')}
+components/Footer.tsx:141:                >
+components/Footer.tsx:143:                </button>
+components/Footer.tsx:144:              </div>
+components/Footer.tsx:145:              <div className="flex items-center gap-4">
+components/Footer.tsx:146:                <span>{t.footer.rights}</span>
+components/Footer.tsx:147:                <Link to="/admin" className="opacity-50 hover:opacity-100 hover:text-brand-blue transition-all" title="Admin Login">
+components/Footer.tsx:148:                   <Lock className="w-3 h-3" />
+components/Footer.tsx:149:                </Link>
+components/Footer.tsx:150:              </div>
+components/Footer.tsx:151:            </div>
+components/Footer.tsx:152:          </div>
+components/Footer.tsx:153:        </div>
+components/Footer.tsx:154:      </footer>
+components/Footer.tsx:156:      {/* Modals */}
+components/Footer.tsx:157:      <LegalModal 
+components/Footer.tsx:158:        isOpen={activeModal === 'email'} 
+components/Footer.tsx:159:        onClose={() => setActiveModal(null)} 
+components/Footer.tsx:162:      />
+components/Footer.tsx:163:      <LegalModal 
+components/Footer.tsx:164:        isOpen={activeModal === 'privacy'} 
+components/Footer.tsx:165:        onClose={() => setActiveModal(null)} 
+components/Footer.tsx:168:      />
+components/Footer.tsx:169:    </>
