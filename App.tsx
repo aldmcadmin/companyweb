@@ -23,7 +23,7 @@ import AboutPage from './pages/AboutPage';
 import { Phone, Mail, MapPin, Clock, TrendingUp, ThumbsUp, Lightbulb, UserCheck, Sparkles, Award, Printer, Navigation, Feather, Factory, Settings, Cpu, Building2, Leaf, Box, Layers, ChevronRight } from 'lucide-react';
 import { TRANSLATIONS } from './translations';
 
-// Scroll to top on route change
+// Scroll to top on route change (push trigger test)
 const ScrollToTop = () => {
   const { pathname } = useLocation();
   useEffect(() => {
