@@ -150,65 +150,13 @@ const ProductDetailPage = ({ categoryKey }: { categoryKey: keyof typeof TRANSLAT
 
 // Improved Contact/Support Page
 const ContactPage = () => {
-  const { config, t } = useSite();
+  const { t } = useSite();
   
   return (
     <PublicLayout>
       <PageLayout title={t.pages.support.title} subtitle={t.pages.support.subtitle}>
-          <div className="grid lg:grid-cols-5 gap-12 items-start">
-             {/* Left Info Column */}
-             <div className="lg:col-span-2 space-y-8">
-                <div className="bg-brand-blue text-white p-8 rounded-3xl shadow-xl">
-                   <h3 className="text-xl font-bold mb-6">{t.contact.info.title}</h3>
-                   <div className="space-y-6">
-                      <div className="flex items-start gap-4">
-                         <div className="p-2 bg-white/10 rounded-lg"><Phone className="w-5 h-5" /></div>
-                         <div>
-                            <p className="text-xs text-blue-200 mb-1">{t.contact.info.phone}</p>
-                            <p className="font-bold text-lg">053-611-6061</p>
-                         </div>
-                      </div>
-                      <div className="flex items-start gap-4">
-                         <div className="p-2 bg-white/10 rounded-lg"><Mail className="w-5 h-5" /></div>
-                         <div>
-                            <p className="text-xs text-blue-200 mb-1">{t.contact.info.email}</p>
-                            <p className="font-bold">{config.contactEmail}</p>
-                         </div>
-                      </div>
-                      <div className="flex items-start gap-4">
-                         <div className="p-2 bg-white/10 rounded-lg"><Clock className="w-5 h-5" /></div>
-                         <div>
-                            <p className="text-xs text-blue-200 mb-1">{t.contact.info.hours}</p>
-                            <p className="font-bold">{t.contact.info.hours_desc}</p>
-                            <p className="text-sm text-blue-200">{t.contact.info.closed}</p>
-                         </div>
-                      </div>
-                   </div>
-                </div>
-
-                <div className="flex flex-col gap-4">
-                   <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
-                      <h3 className="text-lg font-bold text-gray-900 mb-3">{t.footer.daegu}</h3>
-                      <div className="flex items-start gap-3 text-gray-600">
-                         <MapPin className="w-5 h-5 shrink-0 mt-0.5 text-brand-blue" />
-                         <p className="text-sm">{t.footer.address_daegu}</p>
-                      </div>
-                   </div>
-
-                   <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
-                      <h3 className="text-lg font-bold text-gray-900 mb-3">{t.footer.changnyeong}</h3>
-                      <div className="flex items-start gap-3 text-gray-600">
-                         <MapPin className="w-5 h-5 shrink-0 mt-0.5 text-brand-blue" />
-                         <p className="text-sm">{t.footer.address_changnyeong}</p>
-                      </div>
-                   </div>
-                </div>
-             </div>
-
-             {/* Right Form Column */}
-             <div className="lg:col-span-3">
-                <ContactForm />
-             </div>
+          <div className="max-w-3xl mx-auto">
+             <ContactForm />
           </div>
       </PageLayout>
     </PublicLayout>
