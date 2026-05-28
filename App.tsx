@@ -186,15 +186,22 @@ const ContactPage = () => {
                    </div>
                 </div>
 
-                <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
-                   <h3 className="text-lg font-bold text-gray-900 mb-4">{t.footer.daegu}</h3>
-                   <div className="flex items-start gap-3 text-gray-600 mb-4">
-                      <MapPin className="w-5 h-5 shrink-0 mt-1 text-brand-blue" />
-                      <p>{t.footer.address_daegu}</p>
+                <div className="flex flex-col gap-4">
+                   <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+                      <h3 className="text-lg font-bold text-gray-900 mb-3">{t.footer.daegu}</h3>
+                      <div className="flex items-start gap-3 text-gray-600">
+                         <MapPin className="w-5 h-5 shrink-0 mt-0.5 text-brand-blue" />
+                         <p className="text-sm">{t.footer.address_daegu}</p>
+                      </div>
                    </div>
-                   <a href="/about/location" className="text-sm font-bold text-brand-blue hover:underline block text-center bg-blue-50 py-3 rounded-xl">
-                      {t.contact.info.view_map}
-                   </a>
+
+                   <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+                      <h3 className="text-lg font-bold text-gray-900 mb-3">{t.footer.changnyeong}</h3>
+                      <div className="flex items-start gap-3 text-gray-600">
+                         <MapPin className="w-5 h-5 shrink-0 mt-0.5 text-brand-blue" />
+                         <p className="text-sm">{t.footer.address_changnyeong}</p>
+                      </div>
+                   </div>
                 </div>
              </div>
 
