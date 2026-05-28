@@ -32,7 +32,7 @@ if (typeof window !== 'undefined') {
     }
     
     initializeAppCheck(app, {
-      provider: new ReCaptchaV3Provider('Y6LfYkwAtAAAAAJF8Au4-HO0LjvD4XmpNmp8B39NoEY_HERE'), // TODO: 실제 발급받은 reCAPTCHA v3 키로 교체 필요
+      provider: new ReCaptchaV3Provider('Y6LfYkwAtAAAAAJF8Au4-HO0LjvD4XmpNmp8B39No'), // TODO: 실제 발급받은 reCAPTCHA v3 키로 교체 필요
       isTokenAutoRefreshEnabled: true
     });
   } catch (error) {
