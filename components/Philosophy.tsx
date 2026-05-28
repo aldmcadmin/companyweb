@@ -119,7 +119,7 @@ const Philosophy: React.FC = () => {
              </h2>
           </ScrollReveal>
           <ScrollReveal delay={0.1}>
-            <p className="text-4xl sm:text-5xl md:text-7xl font-bold text-gray-900 tracking-tight leading-tight mb-8 whitespace-pre-line break-keep">
+            <p className="text-4xl sm:text-5xl md:text-7xl font-bold text-gray-900 tracking-tight leading-[1.3] mb-8 whitespace-pre-line break-keep">
               {t.philosophy.title}
             </p>
           </ScrollReveal>
