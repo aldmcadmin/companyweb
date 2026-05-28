@@ -25,14 +25,8 @@ const app = initializeApp(firebaseConfig);
 // 실제 운영 환경에서는 reCAPTCHA v3 Site Key를 발급받아 아래에 입력하고, Firebase 콘솔에서 App Check를 활성화해야 합니다.
 if (typeof window !== 'undefined') {
   try {
-    // 로컬 개발 환경용 디버그 토큰 활성화 옵션
-    if (window.location.hostname === 'localhost' || window.location.hostname.includes('run.app')) {
-      // @ts-ignore
-      self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
-    }
-    
     initializeAppCheck(app, {
-      provider: new ReCaptchaV3Provider('Y6LfYkwAtAAAAAJF8Au4-HO0LjvD4XmpNmp8B39No'), // TODO: 실제 발급받은 reCAPTCHA v3 키로 교체 필요
+      provider: new ReCaptchaV3Provider('6LfYkwAtAAAAAJF8Au4-HO0LjvD4XmpNmp8B39No'), // TODO: 실제 발급받은 reCAPTCHA v3 키로 교체 필요
       isTokenAutoRefreshEnabled: true
     });
   } catch (error) {
