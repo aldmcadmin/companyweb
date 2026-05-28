@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Post, SiteConfig, Language, Certification, ContentMap, Product, ProcessStep, QualityEquipment } from '../types';
 import { TRANSLATIONS } from '../translations';
-import { db, doc, onSnapshot, setDoc } from '../utils/firebase';
+import { db, doc, onSnapshot, setDoc, getDoc } from '../utils/firebase';
 
 interface SiteContextType {
   config: SiteConfig;
@@ -134,11 +134,24 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // This is crucial: We must listen to Firestore so when Admin uploads an image (and updates the URL in DB),
   // all other clients receive that new URL instantly.
   useEffect(() => {
-    // Helper to subscribe to a document
-    const subscribe = (docName: string, setter: any, defaultData: any) => {
-      return onSnapshot(doc(db, COLLECTION_NAME, docName), (snapshot: any) => {
+    // Helper to fetch document with sessionStorage caching to minimize F5 refresh costs
+    const fetchWithCache = async (docName: string, setter: any, defaultData: any) => {
+      const cacheKey = `site_data_cache_${docName}`;
+      const cached = sessionStorage.getItem(cacheKey);
+
+      if (cached) {
+        try {
+          setter(JSON.parse(cached));
+          return; // Skip Firestore read if we have it in session storage
+        } catch (e) {
+          console.warn("Failed to parse cache:", e);
+        }
+      }
+
+      try {
+        const snapshot = await getDoc(doc(db, COLLECTION_NAME, docName));
         if (snapshot.exists()) {
-          // If document exists in DB, use it (This means Admin has customized it)
+          // If document exists in DB, use it
           let data = snapshot.data().data;
           
           if (!data || (Array.isArray(data) && data.length === 0)) {
@@ -163,36 +176,31 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
           }
           
           setter(data);
+          sessionStorage.setItem(cacheKey, JSON.stringify(data));
         } else {
           // If not exists (first run), we use hardcoded defaults.
-          // We optionally write them to DB so Admin can edit them later.
-          // For now, we just use local defaults to keep it fast.
           setter(defaultData);
+          sessionStorage.setItem(cacheKey, JSON.stringify(defaultData));
         }
-      }, (error: any) => {
-        console.error(`Error syncing ${docName}:`, error);
-      });
+      } catch (error) {
+        console.error(`Error fetching ${docName}:`, error);
+        setter(defaultData); // Fallback
+      }
     };
 
-    const unsubConfig = subscribe('config', setConfig, DEFAULT_CONFIG);
-    const unsubPosts = subscribe('posts', setPosts, DEFAULT_POSTS);
-    const unsubProducts = subscribe('products', setProducts, DEFAULT_PRODUCTS);
-    const unsubCerts = subscribe('certifications', setCertifications, DEFAULT_CERTIFICATIONS);
-    const unsubProcess = subscribe('processSteps', setProcessSteps, DEFAULT_PROCESS_STEPS);
-    const unsubEquipments = subscribe('equipments', setEquipments, DEFAULT_EQUIPMENTS);
-    const unsubContent = subscribe('content', setContent, DEFAULT_CONTENT);
+    const fetchAll = async () => {
+      await fetchWithCache('config', setConfig, DEFAULT_CONFIG);
+      await fetchWithCache('posts', setPosts, DEFAULT_POSTS);
+      await fetchWithCache('products', setProducts, DEFAULT_PRODUCTS);
+      await fetchWithCache('certifications', setCertifications, DEFAULT_CERTIFICATIONS);
+      await fetchWithCache('processSteps', setProcessSteps, DEFAULT_PROCESS_STEPS);
+      await fetchWithCache('equipments', setEquipments, DEFAULT_EQUIPMENTS);
+      await fetchWithCache('content', setContent, DEFAULT_CONTENT);
+      setIsSyncing(false);
+    }
+    
+    fetchAll();
 
-    setIsSyncing(false);
-
-    return () => {
-      unsubConfig();
-      unsubPosts();
-      unsubProducts();
-      unsubCerts();
-      unsubProcess();
-      unsubEquipments();
-      unsubContent();
-    };
   }, []);
 
   // Update CSS Variables & Meta tags
@@ -210,6 +218,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const saveData = async (docName: string, data: any) => {
     try {
       await setDoc(doc(db, COLLECTION_NAME, docName), { data });
+      sessionStorage.setItem(`site_data_cache_${docName}`, JSON.stringify(data));
     } catch (error) {
       console.error(`Failed to save ${docName}:`, error);
       alert("변경사항 저장에 실패했습니다. (네트워크/권한 문제)");
@@ -218,6 +227,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const updateConfig = (newConfig: Partial<SiteConfig>) => {
     const updated = { ...config, ...newConfig };
+    setConfig(updated);
     saveData('config', updated);
   };
 
@@ -229,50 +239,60 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       views: 0,
     };
     const updated = [newPost, ...posts];
+    setPosts(updated);
     saveData('posts', updated);
   };
 
   const deletePost = (id: string) => {
     const updated = posts.filter(p => p.id !== id);
+    setPosts(updated);
     saveData('posts', updated);
   };
 
   const addCertification = (cert: Omit<Certification, 'id'>) => {
     const newCert = { ...cert, id: Date.now().toString() };
     const updated = [...certifications, newCert];
+    setCertifications(updated);
     saveData('certifications', updated);
   };
 
   const deleteCertification = (id: string) => {
     const updated = certifications.filter(c => c.id !== id);
+    setCertifications(updated);
     saveData('certifications', updated);
   };
 
   const updateContent = (key: string, value: string) => {
     const updated = { ...content, [key]: value };
+    setContent(updated);
     saveData('content', updated);
   };
 
   const updateProduct = (id: string, updates: Partial<Product>) => {
     const updated = products.map(p => p.id === id ? { ...p, ...updates } : p);
+    setProducts(updated);
     saveData('products', updated);
   };
 
   const updateProcessStep = (id: string, updates: Partial<ProcessStep>) => {
     const updated = processSteps.map(ps => ps.id === id ? { ...ps, ...updates } : ps);
+    setProcessSteps(updated);
     saveData('processSteps', updated);
   };
 
   const resetProcessSteps = () => {
+    setProcessSteps(DEFAULT_PROCESS_STEPS);
     saveData('processSteps', DEFAULT_PROCESS_STEPS);
   };
 
   const updateEquipment = (id: string, updates: Partial<QualityEquipment>) => {
     const updated = equipments.map(eq => eq.id === id ? { ...eq, ...updates } : eq);
+    setEquipments(updated);
     saveData('equipments', updated);
   };
 
   const resetEquipments = () => {
+    setEquipments(DEFAULT_EQUIPMENTS);
     saveData('equipments', DEFAULT_EQUIPMENTS);
   };
 
