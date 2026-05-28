@@ -144,7 +144,7 @@ const Footer: React.FC = () => {
               </div>
               <div className="flex items-center gap-4">
                 <span>{t.footer.rights}</span>
-                <Link to="/admin" className="opacity-50 hover:opacity-100 hover:text-brand-blue transition-all" title="Admin Login">
+                <Link to="/admin" className="opacity-10 hover:opacity-50 transition-all duration-300" title="Admin Login">
                    <Lock className="w-3 h-3" />
                 </Link>
               </div>
