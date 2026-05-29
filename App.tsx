@@ -171,17 +171,58 @@ const ProductDetailPage = ({ product }: { product: Product }) => {
             subtitle={subtitle}
             badge={badge}
           >
-              <div className="grid md:grid-cols-3 gap-6">
-                  {[1, 2, 3, 4, 5, 6].map((i) => (
-                      <div key={i} className="group cursor-pointer">
-                          <div className="aspect-square bg-gray-100 rounded-2xl mb-4 overflow-hidden relative">
-                               <img src={`https://picsum.photos/seed/${product.id}${i}/400/400`} alt="Product" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
-                               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors"></div>
-                          </div>
-                          <h4 className="font-bold text-lg group-hover:text-brand-blue transition-colors">{t.products.detail_page.model_name} {String(i).padStart(2, '0')}</h4>
-                          <p className="text-sm text-gray-500">{t.products.detail_page.spec_desc}</p>
-                      </div>
-                  ))}
+              <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-start">
+                  {/* Left Column: Images */}
+                  <div className="space-y-4">
+                     <div className="aspect-[4/3] bg-gray-100 rounded-3xl overflow-hidden shadow-sm border border-gray-100">
+                        {product.imageUrl ? (
+                           <img src={product.imageUrl} alt={categoryName} className="w-full h-full object-cover" />
+                        ) : (
+                           <div className="w-full h-full flex items-center justify-center text-gray-400">
+                              <Box className="w-12 h-12" />
+                           </div>
+                        )}
+                     </div>
+                     {product.additionalImages && product.additionalImages.length > 0 && (
+                        <div className="grid grid-cols-4 gap-4 mt-6">
+                           {product.additionalImages.map((imgUrl, i) => (
+                              <div key={i} className="aspect-square bg-gray-100 rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+                                 <img src={imgUrl} alt={`${categoryName} ${i}`} className="w-full h-full object-cover hover:scale-110 transition-transform duration-500 cursor-pointer" />
+                              </div>
+                           ))}
+                        </div>
+                     )}
+                  </div>
+
+                  {/* Right Column: Details & Specs */}
+                  <div className="space-y-8">
+                     {product.fullDescription && (
+                        <div className="prose prose-blue max-w-none">
+                           <h3 className="text-xl font-bold text-gray-900 mb-4 tracking-tight">상세 정보</h3>
+                           <p className="text-gray-600 leading-relaxed whitespace-pre-wrap">{product.fullDescription}</p>
+                        </div>
+                     )}
+                     
+                     {product.specs && product.specs.length > 0 && (
+                        <div>
+                           <h3 className="text-xl font-bold text-gray-900 mb-4 tracking-tight">제품 사양</h3>
+                           <div className="bg-gray-50 rounded-2xl border border-gray-100 overflow-hidden divide-y divide-gray-100">
+                              {product.specs.map((spec, index) => (
+                                 <div key={index} className="flex flex-col sm:flex-row sm:items-center px-6 py-4 hover:bg-white transition-colors">
+                                    <div className="w-1/3 text-sm font-bold text-gray-900 min-w-[120px] pb-1 sm:pb-0">{spec.label}</div>
+                                    <div className="w-2/3 text-sm text-gray-600">{spec.value}</div>
+                                 </div>
+                              ))}
+                           </div>
+                        </div>
+                     )}
+                     
+                     {!product.fullDescription && (!product.specs || product.specs.length === 0) && (
+                         <div className="text-gray-500 bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                            상세 정보가 아직 등록되지 않았습니다. 관리자 페이지에서 내용을 추가해주세요.
+                         </div>
+                     )}
+                  </div>
               </div>
           </PageLayout>
         </PublicLayout>

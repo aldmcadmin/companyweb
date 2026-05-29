@@ -6,7 +6,10 @@ import { Users, Eye, FileText, MousePointer, Plus, Trash2, Search, Palette, Glob
 import { BorderRadiusSize } from '../types';
 import { uploadImageToStorage } from '../utils/firebase';
 
+import AdminProductModal from '../components/AdminProductModal';
+
 // --- Dashboard Component ---
+
 export const AdminDashboard: React.FC = () => {
   const { posts, certifications } = useSite();
   const totalViews = posts.reduce((acc, curr) => acc + curr.views, 0);
@@ -69,10 +72,13 @@ export const AdminDashboard: React.FC = () => {
 
 // --- Content Manager Component (Updated) ---
 export const AdminContent: React.FC = () => {
-  const { certifications, addCertification, updateCertification, deleteCertification, content, updateContent, products, updateProduct, processSteps, updateProcessStep, resetProcessSteps, equipments, updateEquipment, resetEquipments } = useSite();
+  const { certifications, addCertification, updateCertification, deleteCertification, content, updateContent, products, addProduct, updateProduct, deleteProduct, processSteps, updateProcessStep, resetProcessSteps, equipments, updateEquipment, resetEquipments } = useSite();
   const [activeTab, setActiveTab] = useState<'cert' | 'text' | 'images' | 'products' | 'process' | 'equipment'>('products');
   const [newCert, setNewCert] = useState({ title: '', imageUrl: '' });
   const [uploading, setUploading] = useState<{[key: string]: boolean}>({});
+  
+  // Product Modal State
+  const [editingProduct, setEditingProduct] = useState<any | null>(null);
 
   const handleCertUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -111,22 +117,6 @@ export const AdminContent: React.FC = () => {
         alert(`업로드 실패: ${error.message}`);
       } finally {
         setUploading(prev => ({ ...prev, [key]: false }));
-      }
-    }
-  };
-
-  const handleProductImageUpload = async (id: string, e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setUploading(prev => ({ ...prev, [`prod_${id}`]: true }));
-      try {
-        const url = await uploadImageToStorage(file, 'products/');
-        updateProduct(id, { imageUrl: url });
-        alert('제품 이미지가 성공적으로 업로드되었습니다.');
-      } catch (error: any) {
-        alert(`업로드 실패: ${error.message}`);
-      } finally {
-        setUploading(prev => ({ ...prev, [`prod_${id}`]: false }));
       }
     }
   };
@@ -308,56 +298,74 @@ export const AdminContent: React.FC = () => {
 
           {activeTab === 'products' && (
             <div className="animate-fade-in space-y-8">
-               <div className="bg-blue-50 p-6 rounded-2xl flex items-center gap-4 border border-blue-100">
-                  <div className="p-3 bg-white rounded-full text-brand-blue shadow-sm">
-                     <Package className="w-6 h-6" />
+               <div className="bg-blue-50 p-6 rounded-2xl flex items-center justify-between border border-blue-100">
+                  <div className="flex items-center gap-4">
+                     <div className="p-3 bg-white rounded-full text-brand-blue shadow-sm">
+                        <Package className="w-6 h-6" />
+                     </div>
+                     <div>
+                        <h3 className="font-bold text-brand-blue text-lg">제품 소재 관리</h3>
+                        <p className="text-gray-600 text-sm">제품들의 이미지, 상세 설명 및 스펙을 관리합니다.</p>
+                     </div>
                   </div>
-                  <div>
-                     <h3 className="font-bold text-brand-blue text-lg">제품 소재 관리</h3>
-                     <p className="text-gray-600 text-sm">제품 소개 페이지에 표시되는 8가지 소재의 이미지와 설명을 관리합니다.</p>
-                  </div>
+                  <button onClick={() => setEditingProduct({ isNew: true })} className="bg-brand-blue text-white px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 hover:bg-blue-900 transition-colors shadow-sm">
+                     <Plus className="w-5 h-5" /> 새 제품 등록
+                  </button>
                </div>
 
                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {products.map((product) => {
-                     const isUploadingProd = uploading[`prod_${product.id}`];
-                     return (
-                     <div key={product.id} className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col h-full">
+                  {products.map((product) => (
+                     <div key={product.id} className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col h-full group">
                         <div className="relative aspect-[4/3] bg-gray-100 rounded-xl overflow-hidden mb-4 border border-gray-200">
-                           {isUploadingProd ? (
-                             <div className="flex flex-col items-center justify-center h-full text-brand-blue">
-                               <Loader2 className="w-6 h-6 animate-spin mb-2" />
-                               <span className="text-xs">업로드 중</span>
-                             </div>
-                           ) : (
+                           {product.imageUrl ? (
                              <img src={product.imageUrl} alt={product.title} className="w-full h-full object-cover" />
+                           ) : (
+                             <div className="flex items-center justify-center w-full h-full text-gray-400">
+                                <ImageIcon className="w-8 h-8" />
+                             </div>
                            )}
-                           <label className={`absolute inset-0 bg-black/0 hover:bg-black/40 transition-colors flex items-center justify-center cursor-pointer group ${isUploadingProd ? 'pointer-events-none' : ''}`}>
-                              <span className="bg-white/90 text-gray-900 px-3 py-1.5 rounded-lg font-bold text-xs opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2">
-                                 <Pencil className="w-3 h-3" /> 사진 변경
-                              </span>
-                              <input type="file" accept="image/*" className="hidden" onChange={(e) => handleProductImageUpload(product.id, e)} disabled={isUploadingProd} />
-                           </label>
+                           <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <button onClick={() => {
+                                 if (window.confirm('정말 삭제하시겠습니까?')) {
+                                    deleteProduct(product.id);
+                                 }
+                              }} className="p-2 bg-red-500 hover:bg-red-600 text-white rounded-lg shadow-sm"><Trash2 className="w-4 h-4"/></button>
+                           </div>
                         </div>
                         
-                        <div className="space-y-3 flex-1">
-                           <div>
-                              <label className="text-xs font-bold text-gray-400 block mb-1">제품명</label>
-                              <div className="font-bold text-gray-900 text-lg">{product.title}</div>
+                        <div className="flex-1 flex flex-col">
+                           <div className="flex items-center justify-between mb-1">
+                               <h4 className="font-bold text-gray-900 text-lg line-clamp-1">{product.title}</h4>
+                               <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded font-mono truncate max-w-[80px]">{product.slug}</span>
                            </div>
-                           <div>
-                              <label className="text-xs font-bold text-gray-400 block mb-1">설명</label>
-                              <textarea 
-                                 rows={3}
-                                 className="w-full text-sm border border-gray-200 rounded-lg p-2 resize-none focus:ring-1 focus:ring-brand-blue outline-none"
-                                 value={product.description}
-                                 onChange={(e) => updateProduct(product.id, { description: e.target.value })}
-                              />
+                           <p className="text-sm text-gray-500 line-clamp-2 mb-4 leading-relaxed">{product.description}</p>
+                           
+                           <div className="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between">
+                              <span className="text-xs font-bold text-gray-400">스펙 {product.specs?.length || 0}개</span>
+                              <button onClick={() => setEditingProduct(product)} className="text-brand-blue font-bold text-sm flex items-center gap-1 hover:text-blue-900 bg-blue-50 px-3 py-1.5 rounded-lg group-hover:bg-blue-100 transition-colors">
+                                 <Pencil className="w-3.5 h-3.5" /> 상세 편집
+                              </button>
                            </div>
                         </div>
                      </div>
-                  )})}
+                  ))}
                </div>
+               
+               {editingProduct && (
+                  <AdminProductModal 
+                     product={editingProduct.isNew ? {} : editingProduct} 
+                     isNew={editingProduct.isNew}
+                     onClose={() => setEditingProduct(null)}
+                     onSave={(savedData) => {
+                        if (editingProduct.isNew) {
+                           addProduct(savedData);
+                        } else {
+                           updateProduct(editingProduct.id, savedData);
+                        }
+                        setEditingProduct(null);
+                     }}
+                  />
+               )}
             </div>
           )}
 

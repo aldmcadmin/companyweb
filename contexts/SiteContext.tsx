@@ -22,7 +22,9 @@ interface SiteContextType {
   updateCertification: (id: string, updates: Partial<Certification>) => void;
   deleteCertification: (id: string) => void;
   updateContent: (key: string, value: string) => void;
+  addProduct: (product: Omit<Product, 'id'>) => void;
   updateProduct: (id: string, updates: Partial<Product>) => void;
+  deleteProduct: (id: string) => void;
   updateProcessStep: (id: string, updates: Partial<ProcessStep>) => void;
   resetProcessSteps: () => void;
   updateEquipment: (id: string, updates: Partial<QualityEquipment>) => void;
@@ -50,11 +52,11 @@ const DEFAULT_POSTS: Post[] = [
 
 const DEFAULT_PRODUCTS: Product[] = [
   { id: 'p1', slug: 'auto-parts', title: '자동차부품소재', category: 'Auto Parts', description: '자동차 경량화를 위한 고강도 알루미늄 소재', imageUrl: 'https://picsum.photos/id/20/600/400' },
-  { id: 'p2', slug: 'industrial', title: '산업소재', category: 'Industrial', description: '다양한 산업 설비 및 기계 구조용 소재', imageUrl: 'https://picsum.photos/id/1/600/400' },
-  { id: 'p3', slug: 'non-ferrous', title: '비철가공소재', category: 'Non-ferrous', description: '정밀 가공성이 우수한 고품질 소재', imageUrl: 'https://picsum.photos/id/192/600/400' },
-  { id: 'p4', slug: 'electronics', title: '전기전자부품소재', category: 'Electronics', description: '전기 전도성과 방열성이 뛰어난 부품 소재', imageUrl: 'https://picsum.photos/id/3/600/400' },
-  { id: 'p5', slug: 'construction', title: '건축소재', category: 'Construction', description: '내구성과 심미성을 갖춘 건축 내외장재', imageUrl: 'https://picsum.photos/id/10/600/400' },
-  { id: 'p7', slug: 'general-materials', title: '일반소재', category: 'General', description: '건물 및 제품의 외관을 돋보이게 하는 외장재', imageUrl: 'https://picsum.photos/id/12/600/400' },
+  { id: 'p2', slug: 'industrial-material', title: '산업소재', category: 'Industrial', description: '다양한 산업 설비 및 기계 구조용 소재', imageUrl: 'https://picsum.photos/id/1/600/400' },
+  { id: 'p3', slug: 'non-ferrous-material', title: '비철가공소재', category: 'Non-ferrous', description: '정밀 가공성이 우수한 고품질 소재', imageUrl: 'https://picsum.photos/id/192/600/400' },
+  { id: 'p4', slug: 'electronics-material', title: '전기전자부품소재', category: 'Electronics', description: '전기 전도성과 방열성이 뛰어난 부품 소재', imageUrl: 'https://picsum.photos/id/3/600/400' },
+  { id: 'p5', slug: 'construction-material', title: '건축소재', category: 'Construction', description: '내구성과 심미성을 갖춘 건축 내외장재', imageUrl: 'https://picsum.photos/id/10/600/400' },
+  { id: 'p7', slug: 'general-material', title: '일반소재', category: 'General', description: '건물 및 제품의 외관을 돋보이게 하는 외장재', imageUrl: 'https://picsum.photos/id/12/600/400' },
 ];
 
 const DEFAULT_CERTIFICATIONS: Certification[] = [
@@ -167,12 +169,12 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
             data = data.map((p: any) => {
               if (!p.slug) {
                 if (p.id === 'p1') p.slug = 'auto-parts';
-                else if (p.id === 'p2') p.slug = 'industrial';
-                else if (p.id === 'p3') p.slug = 'non-ferrous';
-                else if (p.id === 'p4') p.slug = 'electronics';
-                else if (p.id === 'p5') p.slug = 'construction';
-                else if (p.id === 'p7') p.slug = 'general-materials';
-                else p.slug = p.category ? p.category.toLowerCase().replace(/[^a-z0-9]+/g, '-') : p.id;
+                else if (p.id === 'p2') p.slug = 'industrial-material';
+                else if (p.id === 'p3') p.slug = 'non-ferrous-material';
+                else if (p.id === 'p4') p.slug = 'electronics-material';
+                else if (p.id === 'p5') p.slug = 'construction-material';
+                else if (p.id === 'p7') p.slug = 'general-material';
+                else p.slug = p.id;
               }
               return p;
             });
@@ -312,9 +314,29 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
   };
 
+  const addProduct = (productData: Omit<Product, 'id'>) => {
+    setProducts(prev => {
+      const newProduct: Product = {
+        ...productData,
+        id: `p_${Date.now()}`
+      };
+      const updated = [...prev, newProduct];
+      saveData('products', updated);
+      return updated;
+    });
+  };
+
   const updateProduct = (id: string, updates: Partial<Product>) => {
     setProducts(prev => {
       const updated = prev.map(p => p.id === id ? { ...p, ...updates } : p);
+      saveData('products', updated);
+      return updated;
+    });
+  };
+
+  const deleteProduct = (id: string) => {
+    setProducts(prev => {
+      const updated = prev.filter(p => p.id !== id);
       saveData('products', updated);
       return updated;
     });
@@ -414,7 +436,9 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       updateCertification,
       deleteCertification,
       updateContent,
+      addProduct,
       updateProduct,
+      deleteProduct,
       updateProcessStep,
       resetProcessSteps,
       updateEquipment,

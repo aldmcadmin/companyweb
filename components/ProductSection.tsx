@@ -33,7 +33,7 @@ const ProductSection: React.FC<ProductSectionProps> = ({ hideHeader = false }) =
     
     let translatedCategory = product.category;
     let icon = null;
-    let path = product.slug || product.category?.toLowerCase().replace(/[^a-z0-9]+/g, '-') || 'light';
+    let path = product.slug || product.id || 'p1';
     
     // Assign proper icons based on original static ID mapping
     if (product.id === 'p1') { translatedCategory = t.nav.light; icon = <Feather className="w-3.5 h-3.5" />; }

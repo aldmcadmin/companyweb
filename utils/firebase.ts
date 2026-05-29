@@ -28,6 +28,8 @@ export const initAppCheck = async () => {
   if (typeof window === "undefined" || appCheckInitialized) return;
   
   try {
+    // 임시로 App Check 비활성화 (reCAPTCHA 403 오류 해결)
+    /*
     if (window.location.hostname === 'localhost' || window.location.hostname.includes('run.app')) {
       // @ts-ignore
       self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
@@ -37,6 +39,7 @@ export const initAppCheck = async () => {
       provider: new ReCaptchaV3Provider('6LfYkwAtAAAAAJF8Au4-HO0LjvD4XmpNmp8B39No'),
       isTokenAutoRefreshEnabled: true
     });
+    */
     appCheckInitialized = true;
   } catch (error) {
     console.warn("App Check 초기화 실패:", error);

@@ -15,8 +15,12 @@ export interface Product {
   slug?: string;
   title: string;
   description: string;
+  fullDescription?: string;
   imageUrl: string;
+  additionalImages?: string[];
+  specs?: { label: string; value: string }[];
   category: string;
+  order?: number;
 }
 
 export enum SectionType {
