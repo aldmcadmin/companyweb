@@ -231,82 +231,104 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const updateConfig = (newConfig: Partial<SiteConfig>) => {
-    const updated = { ...config, ...newConfig };
-    setConfig(updated);
-    saveData('config', updated);
+    setConfig(prev => {
+      const updated = { ...prev, ...newConfig };
+      saveData('config', updated);
+      return updated;
+    });
   };
 
   const addPost = (newPostData: Omit<Post, 'id' | 'date' | 'views'>) => {
-    const newPost: Post = {
-      ...newPostData,
-      id: Date.now().toString(),
-      date: new Date().toISOString().split('T')[0],
-      views: 0,
-    };
-    const updated = [newPost, ...posts];
-    setPosts(updated);
-    saveData('posts', updated);
+    setPosts(prev => {
+      const newPost: Post = {
+        ...newPostData,
+        id: Date.now().toString(),
+        date: new Date().toISOString().split('T')[0],
+        views: 0,
+      };
+      const updated = [newPost, ...prev];
+      saveData('posts', updated);
+      return updated;
+    });
   };
 
   const deletePost = (id: string) => {
-    const updated = posts.filter(p => p.id !== id);
-    setPosts(updated);
-    saveData('posts', updated);
+    setPosts(prev => {
+      const updated = prev.filter(p => p.id !== id);
+      saveData('posts', updated);
+      return updated;
+    });
   };
 
   const addCertification = (cert: Omit<Certification, 'id'>) => {
-    const newCert = { ...cert, id: Date.now().toString() };
-    const updated = [...certifications, newCert];
-    setCertifications(updated);
-    saveData('certifications', updated);
+    setCertifications(prev => {
+      const newCert = { ...cert, id: Date.now().toString() };
+      const updated = [...prev, newCert];
+      saveData('certifications', updated);
+      return updated;
+    });
   };
 
   const updateCertification = (id: string, updates: Partial<Certification>) => {
-    const updated = certifications.map(c => 
-      c.id === id ? { ...c, ...updates } : c
-    );
-    setCertifications(updated);
-    saveData('certifications', updated);
+    setCertifications(prev => {
+      const updated = prev.map(c => c.id === id ? { ...c, ...updates } : c);
+      saveData('certifications', updated);
+      return updated;
+    });
   };
 
   const deleteCertification = (id: string) => {
-    const updated = certifications.filter(c => c.id !== id);
-    setCertifications(updated);
-    saveData('certifications', updated);
+    setCertifications(prev => {
+      const updated = prev.filter(c => c.id !== id);
+      saveData('certifications', updated);
+      return updated;
+    });
   };
 
   const updateContent = (key: string, value: string) => {
-    const updated = { ...content, [key]: value };
-    setContent(updated);
-    saveData('content', updated);
+    setContent(prev => {
+      const updated = { ...prev, [key]: value };
+      saveData('content', updated);
+      return updated;
+    });
   };
 
   const updateProduct = (id: string, updates: Partial<Product>) => {
-    const updated = products.map(p => p.id === id ? { ...p, ...updates } : p);
-    setProducts(updated);
-    saveData('products', updated);
+    setProducts(prev => {
+      const updated = prev.map(p => p.id === id ? { ...p, ...updates } : p);
+      saveData('products', updated);
+      return updated;
+    });
   };
 
   const updateProcessStep = (id: string, updates: Partial<ProcessStep>) => {
-    const updated = processSteps.map(ps => ps.id === id ? { ...ps, ...updates } : ps);
-    setProcessSteps(updated);
-    saveData('processSteps', updated);
+    setProcessSteps(prev => {
+      const updated = prev.map(ps => ps.id === id ? { ...ps, ...updates } : ps);
+      saveData('processSteps', updated);
+      return updated;
+    });
   };
 
   const resetProcessSteps = () => {
-    setProcessSteps(DEFAULT_PROCESS_STEPS);
-    saveData('processSteps', DEFAULT_PROCESS_STEPS);
+    setProcessSteps(prev => {
+      saveData('processSteps', DEFAULT_PROCESS_STEPS);
+      return DEFAULT_PROCESS_STEPS;
+    });
   };
 
   const updateEquipment = (id: string, updates: Partial<QualityEquipment>) => {
-    const updated = equipments.map(eq => eq.id === id ? { ...eq, ...updates } : eq);
-    setEquipments(updated);
-    saveData('equipments', updated);
+    setEquipments(prev => {
+      const updated = prev.map(eq => eq.id === id ? { ...eq, ...updates } : eq);
+      saveData('equipments', updated);
+      return updated;
+    });
   };
 
   const resetEquipments = () => {
-    setEquipments(DEFAULT_EQUIPMENTS);
-    saveData('equipments', DEFAULT_EQUIPMENTS);
+    setEquipments(prev => {
+      saveData('equipments', DEFAULT_EQUIPMENTS);
+      return DEFAULT_EQUIPMENTS;
+    });
   };
 
   // --- Export/Import ---
