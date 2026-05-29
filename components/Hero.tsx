@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import Button from './Button';
 import { ArrowDown, ChevronDown } from 'lucide-react';
 import { useSite } from '../contexts/SiteContext';
+import heroBg from '../assets/home-hero-bg.webp';
 
 const Hero: React.FC = () => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -95,7 +96,7 @@ const Hero: React.FC = () => {
       >
         <div className="w-full h-full">
             <img 
-            src={content['home_hero_bg']} 
+            src={heroBg} 
             alt="Hero Background" 
             className="w-full h-full object-cover filter grayscale brightness-[0.4] contrast-125" 
             />

@@ -4,6 +4,8 @@ import { useSite } from '../contexts/SiteContext';
 import ScrollReveal from '../components/ScrollReveal';
 import { Phone, MapPin, TrendingUp, ThumbsUp, Lightbulb, UserCheck, Sparkles, Award, Printer, Navigation, Download, X } from 'lucide-react';
 import { Language } from '../types';
+import introImg1 from '../assets/대구공장.JPG';
+import introImg2 from '../assets/창녕공장.png';
 
 const AboutPage = () => {
   const { content, t, language, certifications } = useSite();
@@ -115,7 +117,7 @@ const AboutPage = () => {
             <ScrollReveal delay={0.1}>
                 <div className="group relative rounded-3xl overflow-hidden shadow-xl h-[300px] md:h-[400px]">
                   <img 
-                    src={content['intro_img_1']} 
+                    src={introImg1} 
                     alt="대구공장 전경" 
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
@@ -130,7 +132,7 @@ const AboutPage = () => {
             <ScrollReveal delay={0.2}>
                 <div className="group relative rounded-3xl overflow-hidden shadow-xl h-[300px] md:h-[400px]">
                   <img 
-                    src={content['intro_img_2']} 
+                    src={introImg2} 
                     alt="창녕공장 전경" 
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
@@ -379,10 +381,11 @@ const AboutPage = () => {
         </ScrollReveal>
 
         <ScrollReveal>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
                 {certifications.map((cer, idx) => {
                     const certItems = (t.pages.cert as any).items;
                     const translatedTitle = certItems?.[cer.id] || cer.title;
+                    const cleanTitle = translatedTitle.replace(/\.[^/.]+$/, "");
                     
                     return (
                     <div key={cer.id} className="group flex flex-col items-center">
@@ -396,7 +399,7 @@ const AboutPage = () => {
                                  e.stopPropagation();
                                  const link = document.createElement('a');
                                  link.href = cer.imageUrl;
-                                 link.download = `${translatedTitle}.png`;
+                                 link.download = `${cleanTitle}.png`;
                                  document.body.appendChild(link);
                                  link.click();
                                  document.body.removeChild(link);
@@ -413,7 +416,7 @@ const AboutPage = () => {
                                 </div>
                                 <img 
                                   src={cer.imageUrl} 
-                                  alt={translatedTitle} 
+                                  alt={cleanTitle} 
                                   className="relative z-10 w-full h-full object-contain transform transition-transform duration-500 group-hover:scale-105"
                                   onError={(e) => {
                                      e.currentTarget.style.opacity = '0.3';
@@ -422,7 +425,7 @@ const AboutPage = () => {
                             </div>
                         </div>
                         <p className="mt-4 text-center font-bold text-gray-800 text-sm md:text-base group-hover:text-brand-blue transition-colors">
-                            {translatedTitle}
+                            {cleanTitle}
                         </p>
                     </div>
                 )})}

@@ -43,7 +43,6 @@ export interface SiteConfig {
   borderRadius: BorderRadiusSize; // Global border radius setting
   seoKeywords: string;
   contactEmail: string;
-  logoUrl?: string | null; // URL or Base64 string of the uploaded logo
 }
 
 export interface Certification {

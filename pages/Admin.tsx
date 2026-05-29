@@ -69,7 +69,7 @@ export const AdminDashboard: React.FC = () => {
 
 // --- Content Manager Component (Updated) ---
 export const AdminContent: React.FC = () => {
-  const { certifications, addCertification, deleteCertification, content, updateContent, products, updateProduct, processSteps, updateProcessStep, resetProcessSteps, equipments, updateEquipment, resetEquipments } = useSite();
+  const { certifications, addCertification, updateCertification, deleteCertification, content, updateContent, products, updateProduct, processSteps, updateProcessStep, resetProcessSteps, equipments, updateEquipment, resetEquipments } = useSite();
   const [activeTab, setActiveTab] = useState<'cert' | 'text' | 'images' | 'products' | 'process' | 'equipment'>('products');
   const [newCert, setNewCert] = useState({ title: '', imageUrl: '' });
   const [uploading, setUploading] = useState<{[key: string]: boolean}>({});
@@ -80,7 +80,12 @@ export const AdminContent: React.FC = () => {
       setUploading(prev => ({ ...prev, 'newCert': true }));
       try {
         const url = await uploadImageToStorage(file, 'certificates/');
-        setNewCert({ ...newCert, imageUrl: url });
+        const suggestedTitle = file.name.replace(/\.[^/.]+$/, "");
+        setNewCert(prev => ({ 
+           ...prev, 
+           imageUrl: url, 
+           title: prev.title || suggestedTitle 
+        }));
       } finally {
         setUploading(prev => ({ ...prev, 'newCert': false }));
       }
@@ -398,19 +403,46 @@ export const AdminContent: React.FC = () => {
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                    <h3 className="font-bold text-lg mb-6">등록된 인증서 목록 ({certifications.length})</h3>
                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                      {certifications.map((cert) => (
-                         <div key={cert.id} className="group relative bg-gray-50 rounded-xl p-3 border border-gray-200">
+                      {certifications.map((cert) => {
+                         const cleanTitle = cert.title.replace(/\.[^/.]+$/, "");
+                         return (
+                         <div key={cert.id} className="group relative bg-gray-50 rounded-xl p-3 border border-gray-200 flex flex-col">
                             <div className="aspect-[3/4] bg-white rounded-lg overflow-hidden mb-3 flex items-center justify-center relative">
-                               <img src={cert.imageUrl} alt={cert.title} className="w-full h-full object-contain" />
-                               <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                               <img src={cert.imageUrl} alt={cleanTitle} className="w-full h-full object-contain" />
+                               <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
+                                  <label className="text-white bg-blue-500 p-2 rounded-full hover:bg-blue-600 cursor-pointer">
+                                     <Upload className="w-4 h-4" />
+                                     <input 
+                                        type="file" 
+                                        accept="image/*" 
+                                        className="hidden" 
+                                        onChange={async (e) => {
+                                           const file = e.target.files?.[0];
+                                           if (file) {
+                                              try {
+                                                const url = await uploadImageToStorage(file, 'certificates/');
+                                                updateCertification(cert.id, { imageUrl: url });
+                                              } catch(err) {
+                                                console.error(err);
+                                              }
+                                           }
+                                        }} 
+                                     />
+                                  </label>
                                   <button onClick={() => deleteCertification(cert.id)} className="text-white bg-red-500 p-2 rounded-full hover:bg-red-600">
                                      <Trash2 className="w-4 h-4" />
                                   </button>
                                 </div>
                             </div>
-                            <p className="text-center text-sm font-medium truncate">{cert.title}</p>
+                            <input 
+                               type="text"
+                               value={cleanTitle}
+                               onChange={(e) => updateCertification(cert.id, { title: e.target.value })}
+                               className="text-center text-sm font-medium border border-transparent hover:border-gray-300 focus:border-brand-blue rounded px-1 py-0.5 outline-none bg-transparent focus:bg-white w-full transition-colors"
+                               placeholder="인증서명"
+                            />
                          </div>
-                      ))}
+                      )})}
                    </div>
                 </div>
              </div>
@@ -494,32 +526,10 @@ export const AdminContent: React.FC = () => {
 
           {activeTab === 'images' && (
              <div className="animate-fade-in space-y-8">
-                {/* Section: Main */}
-                <div>
-                   <h3 className="text-lg font-bold text-gray-800 mb-4 px-1 border-l-4 border-brand-blue pl-3">메인 화면 (Home)</h3>
-                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      <ImageUploadBlock 
-                         label="히어로 배경 이미지" 
-                         contentKey="home_hero_bg" 
-                         description="메인 화면 최상단에 노출되는 대형 배경입니다."
-                      />
-                   </div>
-                </div>
-                
                 {/* Section: Company Intro */}
                 <div>
                    <h3 className="text-lg font-bold text-gray-800 mb-4 px-1 border-l-4 border-brand-blue pl-3">회사 개요 (Factory)</h3>
                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      <ImageUploadBlock 
-                         label="공장 사진 1 (대구)" 
-                         contentKey="intro_img_1" 
-                         description="회사개요 페이지 좌측/상단에 위치하는 첫 번째 사진입니다."
-                      />
-                      <ImageUploadBlock 
-                         label="공장 사진 2 (창녕)" 
-                         contentKey="intro_img_2" 
-                         description="회사개요 페이지 우측/하단에 위치하는 두 번째 사진입니다."
-                      />
                       <FileUploadBlock
                          label="대구공장 사업자등록증"
                          contentKey="daegu_biz_reg_pdf"
@@ -531,18 +541,6 @@ export const AdminContent: React.FC = () => {
                          contentKey="changnyeong_biz_reg_pdf"
                          description="회사개요 사업장 안내에 표시되는 창녕공장 사업자등록증 파일(.pdf, .jpg 등)"
                          accept=".pdf,image/*"
-                      />
-                   </div>
-                </div>
-
-                {/* Section: Philosophy */}
-                <div>
-                   <h3 className="text-lg font-bold text-gray-800 mb-4 px-1 border-l-4 border-brand-blue pl-3">경영 이념</h3>
-                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      <ImageUploadBlock 
-                         label="경영이념 메인 이미지" 
-                         contentKey="philosophy_img_main" 
-                         description="경영이념 섹션 좌측에 위치한 세로형 이미지입니다."
                       />
                    </div>
                 </div>
@@ -813,8 +811,6 @@ export const AdminPosts: React.FC = () => {
 export const AdminSettings: React.FC = () => {
   const { config, updateConfig, exportSiteData, importSiteData } = useSite();
   const [localConfig, setLocalConfig] = useState(config);
-  const [autoRemoveBg, setAutoRemoveBg] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleSave = () => {
     updateConfig(localConfig);
@@ -843,86 +839,6 @@ export const AdminSettings: React.FC = () => {
       };
       reader.readAsText(file);
     }
-  };
-
-  // Function to remove background based on top-left pixel color
-  const removeImageBackground = (imageSrc: string): Promise<string> => {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.crossOrigin = "Anonymous";
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) { resolve(imageSrc); return; }
-        
-        ctx.drawImage(img, 0, 0);
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const data = imageData.data;
-        
-        // Get background color from top-left pixel
-        const bgR = data[0];
-        const bgG = data[1];
-        const bgB = data[2];
-        const bgA = data[3];
-
-        // If top-left is already transparent, assume it's good
-        if (bgA === 0) { resolve(imageSrc); return; }
-
-        const tolerance = 50; // Tolerance for color matching
-
-        for (let i = 0; i < data.length; i += 4) {
-          const r = data[i];
-          const g = data[i + 1];
-          const b = data[i + 2];
-
-          // Calculate distance from background color
-          const diff = Math.abs(r - bgR) + Math.abs(g - bgG) + Math.abs(b - bgB);
-
-          if (diff < tolerance) {
-            data[i + 3] = 0; // Make transparent
-          }
-        }
-
-        ctx.putImageData(imageData, 0, 0);
-        resolve(canvas.toDataURL('image/png'));
-      };
-      img.onerror = () => resolve(imageSrc);
-      img.src = imageSrc;
-    });
-  };
-
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setIsProcessing(true);
-      try {
-        let url = await uploadImageToStorage(file, 'branding/');
-        
-        // Process if auto remove is enabled
-        // Note: Removing background requires Cross-Origin access which Firebase Storage provides if configured (CORS).
-        // If not configured, this might fail or return original URL.
-        // For simplicity, we only run removeImageBackground if we have a valid URL.
-        if (autoRemoveBg) {
-           try {
-             url = await removeImageBackground(url);
-           } catch (e) {
-             console.warn("Could not remove background", e);
-           }
-        }
-        
-        setLocalConfig({ ...localConfig, logoUrl: url });
-      } catch (e) {
-        // Error already handled
-      } finally {
-        setIsProcessing(false);
-      }
-    }
-  };
-
-  const clearLogo = () => {
-    setLocalConfig({ ...localConfig, logoUrl: null });
   };
 
   return (
@@ -992,62 +908,6 @@ export const AdminSettings: React.FC = () => {
                              {opt.label}
                           </button>
                        ))}
-                    </div>
-                 </div>
-
-                 {/* Logo Upload Section */}
-                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">로고 이미지</label>
-                    <div className="flex items-start gap-6">
-                       <div className="w-32 h-16 border border-gray-200 rounded-lg bg-gray-50 flex items-center justify-center overflow-hidden relative group">
-                          {isProcessing ? (
-                             <div className="flex flex-col items-center">
-                                <Loader2 className="w-6 h-6 animate-spin text-brand-blue mb-1" />
-                                <span className="text-xs text-gray-500">처리중</span>
-                             </div>
-                          ) : localConfig.logoUrl ? (
-                            <>
-                              <img src={localConfig.logoUrl} alt="Preview" className="w-full h-full object-contain p-2" />
-                              <button 
-                                onClick={clearLogo}
-                                className="absolute inset-0 bg-black/50 text-white opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"
-                              >
-                                <X className="w-5 h-5" />
-                              </button>
-                            </>
-                          ) : (
-                            <ImageIcon className="w-6 h-6 text-gray-400" />
-                          )}
-                       </div>
-                       <div className="flex-1 space-y-3">
-                          <label className={`cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors ${isProcessing ? 'opacity-50 pointer-events-none' : ''}`}>
-                             <Upload className="w-4 h-4" />
-                             이미지 업로드
-                             <input type="file" accept="image/png, image/jpeg, image/svg+xml" onChange={handleImageUpload} className="hidden" disabled={isProcessing} />
-                          </label>
-                          
-                          {/* Magic Background Remover Toggle */}
-                          <div className="flex items-center gap-2">
-                             <button 
-                               onClick={() => setAutoRemoveBg(!autoRemoveBg)}
-                               className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
-                                  autoRemoveBg 
-                                  ? 'bg-indigo-100 text-indigo-700 border border-indigo-200 shadow-sm' 
-                                  : 'bg-gray-100 text-gray-500 border border-gray-200'
-                               }`}
-                             >
-                                <Wand2 className="w-3.5 h-3.5" />
-                                {autoRemoveBg ? '배경 자동 제거 ON' : '배경 자동 제거 OFF'}
-                             </button>
-                             <p className="text-xs text-gray-400">
-                                {autoRemoveBg ? '업로드 시 배경색을 자동으로 투명하게 만듭니다.' : '배경 제거 기능을 사용하려면 클릭하세요.'}
-                             </p>
-                          </div>
-                          
-                          <p className="text-xs text-gray-400">
-                             배경이 투명한 PNG 파일을 권장합니다.
-                          </p>
-                       </div>
                     </div>
                  </div>
 

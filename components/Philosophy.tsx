@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Target, ShieldCheck, Zap } from 'lucide-react';
 import ScrollReveal from './ScrollReveal';
 import { useSite } from '../contexts/SiteContext';
+import philosophyImg from '../assets/금형.jpg';
 
 // Internal component to handle graph animation on scroll visibility
 const StatGraph = () => {
@@ -138,7 +139,7 @@ const Philosophy: React.FC = () => {
              <ScrollReveal mode="scale" className="sticky top-32">
                 <div className="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl relative group transform transition-transform duration-700 hover:scale-[1.02]">
                   <img 
-                    src={content['philosophy_img_main']} 
+                    src={philosophyImg} 
                     alt="Factory Interior" 
                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                   />
