@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Post, SiteConfig, Language, Certification, ContentMap, Product, ProcessStep, QualityEquipment } from '../types';
 import { TRANSLATIONS } from '../translations';
-import { db, doc, onSnapshot, setDoc, getDoc } from '../utils/firebase';
+import { db, doc, onSnapshot, setDoc, getDoc, initAppCheck } from '../utils/firebase';
 
 interface SiteContextType {
   config: SiteConfig;
@@ -187,24 +187,26 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return unsubscribe;
     };
 
-    const unsubConfig = fetchWithCache('config', setConfig, DEFAULT_CONFIG);
-    const unsubPosts = fetchWithCache('posts', setPosts, DEFAULT_POSTS);
-    const unsubProducts = fetchWithCache('products', setProducts, DEFAULT_PRODUCTS);
-    const unsubCertifications = fetchWithCache('certifications', setCertifications, DEFAULT_CERTIFICATIONS);
-    const unsubProcessSteps = fetchWithCache('processSteps', setProcessSteps, DEFAULT_PROCESS_STEPS);
-    const unsubEquipments = fetchWithCache('equipments', setEquipments, DEFAULT_EQUIPMENTS);
-    const unsubContent = fetchWithCache('content', setContent, DEFAULT_CONTENT);
-    
-    setIsSyncing(false);
+    let unsubs: (() => void)[] = [];
+
+    const initializeData = async () => {
+      await initAppCheck(); // IMPORTANT: Wait for App Check before Firestore connections
+      
+      unsubs.push(fetchWithCache('config', setConfig, DEFAULT_CONFIG));
+      unsubs.push(fetchWithCache('posts', setPosts, DEFAULT_POSTS));
+      unsubs.push(fetchWithCache('products', setProducts, DEFAULT_PRODUCTS));
+      unsubs.push(fetchWithCache('certifications', setCertifications, DEFAULT_CERTIFICATIONS));
+      unsubs.push(fetchWithCache('processSteps', setProcessSteps, DEFAULT_PROCESS_STEPS));
+      unsubs.push(fetchWithCache('equipments', setEquipments, DEFAULT_EQUIPMENTS));
+      unsubs.push(fetchWithCache('content', setContent, DEFAULT_CONTENT));
+      
+      setIsSyncing(false);
+    };
+
+    initializeData();
 
     return () => {
-      unsubConfig();
-      unsubPosts();
-      unsubProducts();
-      unsubCertifications();
-      unsubProcessSteps();
-      unsubEquipments();
-      unsubContent();
+      unsubs.forEach(unsub => unsub());
     };
   }, []);
 
