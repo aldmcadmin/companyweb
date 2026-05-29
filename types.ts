@@ -7,6 +7,7 @@ export interface NavItem {
 
 export interface Product {
   id: string;
+  slug?: string;
   title: string;
   description: string;
   imageUrl: string;

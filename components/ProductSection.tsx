@@ -33,16 +33,18 @@ const ProductSection: React.FC<ProductSectionProps> = ({ hideHeader = false }) =
     
     let translatedCategory = product.category;
     let icon = null;
-    let path = 'light';
+    let path = product.slug || product.category?.toLowerCase().replace(/[^a-z0-9]+/g, '-') || 'light';
     
-    if (product.id === 'p1') { translatedCategory = t.nav.light; icon = <Feather className="w-3.5 h-3.5" />; path = 'light'; }
-    else if (product.id === 'p2') { translatedCategory = t.nav.industry; icon = <Factory className="w-3.5 h-3.5" />; path = 'industry'; }
-    else if (product.id === 'p3') { translatedCategory = t.nav.processing; icon = <Settings className="w-3.5 h-3.5" />; path = 'processing'; }
-    else if (product.id === 'p4') { translatedCategory = t.nav.electronic; icon = <Cpu className="w-3.5 h-3.5" />; path = 'electronic'; }
-    else if (product.id === 'p5') { translatedCategory = t.nav.construction; icon = <Building2 className="w-3.5 h-3.5" />; path = 'construction'; }
-    else if (product.id === 'p6') { translatedCategory = t.nav.environmental; icon = <Leaf className="w-3.5 h-3.5" />; path = 'environmental'; }
-    else if (product.id === 'p7') { translatedCategory = t.nav.exterior; icon = <Box className="w-3.5 h-3.5" />; path = 'exterior'; }
-    else if (product.id === 'p8') { translatedCategory = t.nav.substitute; icon = <Layers className="w-3.5 h-3.5" />; path = 'substitute'; }
+    // Assign proper icons based on original static ID mapping
+    if (product.id === 'p1') { translatedCategory = t.nav.light; icon = <Feather className="w-3.5 h-3.5" />; }
+    else if (product.id === 'p2') { translatedCategory = t.nav.industry; icon = <Factory className="w-3.5 h-3.5" />; }
+    else if (product.id === 'p3') { translatedCategory = t.nav.processing; icon = <Settings className="w-3.5 h-3.5" />; }
+    else if (product.id === 'p4') { translatedCategory = t.nav.electronic; icon = <Cpu className="w-3.5 h-3.5" />; }
+    else if (product.id === 'p5') { translatedCategory = t.nav.construction; icon = <Building2 className="w-3.5 h-3.5" />; }
+    else if (product.id === 'p6') { translatedCategory = t.nav.environmental; icon = <Leaf className="w-3.5 h-3.5" />; }
+    else if (product.id === 'p7') { translatedCategory = t.nav.exterior; icon = <Box className="w-3.5 h-3.5" />;  }
+    else if (product.id === 'p8') { translatedCategory = t.nav.substitute; icon = <Layers className="w-3.5 h-3.5" />;  }
+    else { icon = <Box className="w-3.5 h-3.5" />; }
 
     return {
       title: translation ? translation.title : product.title,

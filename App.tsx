@@ -12,6 +12,7 @@ import ContactForm from './components/ContactForm';
 import PageLayout from './components/PageLayout';
 import ScrollReveal from './components/ScrollReveal'; 
 import { SiteProvider, useSite } from './contexts/SiteContext';
+import { Product } from './types';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AdminDashboard, AdminPosts, AdminSettings, AdminContent } from './pages/Admin';
@@ -71,36 +72,56 @@ const ProductsListPage = () => {
     );
 };
 
-const ProductDetailPage = ({ categoryKey }: { categoryKey: keyof typeof TRANSLATIONS.KOR.nav }) => {
+import { useParams, Navigate } from 'react-router-dom';
+
+const ProductDetailPageWrapper = () => {
+    const { slug } = useParams<{ slug: string }>();
+    const { products } = useSite();
+    
+    // Find by slug first, fallback to original paths if someone used old links
+    const product = products.find(p => p.slug === slug || (p.category && p.category.toLowerCase().replace(/[^a-z0-9]+/g, '-') === slug) || p.id === slug);
+    
+    // Support legacy paths
+    if (!product) {
+        const legacyMapping: Record<string, string> = {
+            light: 'p1', industry: 'p2', processing: 'p3', electronic: 'p4',
+            construction: 'p5', environmental: 'p6', exterior: 'p7', substitute: 'p8',
+            'auto_parts': 'p1', 'non_ferrous': 'p3', 'general': 'p7'
+        };
+        const legacyId = legacyMapping[slug || ''];
+        if (legacyId) {
+            const fallbackProd = products.find(p => p.id === legacyId);
+            if (fallbackProd && fallbackProd.slug) {
+                return <Navigate to={`/products/${fallbackProd.slug}`} replace />;
+            }
+        }
+        return <NotFound />;
+    }
+    
+    return <ProductDetailPage product={product} />;
+};
+
+const ProductDetailPage = ({ product }: { product: Product }) => {
     const { t } = useSite();
-    const categoryName = t.nav[categoryKey];
     
-    // Map categoryKey to product ID to get badge info from translations
-    const keyToIdObj: Record<string, string> = {
-      light: 'p1',
-      industry: 'p2',
-      processing: 'p3',
-      electronic: 'p4',
-      construction: 'p5',
-      environmental: 'p6',
-      exterior: 'p7',
-      substitute: 'p8'
-    };
-    
-    const productId = keyToIdObj[categoryKey] as string;
+    // Try to get translation for the product
     const translatedItems = (t.products as any).items;
-    const translation = translatedItems ? translatedItems[productId] : null;
-    const badgeText = translation ? translation.badge : categoryName;
+    const translation = translatedItems ? translatedItems[product.id] : null;
+    
+    const categoryName = translation ? translation.title : product.title;
+    const subtitle = translation ? translation.desc : product.description;
+    const badgeText = translation && translation.badge ? translation.badge : product.category;
     
     let icon = null;
-    if (categoryKey === 'light') icon = <Feather className="w-3.5 h-3.5" />;
-    else if (categoryKey === 'industry') icon = <Factory className="w-3.5 h-3.5" />;
-    else if (categoryKey === 'processing') icon = <Settings className="w-3.5 h-3.5" />;
-    else if (categoryKey === 'electronic') icon = <Cpu className="w-3.5 h-3.5" />;
-    else if (categoryKey === 'construction') icon = <Building2 className="w-3.5 h-3.5" />;
-    else if (categoryKey === 'environmental') icon = <Leaf className="w-3.5 h-3.5" />;
-    else if (categoryKey === 'exterior') icon = <Box className="w-3.5 h-3.5" />;
-    else if (categoryKey === 'substitute') icon = <Layers className="w-3.5 h-3.5" />;
+    if (product.id === 'p1') icon = <Feather className="w-3.5 h-3.5" />;
+    else if (product.id === 'p2') icon = <Factory className="w-3.5 h-3.5" />;
+    else if (product.id === 'p3') icon = <Settings className="w-3.5 h-3.5" />;
+    else if (product.id === 'p4') icon = <Cpu className="w-3.5 h-3.5" />;
+    else if (product.id === 'p5') icon = <Building2 className="w-3.5 h-3.5" />;
+    else if (product.id === 'p6') icon = <Leaf className="w-3.5 h-3.5" />;
+    else if (product.id === 'p7') icon = <Box className="w-3.5 h-3.5" />;
+    else if (product.id === 'p8') icon = <Layers className="w-3.5 h-3.5" />;
+    else icon = <Box className="w-3.5 h-3.5" />;
 
     const badge = (
       <span className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-brand-blue text-xs font-bold rounded-full w-fit tracking-wider shadow-sm">
@@ -111,7 +132,6 @@ const ProductDetailPage = ({ categoryKey }: { categoryKey: keyof typeof TRANSLAT
     
     return (
         <PublicLayout>
-          {/* Trendy floating back button */}
           <div className="fixed right-4 md:right-6 lg:right-8 xl:right-12 top-1/2 -translate-y-1/2 z-50 hidden sm:block">
             <Link 
                 to="/products" 
@@ -126,14 +146,14 @@ const ProductDetailPage = ({ categoryKey }: { categoryKey: keyof typeof TRANSLAT
 
           <PageLayout 
             title={categoryName} 
-            subtitle={translation ? translation.desc : t.products.desc}
+            subtitle={subtitle}
             badge={badge}
           >
               <div className="grid md:grid-cols-3 gap-6">
                   {[1, 2, 3, 4, 5, 6].map((i) => (
                       <div key={i} className="group cursor-pointer">
                           <div className="aspect-square bg-gray-100 rounded-2xl mb-4 overflow-hidden relative">
-                               <img src={`https://picsum.photos/seed/${categoryKey}${i}/400/400`} alt="Product" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+                               <img src={`https://picsum.photos/seed/${product.id}${i}/400/400`} alt="Product" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors"></div>
                           </div>
                           <h4 className="font-bold text-lg group-hover:text-brand-blue transition-colors">{t.products.detail_page.model_name} {String(i).padStart(2, '0')}</h4>
@@ -199,14 +219,7 @@ const App: React.FC = () => {
             {/* Product Routes */}
             <Route path="/products" element={<ProductsListPage />} />
             {/* Map product detail pages to use translations */}
-            <Route path="/products/light" element={<ProductDetailPage categoryKey="light" />} />
-            <Route path="/products/industry" element={<ProductDetailPage categoryKey="industry" />} />
-            <Route path="/products/processing" element={<ProductDetailPage categoryKey="processing" />} />
-            <Route path="/products/electronic" element={<ProductDetailPage categoryKey="electronic" />} />
-            <Route path="/products/construction" element={<ProductDetailPage categoryKey="construction" />} />
-            <Route path="/products/environmental" element={<ProductDetailPage categoryKey="environmental" />} />
-            <Route path="/products/exterior" element={<ProductDetailPage categoryKey="exterior" />} />
-            <Route path="/products/substitute" element={<ProductDetailPage categoryKey="substitute" />} />
+            <Route path="/products/:slug" element={<ProductDetailPageWrapper />} />
             
             {/* Other Routes */}
             <Route path="/process" element={<ProcessPage />} />
