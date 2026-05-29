@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import Button from './Button';
 import { ArrowDown, ChevronDown } from 'lucide-react';
 import { useSite } from '../contexts/SiteContext';
-import heroBg from '../assets/home-hero-bg.webp';
+import heroBg from '../assets/IMG_4372.JPG';
 
 const Hero: React.FC = () => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
