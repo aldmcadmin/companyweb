@@ -37,7 +37,6 @@ export const initAppCheck = async () => {
       provider: new ReCaptchaV3Provider('6LfYkwAtAAAAAJF8Au4-HO0LjvD4XmpNmp8B39No'),
       isTokenAutoRefreshEnabled: true
     });
-    
     appCheckInitialized = true;
   } catch (error) {
     console.warn("App Check 초기화 실패:", error);

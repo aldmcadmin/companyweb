@@ -86,14 +86,12 @@ const Header: React.FC = () => {
     if (key === '오시는 길') return t.nav.location;
 
     // Sub items (Products)
-    if (key === '경량소재') return t.nav.light;
-    if (key === '산업용소재') return t.nav.industry;
-    if (key === '가공소재') return t.nav.processing;
+    if (key === '자동차부품소재') return t.nav.light;
+    if (key === '산업소재') return t.nav.industry;
+    if (key === '비철가공소재') return t.nav.processing;
     if (key === '전기전자부품소재') return t.nav.electronic;
     if (key === '건축소재') return t.nav.construction;
-    if (key === '환경소재') return t.nav.environmental;
-    if (key === '외장소재') return t.nav.exterior;
-    if (key === '대체소재') return t.nav.substitute;
+    if (key === '일반소재') return t.nav.general || t.nav.exterior || key;
     
     // Sub items (Process)
     if (key === '생산공정') return t.nav.production;

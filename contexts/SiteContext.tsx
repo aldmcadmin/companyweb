@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { Post, SiteConfig, Language, Certification, ContentMap, Product, ProcessStep, QualityEquipment } from '../types';
 import { TRANSLATIONS } from '../translations';
 import { db, doc, onSnapshot, setDoc, getDoc, initAppCheck } from '../utils/firebase';
@@ -49,14 +49,12 @@ const DEFAULT_POSTS: Post[] = [
 ];
 
 const DEFAULT_PRODUCTS: Product[] = [
-  { id: 'p1', title: '경량소재', category: 'Lightweight', description: '자동차 경량화를 위한 고강도 알루미늄 소재', imageUrl: 'https://picsum.photos/id/20/600/400' },
-  { id: 'p2', title: '산업용소재', category: 'Industrial', description: '다양한 산업 설비 및 기계 구조용 소재', imageUrl: 'https://picsum.photos/id/1/600/400' },
-  { id: 'p3', title: '가공소재', category: 'Processing', description: '정밀 가공성이 우수한 고품질 소재', imageUrl: 'https://picsum.photos/id/192/600/400' },
+  { id: 'p1', title: '자동차부품소재', category: 'Auto Parts', description: '자동차 경량화를 위한 고강도 알루미늄 소재', imageUrl: 'https://picsum.photos/id/20/600/400' },
+  { id: 'p2', title: '산업소재', category: 'Industrial', description: '다양한 산업 설비 및 기계 구조용 소재', imageUrl: 'https://picsum.photos/id/1/600/400' },
+  { id: 'p3', title: '비철가공소재', category: 'Non-ferrous', description: '정밀 가공성이 우수한 고품질 소재', imageUrl: 'https://picsum.photos/id/192/600/400' },
   { id: 'p4', title: '전기전자부품소재', category: 'Electronics', description: '전기 전도성과 방열성이 뛰어난 부품 소재', imageUrl: 'https://picsum.photos/id/3/600/400' },
   { id: 'p5', title: '건축소재', category: 'Construction', description: '내구성과 심미성을 갖춘 건축 내외장재', imageUrl: 'https://picsum.photos/id/10/600/400' },
-  { id: 'p6', title: '환경소재', category: 'Environmental', description: '친환경 재활용이 가능한 지속 가능한 소재', imageUrl: 'https://picsum.photos/id/11/600/400' },
-  { id: 'p7', title: '외장소재', category: 'Exterior', description: '건물 및 제품의 외관을 돋보이게 하는 외장재', imageUrl: 'https://picsum.photos/id/12/600/400' },
-  { id: 'p8', title: '대체소재', category: 'Substitute', description: '기존 금속을 대체하는 고성능 합금 소재', imageUrl: 'https://picsum.photos/id/13/600/400' },
+  { id: 'p7', title: '일반소재', category: 'General', description: '건물 및 제품의 외관을 돋보이게 하는 외장재', imageUrl: 'https://picsum.photos/id/12/600/400' },
 ];
 
 const DEFAULT_CERTIFICATIONS: Certification[] = [
@@ -125,33 +123,27 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
   
   const [language, setLanguage] = useState<Language>('KOR');
   const [isSyncing, setIsSyncing] = useState(true);
+  
+  // Track data load status to prevent accidental overwrite
+  const dataStatusRef = useRef<Record<string, 'loading' | 'success' | 'error' | 'not_found'>>({});
 
   // --- Firestore Realtime Sync ---
-  // This is crucial: We must listen to Firestore so when Admin uploads an image (and updates the URL in DB),
-  // all other clients receive that new URL instantly.
   useEffect(() => {
-    // Helper to fetch document with sessionStorage caching to minimize F5 refresh costs,
-    // now combined with onSnapshot for real-time updates.
-    const fetchWithCache = (docName: string, setter: any, defaultData: any) => {
-      const cacheKey = `site_data_cache_${docName}`;
-      const cached = sessionStorage.getItem(cacheKey);
-
-      if (cached) {
-        try {
-          setter(JSON.parse(cached));
-          // Do NOT return here, we still want to attach onSnapshot for real-time updates
-        } catch (e) {
-          console.warn("Failed to parse cache:", e);
-        }
-      }
-
+    const fetchWithSnapshot = (docName: string, setter: any, defaultData: any) => {
+      dataStatusRef.current[docName] = 'loading';
+      
       const unsubscribe = onSnapshot(doc(db, COLLECTION_NAME, docName), (snapshot) => {
         if (snapshot.exists()) {
           // If document exists in DB, use it
           let data = snapshot.data().data;
           
           if (!data || (Array.isArray(data) && data.length === 0)) {
+            // Document exists but empty? We use fallback UI data
+            // but DO NOT mark as success so that it won't overwrite empty array with defaults later unless intended
             data = defaultData;
+            dataStatusRef.current[docName] = 'not_found';
+          } else {
+            dataStatusRef.current[docName] = 'success';
           }
           
           // Apply user requested overrides automatically if they are still using the old values
@@ -172,16 +164,16 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
           }
           
           setter(data);
-          sessionStorage.setItem(cacheKey, JSON.stringify(data));
         } else {
-          // If not exists (first run), we use hardcoded defaults.
+          // If not exists (first run), we use hardcoded defaults for UI fallback.
+          dataStatusRef.current[docName] = 'not_found';
           setter(defaultData);
-          sessionStorage.setItem(cacheKey, JSON.stringify(defaultData));
         }
       }, (error) => {
         console.warn(`Firestore read blocked for ${docName}:`, error.message);
-        // Fallback to default if there's an error and no cache was loaded
-        if (!cached) setter(defaultData); 
+        dataStatusRef.current[docName] = 'error';
+        // Fallback to default if there's an error
+        setter(defaultData); 
       });
 
       return unsubscribe;
@@ -192,13 +184,13 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const initializeData = async () => {
       await initAppCheck(); // IMPORTANT: Wait for App Check before Firestore connections
       
-      unsubs.push(fetchWithCache('config', setConfig, DEFAULT_CONFIG));
-      unsubs.push(fetchWithCache('posts', setPosts, DEFAULT_POSTS));
-      unsubs.push(fetchWithCache('products', setProducts, DEFAULT_PRODUCTS));
-      unsubs.push(fetchWithCache('certifications', setCertifications, DEFAULT_CERTIFICATIONS));
-      unsubs.push(fetchWithCache('processSteps', setProcessSteps, DEFAULT_PROCESS_STEPS));
-      unsubs.push(fetchWithCache('equipments', setEquipments, DEFAULT_EQUIPMENTS));
-      unsubs.push(fetchWithCache('content', setContent, DEFAULT_CONTENT));
+      unsubs.push(fetchWithSnapshot('config', setConfig, DEFAULT_CONFIG));
+      unsubs.push(fetchWithSnapshot('posts', setPosts, DEFAULT_POSTS));
+      unsubs.push(fetchWithSnapshot('products', setProducts, DEFAULT_PRODUCTS));
+      unsubs.push(fetchWithSnapshot('certifications', setCertifications, DEFAULT_CERTIFICATIONS));
+      unsubs.push(fetchWithSnapshot('processSteps', setProcessSteps, DEFAULT_PROCESS_STEPS));
+      unsubs.push(fetchWithSnapshot('equipments', setEquipments, DEFAULT_EQUIPMENTS));
+      unsubs.push(fetchWithSnapshot('content', setContent, DEFAULT_CONTENT));
       
       setIsSyncing(false);
     };
@@ -222,10 +214,20 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // --- Action Handlers (Write to Firestore) ---
   // When Admin changes something, we save to DB.
   
-  const saveData = async (docName: string, data: any) => {
+  const saveData = async (docName: string, data: any, forceInit: boolean = false) => {
+    const status = dataStatusRef.current[docName];
+    
+    // 명시적 초기화(forceInit)가 아니면 success 상태에서만 저장 허용
+    if (!forceInit && status !== 'success') {
+      alert("Firestore 동기화 완료 전에는 저장할 수 없습니다.");
+      return;
+    }
+
     try {
       await setDoc(doc(db, COLLECTION_NAME, docName), { data });
-      sessionStorage.setItem(`site_data_cache_${docName}`, JSON.stringify(data));
+      if (forceInit) {
+        dataStatusRef.current[docName] = 'success';
+      }
     } catch (error) {
       console.error(`Failed to save ${docName}:`, error);
       alert("변경사항 저장에 실패했습니다. (네트워크/권한 문제)");
@@ -363,13 +365,13 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const data = JSON.parse(jsonData);
       if (!data.config || !data.content) throw new Error("Invalid data format");
 
-      saveData('config', data.config);
-      saveData('posts', data.posts || []);
-      saveData('products', data.products || []);
-      saveData('certifications', data.certifications || []);
-      saveData('processSteps', data.processSteps || []);
-      saveData('equipments', data.equipments || []);
-      saveData('content', data.content);
+      saveData('config', data.config, true);
+      saveData('posts', data.posts || [], true);
+      saveData('products', data.products || [], true);
+      saveData('certifications', data.certifications || [], true);
+      saveData('processSteps', data.processSteps || [], true);
+      saveData('equipments', data.equipments || [], true);
+      saveData('content', data.content, true);
 
       return true;
     } catch (e) {

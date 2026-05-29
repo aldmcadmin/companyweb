@@ -16,13 +16,13 @@ export const TRANSLATIONS = {
       philosophy: '경영이념',
       cert: '인증현황',
       location: '오시는 길',
-      light: '경량소재',
-      industry: '산업용소재',
-      processing: '가공소재',
+      light: '자동차부품소재',
+      industry: '산업소재',
+      processing: '비철가공소재',
       electronic: '전기전자부품소재',
       construction: '건축소재',
       environmental: '환경소재',
-      exterior: '외장소재',
+      exterior: '일반소재',
       substitute: '대체소재',
       production: '생산공정',
       quality: '품질검사'
@@ -270,14 +270,12 @@ export const TRANSLATIONS = {
         note: ''
       },
       items: {
-        p1: { title: '경량소재', desc: '자동차 경량화를 위한 고강도 알루미늄 소재', badge: '더 가볍고 단단하게' },
-        p2: { title: '산업용소재', desc: '다양한 산업 설비 및 기계 구조용 소재', badge: '산업의 기초를 탄탄하게' },
-        p3: { title: '가공소재', desc: '정밀 가공성이 우수한 고품질 소재', badge: '정밀하고 원활한 가공' },
+        p1: { title: '자동차부품소재', desc: '자동차 경량화를 위한 고강도 알루미늄 소재', badge: '더 가볍고 단단하게' },
+        p2: { title: '산업소재', desc: '다양한 산업 설비 및 기계 구조용 소재', badge: '산업의 기초를 탄탄하게' },
+        p3: { title: '비철가공소재', desc: '정밀 가공성이 우수한 고품질 소재', badge: '정밀하고 원활한 가공' },
         p4: { title: '전기전자부품소재', desc: '전기 전도성과 방열성이 뛰어난 부품 소재', badge: '안전하고 효율적인 방열' },
         p5: { title: '건축소재', desc: '내구성과 심미성을 갖춘 건축 내외장재', badge: '아름답고 견고한 건축' },
-        p6: { title: '환경소재', desc: '친환경 재활용이 가능한 지속 가능한 소재', badge: '지속 가능한 미래' },
-        p7: { title: '외장소재', desc: '건물 및 제품의 외관을 돋보이게 하는 외장재', badge: '돋보이는 프리미엄 외관' },
-        p8: { title: '대체소재', desc: '기존 금속을 대체하는 고성능 합금 소재', badge: '한계를 뛰어넘는 신소재' }
+        p7: { title: '일반소재', desc: '건물 및 제품의 외관을 돋보이게 하는 외장재', badge: '돋보이는 프리미엄 외관' }
       },
       detail_page: {
         model_name: '제품 모델명',
@@ -629,14 +627,12 @@ export const TRANSLATIONS = {
         note: ''
       },
       items: {
-        p1: { title: 'Lightweight Materials', desc: 'High-strength aluminum for automotive weight reduction', badge: 'Light & Strong' },
+        p1: { title: 'Auto Parts Materials', desc: 'High-strength aluminum for automotive weight reduction', badge: 'Light & Strong' },
         p2: { title: 'Industrial Materials', desc: 'Materials for various industrial equipment and structures', badge: 'Industrial Foundation' },
-        p3: { title: 'Processed Materials', desc: 'High-quality materials with excellent machinability', badge: 'Precision Processing' },
+        p3: { title: 'Non-ferrous Materials', desc: 'High-quality materials with excellent machinability', badge: 'Precision Processing' },
         p4: { title: 'Electronic Parts', desc: 'Components with excellent conductivity and heat dissipation', badge: 'Efficient Heat Dissipation' },
         p5: { title: 'Construction Materials', desc: 'Durable and aesthetic architectural materials', badge: 'Durable Construction' },
-        p6: { title: 'Eco Materials', desc: 'Eco-friendly, sustainable recyclable materials', badge: 'Sustainable Future' },
-        p7: { title: 'Exterior Materials', desc: 'Exterior materials that enhance building appearance', badge: 'Premium Exterior' },
-        p8: { title: 'Substitute Materials', desc: 'High-performance alloys replacing existing metals', badge: 'Advanced Substitute' }
+        p7: { title: 'General Materials', desc: 'Exterior materials that enhance the appearance of buildings and products', badge: 'Premium Appearance' }
       },
       detail_page: {
         model_name: 'Product Model',
@@ -734,13 +730,13 @@ export const TRANSLATIONS = {
       philosophy: '経営理念',
       cert: '認証現況',
       location: 'アクセス',
-      light: '軽量素材',
-      industry: '産業用素材',
-      processing: '加工素材',
+      light: '自動車部品素材',
+      industry: '産業素材',
+      processing: '非鉄加工素材',
       electronic: '電気電子部品素材',
       construction: '建築素材',
       environmental: '環境素材',
-      exterior: '外装素材',
+      exterior: '一般素材',
       substitute: '代替素材',
       production: '生産工程',
       quality: '品質検査'
@@ -988,14 +984,12 @@ export const TRANSLATIONS = {
         note: ''
       },
       items: {
-        p1: { title: '軽量素材', desc: '自動車軽量化のための高強度アルミニウム素材', badge: 'より軽く頑丈に' },
-        p2: { title: '産業用素材', desc: '様々な産業設備および機械構造用素材', badge: '産業の基盤を強固に' },
-        p3: { title: '加工素材', desc: '精密加工性に優れた高品質素材', badge: '精密で完璧な加工' },
+        p1: { title: '自動車部品素材', desc: '自動車軽量化のための高強度アルミニウム素材', badge: 'より軽く頑丈に' },
+        p2: { title: '産業素材', desc: '様々な産業設備および機械構造用素材', badge: '産業の基盤を強固に' },
+        p3: { title: '非鉄加工素材', desc: '精密加工性に優れた高品質素材', badge: '精密で完璧な加工' },
         p4: { title: '電気電子部品素材', desc: '電気伝導性と放熱性に優れた部品素材', badge: '安全で効率的な放熱' },
         p5: { title: '建築素材', desc: '耐久性と審美性を備えた建築内外装材', badge: '美しく堅牢な建築' },
-        p6: { title: '環境素材', desc: '環境に優しいリサイクル可能な持続可能な素材', badge: '持続可能な未来' },
-        p7: { title: '外装素材', desc: '建物や製品の外観を引き立てる外装材', badge: '際立つプレミアム外観' },
-        p8: { title: '代替素材', desc: '既存の金属に代わる高性能合金素材', badge: '限界を超える新素材' }
+        p7: { title: '一般素材', desc: '建物や製品の外観を引き立てる一般材', badge: '際立つプレミアム外観' }
       },
       detail_page: {
         model_name: '製品モデル名',
