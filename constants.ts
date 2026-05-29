@@ -18,11 +18,11 @@ export const NAV_ITEMS: NavItem[] = [
     path: '/products',
     subItems: [
       { label: '자동차부품소재', path: '/products/auto-parts' },
-      { label: '산업소재', path: '/products/industrial' },
-      { label: '비철가공소재', path: '/products/non-ferrous' },
-      { label: '전기전자부품소재', path: '/products/electronics' },
-      { label: '건축소재', path: '/products/construction' },
-      { label: '일반소재', path: '/products/general-materials' },
+      { label: '산업소재', path: '/products/industrial-material' },
+      { label: '비철가공소재', path: '/products/non-ferrous-material' },
+      { label: '전기전자부품소재', path: '/products/electronics-material' },
+      { label: '건축소재', path: '/products/construction-material' },
+      { label: '일반소재', path: '/products/general-material' },
     ]
   },
   {

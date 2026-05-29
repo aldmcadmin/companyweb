@@ -7,6 +7,11 @@ export interface NavItem {
 
 export interface Product {
   id: string;
+  /**
+   * 고유 시스템 식별자 (slug).
+   * URL 라우팅 및 다국어 대응 환경에서 Firestore 데이터 변경 시에도 깨지지 않는 고정 경로를 보장합니다.
+   * 예: 'auto-parts', 'industrial-material'
+   */
   slug?: string;
   title: string;
   description: string;

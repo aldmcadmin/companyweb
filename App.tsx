@@ -78,24 +78,46 @@ const ProductDetailPageWrapper = () => {
     const { slug } = useParams<{ slug: string }>();
     const { products } = useSite();
     
-    // Find by slug first, fallback to original paths if someone used old links
-    const product = products.find(p => p.slug === slug || (p.category && p.category.toLowerCase().replace(/[^a-z0-9]+/g, '-') === slug) || p.id === slug);
+    // Find by slug first, fallback to id for DB compatibility
+    let product = products.find(p => p.slug === slug);
+    
+    if (!product) {
+        product = products.find(p => p.id === slug);
+    }
     
     // Support legacy paths
     if (!product) {
         const legacyMapping: Record<string, string> = {
-            light: 'p1', industry: 'p2', processing: 'p3', electronic: 'p4',
-            construction: 'p5', environmental: 'p6', exterior: 'p7', substitute: 'p8',
-            'auto_parts': 'p1', 'non_ferrous': 'p3', 'general': 'p7'
+            light: 'auto-parts',
+            industry: 'industrial-material',
+            processing: 'non-ferrous-material',
+            electronic: 'electronics-material',
+            construction: 'construction-material',
+            environmental: 'general-material',
+            exterior: 'general-material',
+            substitute: 'general-material',
+            auto_parts: 'auto-parts',
+            non_ferrous: 'non-ferrous-material',
+            general: 'general-material',
+            industrial: 'industrial-material',
+            electronics: 'electronics-material',
+            'general-materials': 'general-material'
         };
-        const legacyId = legacyMapping[slug || ''];
-        if (legacyId) {
-            const fallbackProd = products.find(p => p.id === legacyId);
-            if (fallbackProd && fallbackProd.slug) {
-                return <Navigate to={`/products/${fallbackProd.slug}`} replace />;
+        const legacySlug = legacyMapping[slug || ''];
+        if (legacySlug) {
+            // Find if there's a product with this slug
+            const fallbackProd = products.find(p => p.slug === legacySlug || p.id === legacyMapping[legacySlug] || p.id === 'p1'); // generic fallback logic
+            if (fallbackProd) {
+                 // Even if we found it, rely on the product's actual slug
+                 return <Navigate to={`/products/${fallbackProd.slug}`} replace />;
             }
         }
         return <NotFound />;
+    }
+    
+    // Enforce canonical slug URL
+    if (product && product.slug && product.slug !== slug) {
+        return <Navigate to={`/products/${product.slug}`} replace />;
     }
     
     return <ProductDetailPage product={product} />;
