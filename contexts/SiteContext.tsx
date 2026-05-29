@@ -130,22 +130,22 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // This is crucial: We must listen to Firestore so when Admin uploads an image (and updates the URL in DB),
   // all other clients receive that new URL instantly.
   useEffect(() => {
-    // Helper to fetch document with sessionStorage caching to minimize F5 refresh costs
-    const fetchWithCache = async (docName: string, setter: any, defaultData: any) => {
+    // Helper to fetch document with sessionStorage caching to minimize F5 refresh costs,
+    // now combined with onSnapshot for real-time updates.
+    const fetchWithCache = (docName: string, setter: any, defaultData: any) => {
       const cacheKey = `site_data_cache_${docName}`;
       const cached = sessionStorage.getItem(cacheKey);
 
       if (cached) {
         try {
           setter(JSON.parse(cached));
-          return; // Skip Firestore read if we have it in session storage
+          // Do NOT return here, we still want to attach onSnapshot for real-time updates
         } catch (e) {
           console.warn("Failed to parse cache:", e);
         }
       }
 
-      try {
-        const snapshot = await getDoc(doc(db, COLLECTION_NAME, docName));
+      const unsubscribe = onSnapshot(doc(db, COLLECTION_NAME, docName), (snapshot) => {
         if (snapshot.exists()) {
           // If document exists in DB, use it
           let data = snapshot.data().data;
@@ -178,25 +178,34 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setter(defaultData);
           sessionStorage.setItem(cacheKey, JSON.stringify(defaultData));
         }
-      } catch (error) {
-        console.error(`Error fetching ${docName}:`, error);
-        setter(defaultData); // Fallback
-      }
+      }, (error) => {
+        console.warn(`Firestore read blocked for ${docName}:`, error.message);
+        // Fallback to default if there's an error and no cache was loaded
+        if (!cached) setter(defaultData); 
+      });
+
+      return unsubscribe;
     };
 
-    const fetchAll = async () => {
-      await fetchWithCache('config', setConfig, DEFAULT_CONFIG);
-      await fetchWithCache('posts', setPosts, DEFAULT_POSTS);
-      await fetchWithCache('products', setProducts, DEFAULT_PRODUCTS);
-      await fetchWithCache('certifications', setCertifications, DEFAULT_CERTIFICATIONS);
-      await fetchWithCache('processSteps', setProcessSteps, DEFAULT_PROCESS_STEPS);
-      await fetchWithCache('equipments', setEquipments, DEFAULT_EQUIPMENTS);
-      await fetchWithCache('content', setContent, DEFAULT_CONTENT);
-      setIsSyncing(false);
-    }
+    const unsubConfig = fetchWithCache('config', setConfig, DEFAULT_CONFIG);
+    const unsubPosts = fetchWithCache('posts', setPosts, DEFAULT_POSTS);
+    const unsubProducts = fetchWithCache('products', setProducts, DEFAULT_PRODUCTS);
+    const unsubCertifications = fetchWithCache('certifications', setCertifications, DEFAULT_CERTIFICATIONS);
+    const unsubProcessSteps = fetchWithCache('processSteps', setProcessSteps, DEFAULT_PROCESS_STEPS);
+    const unsubEquipments = fetchWithCache('equipments', setEquipments, DEFAULT_EQUIPMENTS);
+    const unsubContent = fetchWithCache('content', setContent, DEFAULT_CONTENT);
     
-    fetchAll();
+    setIsSyncing(false);
 
+    return () => {
+      unsubConfig();
+      unsubPosts();
+      unsubProducts();
+      unsubCertifications();
+      unsubProcessSteps();
+      unsubEquipments();
+      unsubContent();
+    };
   }, []);
 
   // Update CSS Variables & Meta tags
