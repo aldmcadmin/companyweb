@@ -152,6 +152,7 @@ const ProductSection: React.FC<ProductSectionProps> = ({
                       <img
                         src={content.imageUrl}
                         alt={content.title}
+                        loading="lazy"
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]"
                       />
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500"></div>

@@ -196,26 +196,41 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return unsubscribe;
     };
 
-    let unsubs: (() => void)[] = [];
+    let active = true;
+    const activeUnsubs: (() => void)[] = [];
 
     const initializeData = async () => {
       await initAppCheck(); // IMPORTANT: Wait for App Check before Firestore connections
+      if (!active) return;
       
-      unsubs.push(fetchWithSnapshot('config', setConfig, DEFAULT_CONFIG));
-      unsubs.push(fetchWithSnapshot('posts', setPosts, DEFAULT_POSTS));
-      unsubs.push(fetchWithSnapshot('products', setProducts, DEFAULT_PRODUCTS));
-      unsubs.push(fetchWithSnapshot('certifications', setCertifications, DEFAULT_CERTIFICATIONS));
-      unsubs.push(fetchWithSnapshot('processSteps', setProcessSteps, DEFAULT_PROCESS_STEPS));
-      unsubs.push(fetchWithSnapshot('equipments', setEquipments, DEFAULT_EQUIPMENTS));
-      unsubs.push(fetchWithSnapshot('content', setContent, DEFAULT_CONTENT));
-      
+      const configUnsub = fetchWithSnapshot('config', setConfig, DEFAULT_CONFIG);
+      const postsUnsub = fetchWithSnapshot('posts', setPosts, DEFAULT_POSTS);
+      const productsUnsub = fetchWithSnapshot('products', setProducts, DEFAULT_PRODUCTS);
+      const certsUnsub = fetchWithSnapshot('certifications', setCertifications, DEFAULT_CERTIFICATIONS);
+      const processUnsub = fetchWithSnapshot('processSteps', setProcessSteps, DEFAULT_PROCESS_STEPS);
+      const equipUnsub = fetchWithSnapshot('equipments', setEquipments, DEFAULT_EQUIPMENTS);
+      const contentUnsub = fetchWithSnapshot('content', setContent, DEFAULT_CONTENT);
+
+      if (!active) {
+        configUnsub();
+        postsUnsub();
+        productsUnsub();
+        certsUnsub();
+        processUnsub();
+        equipUnsub();
+        contentUnsub();
+        return;
+      }
+
+      activeUnsubs.push(configUnsub, postsUnsub, productsUnsub, certsUnsub, processUnsub, equipUnsub, contentUnsub);
       setIsSyncing(false);
     };
 
     initializeData();
 
     return () => {
-      unsubs.forEach(unsub => unsub());
+      active = false;
+      activeUnsubs.forEach(unsub => unsub());
     };
   }, []);
 

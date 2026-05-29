@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useSite } from '../contexts/SiteContext';
-import { ArrowDown, ChevronRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import React, { useEffect, useRef, useState } from "react";
+import { useSite } from "../contexts/SiteContext";
+import { ArrowDown, ChevronRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const ProcessPage: React.FC = () => {
   const { t, processSteps } = useSite();
@@ -25,8 +25,9 @@ const ProcessPage: React.FC = () => {
       const scrollY = window.scrollY;
 
       // Calculate scroll percentage within the section (0 to 1)
-      let scrollPercentage = (scrollY - sectionTop) / (sectionHeight - windowHeight);
-      
+      let scrollPercentage =
+        (scrollY - sectionTop) / (sectionHeight - windowHeight);
+
       if (scrollPercentage < 0) scrollPercentage = 0;
       if (scrollPercentage > 1) scrollPercentage = 1;
 
@@ -42,9 +43,9 @@ const ProcessPage: React.FC = () => {
       setCurrentSlideIndex(index);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
     handleScroll(); // init
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [numSteps]);
 
   if (sortedSteps.length === 0) {
@@ -52,7 +53,7 @@ const ProcessPage: React.FC = () => {
       <div className="flex flex-col min-h-screen">
         <Header />
         <div className="flex-grow pt-32 text-center text-gray-500">
-           공정 단계가 등록되지 않았습니다.
+          공정 단계가 등록되지 않았습니다.
         </div>
         <Footer />
       </div>
@@ -60,37 +61,47 @@ const ProcessPage: React.FC = () => {
   }
 
   return (
-    <div className="bg-[#0a0a0a] text-white" style={{ fontFamily: "'Inter', sans-serif" }}>
+    <div
+      className="bg-[#0a0a0a] text-white"
+      style={{ fontFamily: "'Inter', sans-serif" }}
+    >
       <Header />
 
       {/* Intro Section */}
       <section className="h-screen flex flex-col justify-center items-center text-center px-4 relative pt-16">
         <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight mb-4 md:mb-6 leading-tight break-keep">
-          {t.process?.intro_title?.split('\\n').map((line, i) => (
+          {t.process?.intro_title?.split("\\n").map((line, i) => (
             <React.Fragment key={i}>
               {line}
               <br />
             </React.Fragment>
           )) || (
             <>
-              완벽을 향한<br />알루미늄의 여정
+              완벽을 향한
+              <br />
+              알루미늄의 여정
             </>
           )}
         </h1>
         <p className="text-base sm:text-lg md:text-xl text-gray-400 max-w-2xl font-light break-keep">
-          {t.process?.intro_desc?.split('\\n').map((line, i) => (
+          {t.process?.intro_desc?.split("\\n").map((line, i) => (
             <React.Fragment key={i}>
               {line}
               <br className="hidden md:block" />
             </React.Fragment>
           )) || (
             <>
-              수십 년의 노하우와 첨단 기술이 만나는 생산 공정을 한눈에 확인하세요.<br className="hidden md:block" /> 아래로 스크롤하여 여정을 시작합니다.
+              수십 년의 노하우와 첨단 기술이 만나는 생산 공정을 한눈에
+              확인하세요.
+              <br className="hidden md:block" /> 아래로 스크롤하여 여정을
+              시작합니다.
             </>
           )}
         </p>
         <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center opacity-70 animate-bounce">
-          <span className="text-sm tracking-widest mb-2 text-white">SCROLL</span>
+          <span className="text-sm tracking-widest mb-2 text-white">
+            SCROLL
+          </span>
           <ArrowDown className="w-6 h-6 text-white" />
         </div>
       </section>
@@ -99,37 +110,44 @@ const ProcessPage: React.FC = () => {
       <section className="py-24 bg-[#0a0a0a] px-4 md:px-8 border-t border-gray-800">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight">{t.process?.overview_title || '생산 공정 개요도'}</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight">
+              {t.process?.overview_title || "생산 공정 개요도"}
+            </h2>
             <p className="text-gray-400 font-light text-sm md:text-base">
-              {t.process?.overview_desc || '최고 품질의 알루미늄 제품이 완성되기까지의 전체 공정을 한눈에 확인하세요.'}
+              {t.process?.overview_desc ||
+                "최고 품질의 알루미늄 제품이 완성되기까지의 전체 공정을 한눈에 확인하세요."}
             </p>
           </div>
-          
+
           <div className="flex flex-wrap justify-center gap-4 md:gap-6">
             {sortedSteps.map((step, index) => {
               const translationKey = step.id;
               // Add a type guard to handle potential undefined objects
               const processTranslations = t.process as any;
-              const translatedItem = processTranslations?.items?.[translationKey];
+              const translatedItem =
+                processTranslations?.items?.[translationKey];
               const displayTitle = translatedItem?.title || step.title;
 
               return (
-                <div 
-                  key={step.id} 
+                <div
+                  key={step.id}
                   className="w-[calc(50%-0.5rem)] md:w-[calc(33.333%-1rem)] lg:w-[calc(25%-1.125rem)] group relative overflow-hidden rounded-xl bg-gray-900 border border-gray-800 hover:border-gray-600 transition-all shrink-0"
                 >
                   <div className="aspect-square w-full overflow-hidden">
-                    <img 
-                      src={step.imageUrl || 'https://via.placeholder.com/400x300'} 
-                      alt={displayTitle} 
+                    <img
+                      src={
+                        step.imageUrl || "https://via.placeholder.com/400x300"
+                      }
+                      alt={displayTitle}
+                      loading="lazy"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-500"></div>
                   </div>
-                  
+
                   <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent p-4 md:p-5 flex flex-col justify-end">
                     <span className="bg-gradient-to-r from-sky-300 to-indigo-400 bg-clip-text text-transparent font-mono text-xs md:text-sm tracking-wider font-semibold mb-1 lg:mb-2 block">
-                      STEP {String(index + 1).padStart(2, '0')}
+                      STEP {String(index + 1).padStart(2, "0")}
                     </span>
                     <h3 className="text-base md:text-lg font-bold text-white leading-snug break-keep drop-shadow-md whitespace-pre-wrap">
                       {displayTitle}
@@ -144,67 +162,77 @@ const ProcessPage: React.FC = () => {
 
       {/* Main Scroll-telling Section */}
       {/* Set the parent container height to allow scrolling based on number of steps */}
-      <div 
-        ref={sectionRef} 
-        className="relative" 
+      <div
+        ref={sectionRef}
+        className="relative"
         style={{ height: `${numSteps * 100}vh` }}
       >
         <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center">
-          <div 
-            ref={trackRef} 
-            className="flex h-screen" 
-            style={{ width: `${numSteps * 100}vw`, willChange: 'transform' }}
+          <div
+            ref={trackRef}
+            className="flex h-screen"
+            style={{ width: `${numSteps * 100}vw`, willChange: "transform" }}
           >
             {sortedSteps.map((step, index) => {
               const isActive = index === currentSlideIndex;
 
               return (
-                <div 
-                  key={step.id} 
+                <div
+                  key={step.id}
                   className="relative flex items-center justify-start h-screen pl-[6%] md:pl-[10%] overflow-hidden group shrink-0 w-screen"
                 >
                   {/* Background Image */}
-                  <div 
+                  <div
                     className="absolute top-0 left-0 w-full h-full bg-cover bg-center -z-20 transition-transform duration-500 group-hover:scale-105"
                     style={{ backgroundImage: `url('${step.imageUrl}')` }}
                   />
-                  
+
                   {/* Overlay Gradient for Text Readability */}
-                  <div 
-                    className="absolute top-0 left-0 w-full h-full -z-10 bg-gradient-to-r from-black/90 via-black/50 to-transparent sm:from-black/80 sm:via-black/40"
-                  />
+                  <div className="absolute top-0 left-0 w-full h-full -z-10 bg-gradient-to-r from-black/90 via-black/50 to-transparent sm:from-black/80 sm:via-black/40" />
 
                   {/* Content */}
                   <div className="max-w-[90%] md:max-w-[600px] z-10 z-10">
                     <span className="inline-block text-xs md:text-xl font-semibold tracking-[0.2em] bg-gradient-to-r from-sky-300 to-indigo-400 bg-clip-text text-transparent mb-3 md:mb-4 border border-sky-300/50 px-3 md:px-4 py-1 rounded-full backdrop-blur-[4px]">
-                      STEP {String(index + 1).padStart(2, '0')}
+                      STEP {String(index + 1).padStart(2, "0")}
                     </span>
                     <h2 className="text-3xl sm:text-5xl md:text-[4.5rem] font-extrabold leading-tight mb-4 md:mb-6 tracking-tight text-shadow-lg break-keep drop-shadow-md">
                       {(() => {
                         const translationKey = step.id;
                         const processTranslations = t.process as any;
-                        const translatedItem = processTranslations?.items?.[translationKey];
-                        const displayTitle = translatedItem?.title || step.title;
-                        const displayDesc = translatedItem?.desc || step.description;
+                        const translatedItem =
+                          processTranslations?.items?.[translationKey];
+                        const displayTitle =
+                          translatedItem?.title || step.title;
+                        const displayDesc =
+                          translatedItem?.desc || step.description;
 
-                        return displayTitle.split(/\n|\\n/).map((line: string, i: number) => (
-                          <React.Fragment key={i}>
-                            {line}
-                            <br className="hidden sm:block" />
-                          </React.Fragment>
-                        ));
+                        return displayTitle
+                          .split(/\n|\\n/)
+                          .map((line: string, i: number) => (
+                            <React.Fragment key={i}>
+                              {line}
+                              <br className="hidden sm:block" />
+                            </React.Fragment>
+                          ));
                       })()}
                     </h2>
-                    <p 
+                    <p
                       className={`text-sm sm:text-base md:text-xl leading-relaxed text-gray-300 font-light break-keep transition-all duration-800 ease-out ${
-                        isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'
+                        isActive
+                          ? "opacity-100 translate-y-0"
+                          : "opacity-0 translate-y-5"
                       }`}
                     >
                       {(() => {
                         const translationKey = step.id;
                         const processTranslations = t.process as any;
-                        const translatedItem = processTranslations?.items?.[translationKey];
-                        return translatedItem?.desc || step.description || '상세 공정 설명이 없습니다.';
+                        const translatedItem =
+                          processTranslations?.items?.[translationKey];
+                        return (
+                          translatedItem?.desc ||
+                          step.description ||
+                          "상세 공정 설명이 없습니다."
+                        );
                       })()}
                     </p>
                   </div>
@@ -217,24 +245,29 @@ const ProcessPage: React.FC = () => {
 
       {/* Outro Section */}
       <section className="h-screen flex flex-col justify-center items-center text-center px-4 bg-gray-900 border-t border-gray-800">
-        <h2 className="text-3xl md:text-5xl font-bold mb-4 md:mb-6 break-keep">{t.process?.outro_title || '빈틈없는 품질을 향하여'}</h2>
+        <h2 className="text-3xl md:text-5xl font-bold mb-4 md:mb-6 break-keep">
+          {t.process?.outro_title || "빈틈없는 품질을 향하여"}
+        </h2>
         <p className="text-base md:text-xl text-gray-400 mb-8 md:mb-10 font-light break-keep flex flex-col items-center gap-2">
-          <span>{t.process?.outro_desc || '대우경금속의 체계적인 품질 검사 과정과 데이터 리포트를 확인해 보세요.'}</span>
+          <span>
+            {t.process?.outro_desc ||
+              "대우경금속의 체계적인 품질 검사 과정과 데이터 리포트를 확인해 보세요."}
+          </span>
         </p>
-        
+
         <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
-          <Link 
+          <Link
             to="/products"
             className="inline-flex items-center gap-2 px-6 py-3 md:px-8 md:py-4 bg-gray-800 hover:bg-gray-700 border border-gray-700 text-white font-semibold rounded-full transition-all transform hover:scale-105 shadow-lg shadow-black/30 text-sm md:text-base group"
           >
-            {t.process?.btn_report || '데이터 리포트 확인하기'}
+            {t.process?.btn_report || "데이터 리포트 확인하기"}
             <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
-          <Link 
+          <Link
             to="/quality"
             className="inline-flex items-center gap-2 px-6 py-3 md:px-8 md:py-4 bg-brand-blue hover:bg-blue-600 text-white font-semibold rounded-full transition-all transform hover:scale-105 shadow-lg shadow-blue-500/30 text-sm md:text-base group"
           >
-            {t.process?.btn_quality || '품질검사 페이지로 이동'}
+            {t.process?.btn_quality || "품질검사 페이지로 이동"}
             <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
